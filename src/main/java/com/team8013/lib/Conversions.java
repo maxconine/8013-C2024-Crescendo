@@ -26,8 +26,8 @@ public class Conversions {
      * @param gearRatio Gear Ratio between Falcon and Mechanism
      * @return Degrees of Rotation of Mechanism
      */
-    public static double rotationsToDegrees(double counts, double gearRatio) {
-        return counts * (360.0 / (gearRatio));
+    public static double rotationsToDegrees(double rotations, double gearRatio) {
+        return (rotations/gearRatio) * (360.0); //This was changed from citrus
     }
 
     /**
@@ -108,6 +108,13 @@ public class Conversions {
         double wheelRevolutions = rotations / gearRatio;
         double wheelDistance = wheelRevolutions * circumference;
         return wheelDistance;
+    }
+
+    public static double metersToRotations(double meters, double circumference, double gearRatio) {
+
+        double wheelRevolutions = meters / circumference;
+        double rotations = wheelRevolutions / gearRatio;
+        return rotations;
     }
 
     // Convert meters to inches

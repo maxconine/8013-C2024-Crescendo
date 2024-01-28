@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team8013.frc2024.Constants;
+import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.subsystems.Subsystem;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.Util;
@@ -33,16 +34,16 @@ public class SwerveModule extends Subsystem {
         kAngleOffset = moduleConstants.angleOffset;
 
         // Absolute encoder config
-        angleEncoder = new CANcoder(moduleConstants.cancoderID, "Pegasus");
+        angleEncoder = new CANcoder(moduleConstants.cancoderID, Ports.CANBUS);
         angleEncoder.getConfigurator().apply(Constants.SwerveConstants.swerveCancoderConfig());
 
         // Angle motor config
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, "Pegasus");
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Ports.CANBUS);
         mAngleMotor.getConfigurator().apply(Constants.SwerveConstants.swerveAngleFXConfig());
         mAngleMotor.setPosition(0);
 
         // Drive motor config
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, "Pegasus");
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Ports.CANBUS);
         mDriveMotor.getConfigurator().apply(Constants.SwerveConstants.swerveDriveFXConfig());
         mDriveMotor.setPosition(0.0);
 

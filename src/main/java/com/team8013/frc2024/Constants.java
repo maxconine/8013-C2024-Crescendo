@@ -302,8 +302,10 @@ public class Constants {
             // config.sensorTimeBase = SensorTimeBase.PerSecond;
             return config;
         }
+}
 
-    }
+
+
 
     public static final class SnapConstants {
         public static final double kP = 6; // og 5.0 //6.0 seems to work with 0.15 kD
@@ -440,52 +442,45 @@ public class Constants {
 
     /*** SUBSYSTEM CONSTANTS ***/
 
-    public static final class IntakeConstants {
 
-        public static final double kSingulatorVelocityConversion = (600.0 / 2048.0) * (1.0 / 1.9);
 
-        public static final double kSingulatorP = 0.07;
-        public static final double kSingulatorI = 0.0;
-        public static final double kSingulatorD = 0.01;
-        public static final double kSingulatorF = 0.045;
-
-        public static final double kIntakingVoltage = 10;
-        public static final double kSpittingVoltage = -8;
-        public static final double kRejectingVoltage = -5;
-
-        public static final double kSingulatorVelocity = 2300.0;
-
-        public static final double kDeployVoltage = 4.0;
-        public static final double kInHoldingVoltage = 1.2;
-        public static final double kOutHoldingVoltage = 1.5;
-
-        public static final double kDeployCurrentLimit = 60;
-
-        public static final double kIntakeRejectTime = 1.0;
-        public static final double kSingulatorReverseDelay = 0.5;
-    }
-
-    public static final class ArmConstants {
+    public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
+        public static final double CANCODER_OFFSET = 34.0;
+
+        public static final double gravityFeedforward = 0.5;
+
+        public static final double PivotGearRatio = (25)*(74/18);//25:1 74:18 revolutions of the pivot per 1 rotation of the motor
 
         // arm constants
-        public static final int kMinHeight = 0; // ticks
-        public static final int kMaxHeight = 244984; // ticks
-        public static final int kTravelDistance = kMaxHeight - kMinHeight + 500; // ticks
+        public static final int kMinHeight = 0; // rotations
+        public static final int kMaxHeight = 2; // rotations
+        //public static final int kTravelDistance = kMaxHeight - kMinHeight; // ticks
+        
+        
+        public static CANcoderConfiguration pivotCancoderConfig() {
+            CANcoderConfiguration config = new CANcoderConfiguration();
+            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+            config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+            return config;
+        }
+    }
 
-        // TODO I have no idea the max height ticks
-        public static final int kHybridTravelDistance = 182106; // kLeftTravelDistance * 0.75
-        public static final int kMidTravelDistance = 182106; // kLeftTravelDistance * 0.75
-        public static final int kHighTravelDistance = 182106; // kLeftTravelDistance * 0.75
+    public static final class WristConstants {
+        public static final double kStatorCurrentLimit = 80.0;
+        public static final double CANCODER_OFFSET = 0;
 
-        /* GENERAL CLIMBER CONSTANTS USED */
+        public static final double kGearRatio = (2*Math.PI)/25; //radians per rotation
 
-        public static final double kBarContactAngleEpsilon = 2.0;
+        // arm constants
+        public static final int kMinPosition = 0; // rotations
+        public static final int kMaxPosition = 2; // rotations
+    }
 
-        public static final int kSafetyMinimum = -7000; // minimum outside 0 ticks
-
-        public static final double kTravelDistanceEpsilon = 20000;
-
+    public static final class ElevatorConstants{
+        public static final int kMaxVoltage = 12;
+        public static final double kGearRatio = 25;
+        public static final double kWheelCircumference = Conversions.inchesToMeters(1.625)*Math.PI;
     }
 
     public static final class ControllerConstants {

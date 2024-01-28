@@ -9,6 +9,7 @@ import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
+import com.team8013.frc2024.subsystems.EndEffector.State;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.requests.SequentialRequest;
@@ -25,14 +26,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Superstructure extends Subsystem {
 
-    // private Arm mArm = Arm.getInstance();
-    // private Elevator mElevator = Elevator.getInstance();
-    // private Wrist mWrist = Wrist.getInstance();
-    // private EndEffector mEndEffector = EndEffector.getInstance();
-    // private LEDs mLEDs = LEDs.getInstance();
+    private Elevator mElevator = Elevator.getInstance();
+    private Wrist mWrist = Wrist.getInstance();
+    private EndEffector mEndEffector = EndEffector.getInstance();
     private Drive mDrive = Drive.getInstance();
     private Limelight mLimelight = Limelight.getInstance();
     private ControlBoard mControlBoard = ControlBoard.getInstance();
+    private Pivot mPivot = Pivot.getInstance();
 
     private Request activeRequest = null;
     private ArrayList<Request> queuedRequests = new ArrayList<>(0);
@@ -296,6 +296,37 @@ public class Superstructure extends Subsystem {
         } else
             return false;
     }
+
+    public void controlPivotPercentOutput(double demand){
+        mPivot.setDemandOpenLoop(demand);
+    }
+
+    public void controlElevatorPercentOutput(double demand){
+        mElevator.setDemandOpenLoop(demand);
+    }
+    
+    public void controlWristPercentOutput(double demand){
+        mWrist.setDemandOpenLoop(demand);
+    }
+
+    public void intake(boolean intake){
+        if (intake){
+        mEndEffector.setState(State.INTAKING);
+        }
+        else{
+        mEndEffector.setState(State.IDLE);
+        }
+    }
+
+    public void outtake(boolean intake){
+        if (intake){
+        mEndEffector.setState(State.OUTTAKING);
+        }
+        else{
+        mEndEffector.setState(State.IDLE);
+        }
+    }
+
 
     // public void updateLEDs() {
     // if (mLEDs.getUsingSmartdash()) {

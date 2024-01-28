@@ -28,9 +28,12 @@ import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.Looper;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
+import com.team8013.frc2024.subsystems.Elevator;
+import com.team8013.frc2024.subsystems.EndEffector;
 import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Pivot;
 import com.team8013.frc2024.subsystems.Superstructure;
+import com.team8013.frc2024.subsystems.Wrist;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 public class Robot extends TimedRobot {
@@ -46,11 +49,10 @@ public class Robot extends TimedRobot {
 	private final Drive mDrive = Drive.getInstance();
 	private final Limelight mLimelight = Limelight.getInstance();
 	private final Pivot mPivot = Pivot.getInstance();
-	// private final Arm mArm = Arm.getInstance();
-	// private final Elevator mElevator = Elevator.getInstance();
-	// private final Wrist mWrist = Wrist.getInstance();
-	// private final EndEffector mEffector = EndEffector.getInstance();
-	// private final LEDs mLeds = LEDs.getInstance();
+	private final Elevator mElevator = Elevator.getInstance();
+	private final Wrist mWrist = Wrist.getInstance();
+	private final EndEffector mEndEffector = EndEffector.getInstance();
+
 
 	// instantiate enabled and disabled loopers
 	private final Looper mEnabledLooper = new Looper();
@@ -162,12 +164,10 @@ public class Robot extends TimedRobot {
 					mDrive,
 					mSuperstructure,
 					mLimelight,
-					mPivot
-			// mArm,
-			// mElevator,
-			// mWrist,
-			// mEffector,
-			// mLeds
+					mPivot,
+					mElevator,
+					mWrist,
+					mEndEffector
 
 			);
 
@@ -289,8 +289,27 @@ public class Robot extends TimedRobot {
 			}
 
 			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
-				mSuperstructure.controlPivotPercentOutput(mControlBoard.pivotPercentOutput()*0.75);
+				mSuperstructure.controlPivotPercentOutput(mControlBoard.pivotPercentOutput()*0.25);
 			}
+			else{
+				mSuperstructure.controlPivotPercentOutput(0);
+			}
+			// else if (Math.abs(mControlBoard.elevatorPercentOutput())>0.1){
+			// 	mSuperstructure.controlElevatorPercentOutput(mControlBoard.elevatorPercentOutput()*0.75);
+			// }
+			// else if (Math.abs(mControlBoard.wristPercentOutput())>0.1){
+			// 	mSuperstructure.controlWristPercentOutput(mControlBoard.wristPercentOutput());
+			// }
+			// else if (mControlBoard.endEffectorIntake()){
+			// 	mSuperstructure.intake(true);
+			// }
+			// else if(mControlBoard.endEffectorOuttake()){
+			// 	mSuperstructure.outtake(true);
+			// }
+			// else{
+			// 	mSuperstructure.intake(false);
+			// }
+
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
 			// 	mDrive.setHeadingControlTarget(mControlBoard.getSwerveSnap().degrees);

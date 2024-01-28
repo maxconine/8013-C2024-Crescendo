@@ -4,7 +4,9 @@ import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.geometry.Translation2d;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
+import com.team8013.frc2024.controlboard.CustomXboxController.Axis;
 import com.team8013.frc2024.controlboard.CustomXboxController.Button;
+import com.team8013.frc2024.controlboard.CustomXboxController.Side;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.lib.Util;
 
@@ -136,10 +138,29 @@ public class ControlBoard {
             
     }
 
+    public double pivotPercentOutput(){
+        return operator.getAxis(Side.LEFT, Axis.Y);
+    }
+
+    public double elevatorPercentOutput(){
+        return operator.getAxis(Side.RIGHT, Axis.Y);
+    }
+
+    public double wristPercentOutput(){
+        return operator.getAxis(Side.RIGHT, Axis.X);
+    }
+
+    public boolean endEffectorIntake(){
+        return operator.getButton(Button.Y);
+    }
+    public boolean endEffectorOuttake(){
+        return operator.getButton(Button.A);
+    }
+
 
     // Align swerve drive with target
     public boolean getWantChase() {
-        return (m_driver.getRawButton(9)||(operator.getButton(Button.Y))||(operator.getButton(Button.B))||(operator.getButton(Button.A))||(operator.getButton(Button.X)));
+        return false;//(m_driver.getRawButton(9)||(operator.getButton(Button.Y))||(operator.getButton(Button.B))||(operator.getButton(Button.A))||(operator.getButton(Button.X)));
     }
 
     public int tagToChase(){
