@@ -291,6 +291,12 @@ public class Robot extends TimedRobot {
 			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
 				mSuperstructure.controlPivotPercentOutput(mControlBoard.pivotPercentOutput()*0.25);
 			}
+			else if (mControlBoard.pivotUp()){
+				mPivot.setSetpointMotionMagic(60);
+			}
+			else if (mControlBoard.pivotDown()){
+				mPivot.setSetpointMotionMagic(15);
+			}
 			else{
 				mSuperstructure.controlPivotPercentOutput(0);
 			}

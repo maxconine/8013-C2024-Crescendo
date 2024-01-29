@@ -52,8 +52,8 @@ public class Pivot extends Subsystem{
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
         //Customize these configs from constants in the future
-        mMaster.getConfigurator().apply(new TalonFXConfiguration());
-        mSlave.getConfigurator().apply(new TalonFXConfiguration());
+        mMaster.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
+        mSlave.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
 
         mCANcoder.getConfigurator().apply(CANCoderConfig);
 
