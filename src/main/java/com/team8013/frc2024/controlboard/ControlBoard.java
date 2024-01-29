@@ -142,6 +142,15 @@ public class ControlBoard {
         return operator.getAxis(Side.LEFT, Axis.Y);
     }
 
+
+    public boolean pivotUp(){
+        return operator.getButton(Button.Y);
+    }
+
+    public boolean pivotDown(){
+        return operator.getButton(Button.A);
+    }
+
     public double elevatorPercentOutput(){
         return operator.getAxis(Side.RIGHT, Axis.Y);
     }

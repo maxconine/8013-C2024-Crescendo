@@ -90,7 +90,7 @@ public class SwerveModule extends Subsystem {
     }
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValue()*360);
+        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(angleEncoder.getAbsolutePosition().getValueAsDouble()*360, angleEncoder.getAbsolutePosition().getValueAsDouble()*360));
     }
 
     public ModuleState getState() {

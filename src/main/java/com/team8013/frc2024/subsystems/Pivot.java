@@ -16,6 +16,7 @@ import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -99,7 +100,7 @@ public class Pivot extends Subsystem{
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC){
-            mMaster.setControl(new MotionMagicTorqueCurrentFOC(mPeriodicIO.demand));
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
         }
         else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
             if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
