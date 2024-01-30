@@ -13,6 +13,7 @@ import com.team8013.lib.logger.Log;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -42,7 +43,7 @@ public class Wrist extends Subsystem{
         mCANcoder = new CANcoder(Ports.WRIST_CANCODER, Ports.CANBUS);
 
         //Customize these configs from constants in the future
-        mMotor.getConfigurator().apply(new TalonFXConfiguration());
+        mMotor.getConfigurator().apply(Constants.WristConstants.wristMotorConfig());
         mCANcoder.getConfigurator().apply(new CANcoderConfiguration());
 
         setWantNeutralBrake(false);
@@ -67,7 +68,7 @@ public class Wrist extends Subsystem{
         mEnabledLooper.register(new Loop() {
             @Override
             public void onStart(double timestamp) {
-                //setSetpointMotionMagic(mConstants.kHomePosition);
+                resetToAbsolute();
             }
 
             @Override
@@ -86,51 +87,20 @@ public class Wrist extends Subsystem{
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC){
-            mMotor.setControl(new MotionMagicTorqueCurrentFOC(mPeriodicIO.demand));
+            mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
         }
         else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
             if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
                 mMotor.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the future?
             }
             else{
-                mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand));
+                
+                mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand)); //needs a feedforward
             }
         }
 
 
     }
-
-    // public Request WristRequest(double angle, boolean waitForPosition) {
-    //     return new Request() {
-    //         @Override
-    //         public void act() {
-    //             setSetpointMotionMagic(angle);
-    //             is_climb = false;
-    //             is_scraping = false;
-    //             updateCurrentLimits();
-    //         }
-
-    //         @Override
-    //         public boolean isFinished() {
-    //             return waitForPosition ? Util.epsilonEquals(mPeriodicIO.position, angle, 3.0) : true;
-    //         }
-    //     };
-    // }
-
-
-    // public Request WristWaitRequest(double angle) {
-    //     return new Request() {
-    //         @Override 
-    //         public void act() {
-
-    //         }
-
-    //         @Override 
-    //         public boolean isFinished() {
-    //             return Util.epsilonEquals(mPeriodicIO.position_degrees, angle, 1.0);
-    //         }
-    //     };
-    // }
 
 
     public void setSetpointMotionMagic(double degrees) {
@@ -149,9 +119,8 @@ public class Wrist extends Subsystem{
     }
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(mCANcoder.getAbsolutePosition().getValue()*360);
+        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360,mCANcoder.getAbsolutePosition().getValueAsDouble()*360));
     }
-
     @Log
     public double getWristAngleDeg(){
         return mPeriodicIO.position_degrees;
@@ -165,7 +134,7 @@ public class Wrist extends Subsystem{
     
     @Log
     public double getWristVelocity(){
-        return mPeriodicIO.velocity_radPerSec;
+        return mPeriodicIO.velocity_rps;
     }
     
     @Log
@@ -195,7 +164,7 @@ public class Wrist extends Subsystem{
         public double timestamp = 0.0;
         public double targetVelocity = 0.0;
         public double position_degrees = 0.0;
-        public double velocity_radPerSec = 0.0;
+        public double velocity_rps = 0.0;
 
         public double current = 0.0;
         public double output_voltage = 0.0;
@@ -215,16 +184,17 @@ public class Wrist extends Subsystem{
         mPeriodicIO.position_degrees = Conversions.rotationsToDegrees(mMotor.getRotorPosition().getValue(), Constants.WristConstants.kGearRatio);
         mPeriodicIO.current = mMotor.getTorqueCurrent().getValue();
         mPeriodicIO.output_voltage = mMotor.getMotorVoltage().getValue();
-        mPeriodicIO.velocity_radPerSec = Conversions.rotationsToDegrees(mMotor.getVelocity().getValue(), Constants.WristConstants.kGearRatio)*Math.PI/180;
+        mPeriodicIO.velocity_rps = Conversions.rotationsToDegrees(mMotor.getVelocity().getValue(), Constants.WristConstants.kGearRatio);
     }
 
 
     @Override
     public void outputTelemetry() {
         SmartDashboard.putNumber("WristAngle (degrees)", mPeriodicIO.position_degrees);
-        SmartDashboard.putNumber("Wrist Motor Rotations", mPeriodicIO.position_degrees);
+        SmartDashboard.putNumber("Wrist CANCODER (degrees)", getCanCoder().getDegrees());
+        SmartDashboard.putNumber("Wrist Motor Rotations", mMotor.getRotorPosition().getValueAsDouble());
         SmartDashboard.putNumber("Wrist Demand", mPeriodicIO.demand);
-        SmartDashboard.putNumber("Wrist Velocity rad/s", mPeriodicIO.velocity_radPerSec);
+        SmartDashboard.putNumber("Wrist Velocity rad/s", mPeriodicIO.velocity_rps);
         SmartDashboard.putNumber("Wrist Demand", mPeriodicIO.demand);
         SmartDashboard.putNumber("Wrist Volts", mPeriodicIO.output_voltage);
         SmartDashboard.putNumber("Wrist Current", mPeriodicIO.current);

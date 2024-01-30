@@ -12,6 +12,7 @@ import com.team8013.lib.util.DelayedBoolean;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -158,14 +159,14 @@ public class Elevator extends Subsystem {
      * 
      * @param units meters to extend elevator to
      */
-    public void setSetpointMotionMagic(double units) {
-        if (units != 0.0) { //why?
-            mNeedsToHome = true;
-        }
+    public void setSetpointMotionMagic(double distance) {
+        // if (distance != 0.0) { //why?
+        //     mNeedsToHome = true;
+        // }
         if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC){
             mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
-        double rotationDemand = Conversions.metersToRotations(mMaster.getRotorPosition().getValue(), Constants.ElevatorConstants.kWheelCircumference, Constants.ElevatorConstants.kGearRatio);
+        double rotationDemand = Conversions.metersToRotations(distance, Constants.ElevatorConstants.kWheelCircumference, Constants.ElevatorConstants.kGearRatio);
         mPeriodicIO.demand = rotationDemand;
     }
 
@@ -185,9 +186,9 @@ public class Elevator extends Subsystem {
 
 
         if (mHoming) { //sets it moving backward until velocity slows down
-            //mMaster.setControl(new VoltageOut(-1));
+            mMaster.setControl(new VoltageOut(-1));
             if (mHomingDelay.update(Timer.getFPGATimestamp(),
-                    Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.01))) {
+                    Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { //is this motor velocity or elevator velocity
                 zeroSensors();  
                 setSetpointMotionMagic(0.0);
                 mHoming = false;
@@ -195,15 +196,15 @@ public class Elevator extends Subsystem {
         }
         else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if(mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
-                //mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the future?
+                mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the future?
             }
             else{
-                //mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
             }
 
         }
         else if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC){
-            //mMaster.setControl(new MotionMagicTorqueCurrentFOC(mPeriodicIO.demand));
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
         }
     }
 

@@ -113,7 +113,7 @@ public class Conversions {
     public static double metersToRotations(double meters, double circumference, double gearRatio) {
 
         double wheelRevolutions = meters / circumference;
-        double rotations = wheelRevolutions / gearRatio;
+        double rotations = wheelRevolutions * gearRatio;
         return rotations;
     }
 

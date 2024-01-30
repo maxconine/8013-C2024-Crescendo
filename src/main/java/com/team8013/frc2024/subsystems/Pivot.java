@@ -63,7 +63,7 @@ public class Pivot extends Subsystem{
         resetToAbsolute();
     }
 
-    private void resetToAbsolute(){
+    public void resetToAbsolute(){
        double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees() - Constants.PivotConstants.CANCODER_OFFSET,Constants.PivotConstants.PivotGearRatio);
         mMaster.setPosition(absolutePosition);
     }
@@ -81,7 +81,7 @@ public class Pivot extends Subsystem{
         mEnabledLooper.register(new Loop() {
             @Override
             public void onStart(double timestamp) {
-                //setSetpointMotionMagic(mConstants.kHomePosition);
+                resetToAbsolute();
             }
 
             @Override

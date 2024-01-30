@@ -452,8 +452,8 @@ public class Constants {
 
         public static final double PivotGearRatio = (25)*(74/18);//25:1 74:18 revolutions of the pivot per 1 rotation of the motor
 
-        public static final int kMinHeight = -1; // deg
-        public static final int kMaxHeight = 90; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
+        public static final int kMinHeight = 0; // deg
+        public static final int kMaxHeight = 85; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
 
         
         
@@ -483,6 +483,8 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 100;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.degreesToRotation(kMaxHeight,PivotGearRatio);
+        //     config.MotorOutput.PeakReverseDutyCycle = Conversions.degreesToRotation(kMinHeight,PivotGearRatio);
 
             return config;
         }
@@ -490,14 +492,45 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 0;
+        public static final double CANCODER_OFFSET = 67.1;
 
-        public static final double kGearRatio = (2*Math.PI)/25; //radians per rotation
+        public static final double kGearRatio = 25; //radians per rotation
 
-        // arm constants
-        public static final int kMinPosition = 0; // rotations
-        public static final int kMaxPosition = 2; // rotations
+        public static final int kMinPosition = 0; // degrees
+        public static final int kMaxPosition = 180; // degrees
+
+        public static TalonFXConfiguration wristMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            //TODO: do any of these configs even matter?
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 15; //start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.6;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 40;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.degreesToRotation(kMaxPosition, kGearRatio);
+        //     config.MotorOutput.PeakReverseDutyCycle = Conversions.degreesToRotation(kMinPosition, kGearRatio);
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //down to intake is increasing, up to load is decreasing
+
+            return config;
+        }
+
+                
+        public static CANcoderConfiguration wristCancoderConfig() {
+            CANcoderConfiguration config = new CANcoderConfiguration();
+            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+            config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+            return config;
+        }
     }
 
     public static final class ElevatorConstants{
@@ -505,18 +538,28 @@ public class Constants {
         public static final double kGearRatio = 25;
         public static final double kWheelCircumference = Conversions.inchesToMeters(1.625)*Math.PI;
 
+        public static final double kMinHeight = 0; // meters
+        public static final double kMaxHeight = 0.7;
+
         public static TalonFXConfiguration elevatorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             //TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 25; //start off pretty low
-            config.CurrentLimits.SupplyCurrentThreshold = 40;
+            config.CurrentLimits.SupplyCurrentLimit = 15; //start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
             config.Slot0.kP = 0.6;
             config.Slot0.kI = 0.0;
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 40;
+
+        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
+        //     config.MotorOutput.PeakReverseDutyCycle = 0
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

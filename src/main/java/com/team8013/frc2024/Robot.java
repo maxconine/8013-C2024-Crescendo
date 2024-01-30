@@ -24,6 +24,7 @@ import com.team8013.frc2024.auto.AutoModeExecutor;
 import com.team8013.frc2024.auto.AutoModeSelector;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.controlboard.ControlBoard.SwerveCardinal;
+import com.team8013.frc2024.controlboard.CustomXboxController.Button;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.Looper;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
@@ -240,6 +241,8 @@ public class Robot extends TimedRobot {
 
 			mDrive.setNeutralBrake(true);
 
+			mPivot.resetToAbsolute();
+
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
@@ -288,8 +291,10 @@ public class Robot extends TimedRobot {
 						mDrive.getHeading()));
 			}
 
+			/* PIVOT */
+
 			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
-				mSuperstructure.controlPivotPercentOutput(mControlBoard.pivotPercentOutput()*0.25);
+				mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
 			}
 			else if (mControlBoard.pivotUp()){
 				mPivot.setSetpointMotionMagic(80);
@@ -297,15 +302,45 @@ public class Robot extends TimedRobot {
 			else if (mControlBoard.pivotDown()){
 				mPivot.setSetpointMotionMagic(10);
 			}
-			else{
-				mSuperstructure.controlPivotPercentOutput(0);
+
+			/* ELEVATOR */
+
+			
+			if (Math.abs(mControlBoard.elevatorPercentOutput())>0.1){
+				mElevator.setDemandOpenLoop(mControlBoard.elevatorPercentOutput()*0.25);
 			}
-			// else if (Math.abs(mControlBoard.elevatorPercentOutput())>0.1){
-			// 	mSuperstructure.controlElevatorPercentOutput(mControlBoard.elevatorPercentOutput()*0.75);
+			else if(mControlBoard.operator.getButton(Button.RB)){
+				mElevator.setSetpointMotionMagic(0.3);
+			}
+			// else if(mControlBoard.elevatorDown()){
+			// 	mElevator.setSetpointMotionMagic(0.1);
 			// }
-			// else if (Math.abs(mControlBoard.wristPercentOutput())>0.1){
+			else{
+				mSuperstructure.controlElevatorPercentOutput(0);
+			}
+
+			if (mControlBoard.zeroElevator()){
+				mElevator.setWantHome(true);
+			}
+
+			/* WRIST */
+
+			// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
 			// 	mSuperstructure.controlWristPercentOutput(mControlBoard.wristPercentOutput());
 			// }
+			// else if (mControlBoard.operator.getButton(Button.X)){
+			// 	mWrist.setSetpointMotionMagic(0);
+			// }
+			// else if (mControlBoard.operator.getButton(Button.X)){
+			// 	mWrist.setSetpointMotionMagic(100);
+			// }
+			// else{
+			// 	mWrist.setDemandOpenLoop(0);
+			//}
+
+			/* END EFFECTOR */
+
+
 			// else if (mControlBoard.endEffectorIntake()){
 			// 	mSuperstructure.intake(true);
 			// }

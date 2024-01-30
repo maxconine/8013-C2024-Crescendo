@@ -150,6 +150,19 @@ public class ControlBoard {
     public boolean pivotDown(){
         return operator.getButton(Button.A);
     }
+    
+    
+    public boolean elevatorUp(){
+        return operator.getButton(Button.RB);
+    }
+
+    public boolean elevatorDown(){
+        return operator.getButton(Button.LB);
+    }
+
+    public boolean zeroElevator(){
+        return operator.getButton(Button.START);
+    }
 
     public double elevatorPercentOutput(){
         return operator.getAxis(Side.RIGHT, Axis.Y);

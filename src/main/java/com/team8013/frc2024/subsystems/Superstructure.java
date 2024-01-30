@@ -39,6 +39,8 @@ public class Superstructure extends Subsystem {
     private boolean hasNewRequest = false;
     private boolean allRequestsComplete = false;
 
+    private double pivotManualPosition = mPivot.getPivotAngleDeg();
+
     public boolean requestsCompleted() {
         return allRequestsComplete;
     }
@@ -297,8 +299,15 @@ public class Superstructure extends Subsystem {
             return false;
     }
 
-    public void controlPivotPercentOutput(double demand){
-        mPivot.setDemandOpenLoop(demand);
+    public void controlPivotManually(double demand){
+        double position = mPivot.getPivotAngleDeg();
+        if ((demand>0)&&(position<Constants.PivotConstants.kMaxHeight)){
+            position += 0.8;
+        }
+        else if ((demand<0)&&(position>Constants.PivotConstants.kMinHeight)){
+            position += -0.8;
+        }
+        mPivot.setSetpointMotionMagic(position);
     }
 
     public void controlElevatorPercentOutput(double demand){
