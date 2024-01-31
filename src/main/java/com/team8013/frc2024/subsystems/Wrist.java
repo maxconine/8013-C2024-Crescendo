@@ -51,7 +51,7 @@ public class Wrist extends Subsystem{
     }
 
     public void resetToAbsolute(){
-        double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.position_degrees, getCanCoder().getDegrees() - Constants.WristConstants.CANCODER_OFFSET);
+        double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.position_degrees, getCanCoder().getDegrees());
         double absolutePosition = Conversions.degreesToRotation(angle, Constants.WristConstants.kGearRatio);
         mMotor.setPosition(absolutePosition);
     }
@@ -119,7 +119,7 @@ public class Wrist extends Subsystem{
     }
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360,mCANcoder.getAbsolutePosition().getValueAsDouble()*360));
+        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.WristConstants.CANCODER_OFFSET,mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.WristConstants.CANCODER_OFFSET));
     }
     @Log
     public double getWristAngleDeg(){
