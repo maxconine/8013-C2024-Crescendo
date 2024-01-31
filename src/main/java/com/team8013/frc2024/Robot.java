@@ -33,6 +33,7 @@ import com.team8013.frc2024.subsystems.Elevator;
 import com.team8013.frc2024.subsystems.EndEffector;
 import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Pivot;
+import com.team8013.frc2024.subsystems.Shooter;
 import com.team8013.frc2024.subsystems.Superstructure;
 import com.team8013.frc2024.subsystems.Wrist;
 import com.team8013.lib.swerve.ChassisSpeeds;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
 	private final Elevator mElevator = Elevator.getInstance();
 	private final Wrist mWrist = Wrist.getInstance();
 	private final EndEffector mEndEffector = EndEffector.getInstance();
+	private final Shooter mShooter = Shooter.getInstance();
 
 
 	// instantiate enabled and disabled loopers
@@ -168,7 +170,8 @@ public class Robot extends TimedRobot {
 					mPivot,
 					mElevator,
 					mWrist,
-					mEndEffector
+					mEndEffector,
+					mShooter
 
 			);
 
@@ -292,15 +295,15 @@ public class Robot extends TimedRobot {
 
 			/* PIVOT */
 
-			// if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
-			// 	mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
-			// }
-			// else if (mControlBoard.pivotUp()){
-			// 	mPivot.setSetpointMotionMagic(80);
-			// }
-			// else if (mControlBoard.pivotDown()){
-			// 	mPivot.setSetpointMotionMagic(10);
-			// }
+			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
+				mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
+			}
+			else if (mControlBoard.pivotUp()){
+				mPivot.setSetpointMotionMagic(80);
+			}
+			else if (mControlBoard.pivotDown()){
+				mPivot.setSetpointMotionMagic(10);
+			}
 
 			/* ELEVATOR */
 
@@ -329,10 +332,12 @@ public class Robot extends TimedRobot {
 				
 			// }
 			if (mControlBoard.operator.getButton(Button.X)){
-				mWrist.setSetpointMotionMagic(10);
+				mShooter.setClosedLoopDemand(6380);
+				//mWrist.setSetpointMotionMagic(10);
 			}
 			else if (mControlBoard.operator.getButton(Button.B)){
-				mWrist.setSetpointMotionMagic(176);
+				mShooter.setClosedLoopDemand(0);
+				//mWrist.setSetpointMotionMagic(176);
 			}
 
 
@@ -348,6 +353,8 @@ public class Robot extends TimedRobot {
 			// else{
 			// 	mSuperstructure.intake(false);
 			// }
+
+
 
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
