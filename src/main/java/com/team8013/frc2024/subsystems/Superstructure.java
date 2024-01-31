@@ -40,6 +40,7 @@ public class Superstructure extends Subsystem {
     private boolean allRequestsComplete = false;
 
     private double pivotManualPosition = mPivot.getPivotAngleDeg();
+    private SuperstructureState mSuperstructureState;
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -335,14 +336,60 @@ public class Superstructure extends Subsystem {
         }
     }
 
-    public void outtake(boolean intake){
-        if (intake){
+    public void outtake(boolean outtake){
+        if (outtake){
         mEndEffector.setState(State.OUTTAKING);
         }
         else{
         mEndEffector.setState(State.IDLE);
         }
     }
+
+    public enum SuperstructureState{
+        INTAKING_GROUND,
+        INTAKING_SOURCE,
+        SCORE_AMP,
+        TRANSFER_TO_SHOOTER,
+        SHOOT,
+        STOW
+    }
+
+    public void setSuperstuctureIntakingGround(){
+        if (mSuperstructureState != SuperstructureState.INTAKING_GROUND){
+            mSuperstructureState = SuperstructureState.INTAKING_GROUND;
+        }
+    }
+
+    public void setSuperstuctureIntakingSource(){
+        if (mSuperstructureState != SuperstructureState.INTAKING_SOURCE){
+            mSuperstructureState = SuperstructureState.INTAKING_SOURCE;
+        }
+    }
+
+    public void setSuperstuctureScoreAmp(){
+        if (mSuperstructureState != SuperstructureState.SCORE_AMP){
+            mSuperstructureState = SuperstructureState.SCORE_AMP;
+        }
+    }
+
+    public void setSuperstuctureTransferToShooter(){
+        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER){
+            mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
+        }
+    }
+
+    public void setSuperstuctureShoot(){
+        if (mSuperstructureState != SuperstructureState.SHOOT){
+            mSuperstructureState = SuperstructureState.SHOOT;
+        }
+    }
+
+    public void setSuperstuctureStow(){
+        if (mSuperstructureState != SuperstructureState.STOW){
+            mSuperstructureState = SuperstructureState.STOW;
+        }
+    }
+
 
 
     // public void updateLEDs() {

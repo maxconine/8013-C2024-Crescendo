@@ -572,6 +572,41 @@ public class Constants {
         }
     }
 
+    public static final class EndEffectorConstants{
+        public static TalonFXConfiguration endEffectorMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+            return config;
+        }
+    }
+
+        public static final class ShooterConstants{
+        public static TalonFXConfiguration shooterMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 300;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+            return config;
+        }
+    }
+
+
+
     public static final class ControllerConstants {
         public static final boolean isMamboController = true; //this overrides everything
         public static final boolean isControllerOne = true;

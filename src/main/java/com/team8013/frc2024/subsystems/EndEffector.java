@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
@@ -39,8 +40,8 @@ public class EndEffector extends Subsystem {
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
         //Customize these configs from constants in the future
-        mMaster.getConfigurator().apply(new TalonFXConfiguration());
-        mSlave.getConfigurator().apply(new TalonFXConfiguration());
+        mMaster.getConfigurator().apply(Constants.EndEffectorConstants.endEffectorMotorConfig());
+        mSlave.getConfigurator().apply(Constants.EndEffectorConstants.endEffectorMotorConfig());
 
         mSlave.setControl(new Follower(Ports.END_EFFECTOR_A, false));
         setWantNeutralBrake(false);
@@ -74,18 +75,22 @@ public class EndEffector extends Subsystem {
         return mState;
     }
 
+    public void setState(State state){
+        mState = state;
+    }
+
     public void stop() {
-        mState = IDLE;
+        mState = State.IDLE;
         mPeriodicIO.demand = mState.voltage;
     }
 
     public void outtake() {
-        mState = OUTTAKING;
+        mState = State.OUTTAKING;
         mPeriodicIO.demand = mState.voltage;
     }
 
     public void intake() {
-        mState = INTAKING;
+        mState = State.INTAKING;
         mPeriodicIO.demand = mState.voltage;
     }
 
@@ -142,6 +147,10 @@ public class EndEffector extends Subsystem {
                         // }
                         break;
                 }
+            }
+            @Override
+            public void onStop(double timestamp) {
+                stop();
             }
         });
     }
