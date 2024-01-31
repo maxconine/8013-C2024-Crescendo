@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean hasGamePiece = false;
-    private DigitalInput mBeamBreak;
+    //private DigitalInput mBeamBreak;
 
     private final TalonFX mMaster;
     private final TalonFX mSlave;
@@ -217,6 +217,6 @@ public class Shooter extends Subsystem {
         mPeriodicIO.current = mMaster.getStatorCurrent().getValue();
        // mPeriodicIO.position = mMaster.getRotorPosition().getValue();
         mPeriodicIO.velocity = mMaster.getRotorVelocity().getValue();
-        mPeriodicIO.beamBreak = mBeamBreak.get();
+        //mPeriodicIO.beamBreak = mBeamBreak.get();
     }
 }

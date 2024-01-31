@@ -23,8 +23,8 @@ public class Ports {
     public static final int END_EFFECTOR_B = 20;
     public static final int END_EFFECTOR_BEAM_BREAK = 9;
 
-    public static final int Shooter_A = 23;
-    public static final int Shooter_B = 24;
+    public static final int Shooter_A = 24;
+    public static final int Shooter_B = 23;
 
 
 

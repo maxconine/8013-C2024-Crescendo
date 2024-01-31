@@ -44,6 +44,7 @@ public class Superstructure extends Subsystem {
     private boolean allRequestsComplete = false;
 
     private double pivotManualPosition = mPivot.getPivotAngleDeg();
+        private double elevatorManualPosition = mElevator.getElevatorUnits();
     private SuperstructureState mSuperstructureState;
 
     public boolean requestsCompleted() {
@@ -305,18 +306,25 @@ public class Superstructure extends Subsystem {
     }
 
     public void controlPivotManually(double demand){
-        double position = mPivot.getPivotAngleDeg();
-        if ((demand>0)&&(position<Constants.PivotConstants.kMaxAngle)){
-            position += 2;
+        // double position = mPivot.getPivotAngleDeg();
+        if ((demand>0)&&(pivotManualPosition<Constants.PivotConstants.kMaxAngle)){
+            pivotManualPosition += 0.5;
         }
-        else if ((demand<0)&&(position>Constants.PivotConstants.kMaxAngle)){
-            position += -2;
+        else if ((demand<0)){ //&&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
+            pivotManualPosition += -0.5;
         }
-        mPivot.setSetpointMotionMagic(position);
+        mPivot.setSetpointMotionMagic(pivotManualPosition);
     }
 
-    public void controlElevatorPercentOutput(double demand){
-        mElevator.setDemandOpenLoop(demand);
+    public void controlElevatorManually(double demand){
+        if ((demand>0.2)){
+            elevatorManualPosition += 0.005;
+        }
+        else if ((demand<-0.2)){ //&&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
+            elevatorManualPosition += -0.005;
+        }
+
+        mElevator.setSetpointMotionMagic(elevatorManualPosition);
     }
     
     public void controlWristManually(double demand){

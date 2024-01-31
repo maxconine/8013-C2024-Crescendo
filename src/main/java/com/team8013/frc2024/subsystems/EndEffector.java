@@ -62,8 +62,8 @@ public class EndEffector extends Subsystem {
 
     public enum State {
         IDLE(0.0), 
-        INTAKING(-8.0), //max 12
-        OUTTAKING(8.0); //max 12
+        INTAKING(-12.0), //max 12
+        OUTTAKING(12.0); //max 12
         
         public double voltage;
         State (double voltage) {
@@ -132,7 +132,7 @@ public class EndEffector extends Subsystem {
                         mPeriodicIO.demand = mState.voltage; 
                         break; 
                     case INTAKING:
-                        mPeriodicIO.demand = mState.voltage;
+                        mPeriodicIO.demand = 0.99;
 
                         // if (mPeriodicIO.beamBreak == true) {
                         //     hasGamePiece = true;
@@ -140,7 +140,7 @@ public class EndEffector extends Subsystem {
                         // } 
                         break; 
                     case OUTTAKING:
-                        mPeriodicIO.demand = mState.voltage;
+                        mPeriodicIO.demand = -0.99; //mState.voltage;
                         // if (mPeriodicIO.beamBreak == false) {
                         // hasGamePiece = false;
 

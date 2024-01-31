@@ -59,7 +59,7 @@ public class Pivot extends Subsystem{
         mCANcoder.getConfigurator().apply(CANCoderConfig);
 
         mSlave.setControl(new Follower(Ports.PIVOT_A, true));
-        setWantNeutralBrake(false);
+        setWantNeutralBrake(true);
         resetToAbsolute();
     }
 

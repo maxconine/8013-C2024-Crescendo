@@ -309,18 +309,18 @@ public class Robot extends TimedRobot {
 			/* ELEVATOR */
 
 			
-			if (Math.abs(mControlBoard.elevatorPercentOutput())>0.1){
-				mElevator.setDemandOpenLoop(mControlBoard.elevatorPercentOutput()*0.25);
-			}
-			else if(mControlBoard.operator.getButton(Button.RB)){
-				mElevator.setSetpointMotionMagic(0.4);
+			// if (Math.abs(mControlBoard.elevatorPercentOutput())){
+				mSuperstructure.controlElevatorManually(mControlBoard.elevatorPercentOutput());
+			// }
+		if(mControlBoard.operator.getButton(Button.RB)){
+				mWrist.setSetpointMotionMagic(0);
+				//mElevator.setSetpointMotionMagic(0.4);
 			}
 			else if(mControlBoard.operator.getButton(Button.LB)){
-				mElevator.setSetpointMotionMagic(0.00);
+				mWrist.setSetpointMotionMagic(176);
+				//mElevator.setSetpointMotionMagic(0.00);
 			}
-			else{
-				mSuperstructure.controlElevatorPercentOutput(0);
-			}
+
 
 			if (mControlBoard.zeroElevator()){
 				mElevator.setWantHome(true);
@@ -333,19 +333,18 @@ public class Robot extends TimedRobot {
 				
 			// }
 			if (mControlBoard.operator.getButton(Button.X)){
-				mShooter.setClosedLoopDemand(2000/60); //6380 max 
+				mShooter.setOpenLoopDemand(0.95); //6380 max 
 				//mWrist.setSetpointMotionMagic(10);
 			}
-			else if (mControlBoard.operator.getButton(Button.B)){
-				mShooter.setClosedLoopDemand(0);
-				//mWrist.setSetpointMotionMagic(176);
+			else {//if (mControlBoard.operator.getButton(Button.B)){
+				mShooter.setOpenLoopDemand(0);
 			}
 
 
 			/* END EFFECTOR */
 
 
-			else if (mControlBoard.operator.getTrigger(Side.RIGHT)){
+			if (mControlBoard.operator.getTrigger(Side.RIGHT)){
 				mSuperstructure.intake(true);
 			}
 			else if(mControlBoard.operator.getTrigger(Side.LEFT)){
