@@ -94,11 +94,11 @@ public class Shooter extends Subsystem {
     /**
      * rpm
      */
-    public void setClosedLoopDemand(double rpm) {
+    public void setClosedLoopDemand(double rps) {
         if (mControlState != ControlState.CLOSED_LOOP){
             mControlState = ControlState.CLOSED_LOOP;
         }
-        mPeriodicIO.demand = rpm;
+        mPeriodicIO.demand = rps;
     }
 
     @Override

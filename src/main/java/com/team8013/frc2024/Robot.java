@@ -25,6 +25,7 @@ import com.team8013.frc2024.auto.AutoModeSelector;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.controlboard.ControlBoard.SwerveCardinal;
 import com.team8013.frc2024.controlboard.CustomXboxController.Button;
+import com.team8013.frc2024.controlboard.CustomXboxController.Side;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.Looper;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
@@ -332,7 +333,7 @@ public class Robot extends TimedRobot {
 				
 			// }
 			if (mControlBoard.operator.getButton(Button.X)){
-				mShooter.setClosedLoopDemand(6380);
+				mShooter.setClosedLoopDemand(2000/60); //6380 max 
 				//mWrist.setSetpointMotionMagic(10);
 			}
 			else if (mControlBoard.operator.getButton(Button.B)){
@@ -344,15 +345,15 @@ public class Robot extends TimedRobot {
 			/* END EFFECTOR */
 
 
-			// else if (mControlBoard.endEffectorIntake()){
-			// 	mSuperstructure.intake(true);
-			// }
-			// else if(mControlBoard.endEffectorOuttake()){
-			// 	mSuperstructure.outtake(true);
-			// }
-			// else{
-			// 	mSuperstructure.intake(false);
-			// }
+			else if (mControlBoard.operator.getTrigger(Side.RIGHT)){
+				mSuperstructure.intake(true);
+			}
+			else if(mControlBoard.operator.getTrigger(Side.LEFT)){
+				mSuperstructure.outtake(true);
+			}
+			else{
+				mSuperstructure.intake(false);
+			}
 
 
 

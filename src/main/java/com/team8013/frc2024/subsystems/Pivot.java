@@ -207,6 +207,15 @@ public class Pivot extends Subsystem{
                 if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
                     mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
             }
+
+        //Limit forward and backward movement
+        if (degrees > Constants.PivotConstants.kMaxAngle){
+            degrees = Constants.PivotConstants.kMaxAngle;
+        }
+        else if (degrees < Constants.PivotConstants.kMinAngle){
+            degrees = Constants.PivotConstants.kMinAngle;
+        }
+        
         double rotationDemand = Conversions.degreesToRotation(degrees,Constants.PivotConstants.PivotGearRatio);
         mPeriodicIO.demand = rotationDemand;
     }

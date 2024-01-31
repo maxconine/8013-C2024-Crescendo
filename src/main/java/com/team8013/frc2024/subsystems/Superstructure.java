@@ -3,6 +3,9 @@ package com.team8013.frc2024.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
@@ -10,6 +13,7 @@ import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 import com.team8013.frc2024.subsystems.EndEffector.State;
+import com.team8013.frc2024.subsystems.Shooter.ControlState;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.requests.SequentialRequest;
@@ -351,7 +355,8 @@ public class Superstructure extends Subsystem {
         SCORE_AMP,
         TRANSFER_TO_SHOOTER,
         SHOOT,
-        STOW
+        STOW,
+        CLIMB
     }
 
     public void setSuperstuctureIntakingGround(){
@@ -389,6 +394,45 @@ public class Superstructure extends Subsystem {
             mSuperstructureState = SuperstructureState.STOW;
         }
     }
+
+
+    //     @Override
+    // public void writePeriodicOutputs() { 
+    //     if (mSuperstructureState == SuperstructureState.STOW){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.SHOOT){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle); //in the future this will adjust based on position from goal
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER){
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kTransferToShooterAngle);
+    //         //then outtake
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.SCORE_AMP){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kAmpScoreAngle);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kAmpScoreAngle);
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kFloorIntakeAngle);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kFloorIntakeAngle);
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.INTAKING_SOURCE){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceIntakeHeight);
+    //         mWrist.setSetpointMotionMagic(Constants.WristConstants.kSourceIntakeAngle);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceIntakeAngle);
+    //     }
+    //     else if (mSuperstructureState == SuperstructureState.CLIMB){
+    //         mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
+    //         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
+    //     }
+
+    // }
 
 
 

@@ -453,14 +453,15 @@ public class Constants {
         public static final double PivotGearRatio = (25)*(74/18);//25:1 74:18 revolutions of the pivot per 1 rotation of the motor
 
         public static final int kMinAngle = 0; // deg
-        public static final int kMaxAngle = 85; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
+        public static final int kMaxAngle = 90; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
 
         /* State Positions */
-        public static final int kIntakeAngle = 0; // deg
-        public static final int kStowAngle = 0; // deg
-        public static final int kSourceAngle = 0; // deg Human player load angle
-        public static final int kAmpAngle = 0; // deg
-        public static final int kShootAgainstSubwooferAngle = 0; // deg
+        public static final double kFloorIntakeAngle = 0;
+        public static final double kSourceIntakeAngle = 0;
+        public static final double kStowAngle = 0;
+        public static final double kAmpScoreAngle = 0;
+        public static final double kShootAgainstSubwooferAngle = 0; // deg
+        public static final double kClimbAngle = 0; // deg
         
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
@@ -497,16 +498,24 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 67.23;
+        public static final double CANCODER_OFFSET = 0;
 
         public static final double kGearRatio = 25; //radians per rotation
 
-        public static final int kMinPosition = 0; // degrees
-        public static final int kMaxPosition = 180; // degrees
+        public static final double kMinPosition = 0; // degrees
+        public static final double kMaxPosition = 180; // degrees
+
+        public static final double kFloorIntakeAngle = 180;
+        public static final double kSourceIntakeAngle = 0;
+        public static final double kStowAngle = 0;
+        public static final double kAmpScoreAngle = 0;
+        public static final double kTransferToShooterAngle = 0;
+        public static final double kShootAngle = 0;
+        public static final double kClimbAngle = 0;
+
 
         public static TalonFXConfiguration wristMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            //TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
             config.CurrentLimits.SupplyCurrentLimit = 15; //start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
@@ -540,11 +549,19 @@ public class Constants {
 
     public static final class ElevatorConstants{
         public static final int kMaxVoltage = 12;
-        public static final double kGearRatio = 25;
+        public static final double kGearRatio = 16;
         public static final double kWheelCircumference = Conversions.inchesToMeters(1.625)*Math.PI;
 
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
+
+        public static final double kFloorIntakeHeight = 0;
+        public static final double kSourceIntakeHeight = 0;
+        public static final double kStowHeight = 0;
+        public static final double kAmpScoreHeight = 0;
+        public static final double kShootHeight = 0.0244;
+
+        public static final double kClimbHeight = 0;
 
         public static TalonFXConfiguration elevatorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
