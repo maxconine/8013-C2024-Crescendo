@@ -301,11 +301,11 @@ public class Superstructure extends Subsystem {
 
     public void controlPivotManually(double demand){
         double position = mPivot.getPivotAngleDeg();
-        if ((demand>0)&&(position<Constants.PivotConstants.kMaxHeight)){
-            position += 0.8;
+        if ((demand>0)&&(position<Constants.PivotConstants.kMaxAngle)){
+            position += 2;
         }
-        else if ((demand<0)&&(position>Constants.PivotConstants.kMinHeight)){
-            position += -0.8;
+        else if ((demand<0)&&(position>Constants.PivotConstants.kMaxAngle)){
+            position += -2;
         }
         mPivot.setSetpointMotionMagic(position);
     }
@@ -314,8 +314,16 @@ public class Superstructure extends Subsystem {
         mElevator.setDemandOpenLoop(demand);
     }
     
-    public void controlWristPercentOutput(double demand){
-        mWrist.setDemandOpenLoop(demand);
+    public void controlWristManually(double demand){
+        double position = mWrist.getWristAngleDeg();
+        if (demand>0){//&&(position<Constants.WristConstants.kMaxPosition)){
+            position += 0.8;
+        }
+        else if (demand<0){//&&(position<Constants.WristConstants.kMinPosition)){
+            position = position -0.8;
+        }
+        System.out.println(demand);
+        mWrist.setSetpointMotionMagic(position);
     }
 
     public void intake(boolean intake){

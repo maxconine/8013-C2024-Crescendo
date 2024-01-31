@@ -37,8 +37,8 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
 
     // toggle constants between comp bot and practice bot ("epsilon")
-    public static boolean isBeta = false;
-    public static boolean isComp = true;
+    public static boolean isBeta = true;
+    public static boolean isComp = false;
 
     public static boolean isCompBot() {
         return isComp;
@@ -203,7 +203,7 @@ public class Constants {
                         /*** MODULE SPECIFIC CONSTANTS ***/
             /* Front Left Module - Module 0 */
             public static final class Mod3 {
-                    public static final double betaAngleOffset = 88;
+                    public static final double betaAngleOffset = 0;
                     public static final double compAngleOffset = 0;
 
                     public static SwerveModuleConstants SwerveModuleConstants() {
@@ -214,7 +214,7 @@ public class Constants {
 
             /* Front Right Module - Module 1 */
             public static final class Mod1 {
-                    public static final double betaAngleOffset = 105.2;
+                    public static final double betaAngleOffset = 0;
                     public static final double compAngleOffset = 0;
 
                     public static SwerveModuleConstants SwerveModuleConstants() {
@@ -225,7 +225,7 @@ public class Constants {
 
             /* Back Left Module - Module 2 */
             public static final class Mod2 {
-                    public static final double betaAngleOffset = -9.57;
+                    public static final double betaAngleOffset = 0;
                     public static final double compAngleOffset = 0;
 
                     public static SwerveModuleConstants SwerveModuleConstants() {
@@ -236,7 +236,7 @@ public class Constants {
 
             /* Back Right Module - Module 3 */
             public static final class Mod0 {
-                    public static final double betaAngleOffset = 320.1;
+                    public static final double betaAngleOffset = 0;
                     public static final double compAngleOffset = 0;
 
                     
@@ -452,10 +452,15 @@ public class Constants {
 
         public static final double PivotGearRatio = (25)*(74/18);//25:1 74:18 revolutions of the pivot per 1 rotation of the motor
 
-        public static final int kMinHeight = 0; // deg
-        public static final int kMaxHeight = 85; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
+        public static final int kMinAngle = 0; // deg
+        public static final int kMaxAngle = 85; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
 
-        
+        /* State Positions */
+        public static final int kIntakeAngle = 0; // deg
+        public static final int kStowAngle = 0; // deg
+        public static final int kSourceAngle = 0; // deg Human player load angle
+        public static final int kAmpAngle = 0; // deg
+        public static final int kShootAgainstSubwooferAngle = 0; // deg
         
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
@@ -512,7 +517,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicCruiseVelocity = 10;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 40;
 
@@ -545,7 +550,7 @@ public class Constants {
             TalonFXConfiguration config = new TalonFXConfiguration();
             //TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 15; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -554,9 +559,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicCruiseVelocity = 100;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 40;
+            config.MotionMagic.MotionMagicAcceleration = 300;
 
         //     config.MotorOutput.PeakForwardDutyCycle = Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
         //     config.MotorOutput.PeakReverseDutyCycle = 0

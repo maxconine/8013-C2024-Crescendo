@@ -46,11 +46,11 @@ public class Wrist extends Subsystem{
         mMotor.getConfigurator().apply(Constants.WristConstants.wristMotorConfig());
         mCANcoder.getConfigurator().apply(new CANcoderConfiguration());
 
-        setWantNeutralBrake(false);
+        setWantNeutralBrake(true);
         resetToAbsolute();
     }
 
-    private void resetToAbsolute(){
+    public void resetToAbsolute(){
         double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.position_degrees, getCanCoder().getDegrees() - Constants.WristConstants.CANCODER_OFFSET);
         double absolutePosition = Conversions.degreesToRotation(angle, Constants.WristConstants.kGearRatio);
         mMotor.setPosition(absolutePosition);

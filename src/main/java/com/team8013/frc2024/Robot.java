@@ -241,7 +241,6 @@ public class Robot extends TimedRobot {
 
 			mDrive.setNeutralBrake(true);
 
-			mPivot.resetToAbsolute();
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -293,15 +292,15 @@ public class Robot extends TimedRobot {
 
 			/* PIVOT */
 
-			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
-				mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
-			}
-			else if (mControlBoard.pivotUp()){
-				mPivot.setSetpointMotionMagic(80);
-			}
-			else if (mControlBoard.pivotDown()){
-				mPivot.setSetpointMotionMagic(10);
-			}
+			// if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
+			// 	mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
+			// }
+			// else if (mControlBoard.pivotUp()){
+			// 	mPivot.setSetpointMotionMagic(80);
+			// }
+			// else if (mControlBoard.pivotDown()){
+			// 	mPivot.setSetpointMotionMagic(10);
+			// }
 
 			/* ELEVATOR */
 
@@ -310,11 +309,11 @@ public class Robot extends TimedRobot {
 				mElevator.setDemandOpenLoop(mControlBoard.elevatorPercentOutput()*0.25);
 			}
 			else if(mControlBoard.operator.getButton(Button.RB)){
-				mElevator.setSetpointMotionMagic(0.3);
+				mElevator.setSetpointMotionMagic(0.4);
 			}
-			// else if(mControlBoard.elevatorDown()){
-			// 	mElevator.setSetpointMotionMagic(0.1);
-			// }
+			else if(mControlBoard.operator.getButton(Button.LB)){
+				mElevator.setSetpointMotionMagic(0.00);
+			}
 			else{
 				mSuperstructure.controlElevatorPercentOutput(0);
 			}
@@ -326,17 +325,16 @@ public class Robot extends TimedRobot {
 			/* WRIST */
 
 			// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
-			// 	mSuperstructure.controlWristPercentOutput(mControlBoard.wristPercentOutput());
+			// 	mSuperstructure.controlWristManually(mControlBoard.operator.getController().getLeftX());
+				
 			// }
-			// else if (mControlBoard.operator.getButton(Button.X)){
-			// 	mWrist.setSetpointMotionMagic(0);
-			// }
-			// else if (mControlBoard.operator.getButton(Button.X)){
-			// 	mWrist.setSetpointMotionMagic(100);
-			// }
-			// else{
-			// 	mWrist.setDemandOpenLoop(0);
-			//}
+			if (mControlBoard.operator.getButton(Button.X)){
+				mWrist.setSetpointMotionMagic(10);
+			}
+			else if (mControlBoard.operator.getButton(Button.B)){
+				mWrist.setSetpointMotionMagic(176);
+			}
+
 
 			/* END EFFECTOR */
 
@@ -453,6 +451,9 @@ public class Robot extends TimedRobot {
 		try {
 
 			mDrive.resetModulesToAbsolute();
+			mPivot.resetToAbsolute();
+			mWrist.resetToAbsolute();
+
 
 			// mDrive.outputTelemetryDisabled();
 

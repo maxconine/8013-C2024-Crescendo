@@ -186,11 +186,11 @@ public class Elevator extends Subsystem {
 
 
         if (mHoming) { //sets it moving backward until velocity slows down
-            mMaster.setControl(new VoltageOut(-1));
+            mMaster.setControl(new VoltageOut(-0.5));
             if (mHomingDelay.update(Timer.getFPGATimestamp(),
                     Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { //is this motor velocity or elevator velocity
                 zeroSensors();  
-                setSetpointMotionMagic(0.0);
+                setSetpointMotionMagic(0.05);
                 mHoming = false;
             }
         }
