@@ -31,6 +31,7 @@ public class EndEffector extends Subsystem {
     // private final StatorCurrentLimitConfiguration kDisabledStatorLimit = new StatorCurrentLimitConfiguration(false, 0, 0, 0);
     // private final StatorCurrentLimitConfiguration kEnabledStatorLimit = new StatorCurrentLimitConfiguration(true, 40, 40,
     //         0.0);
+
         
     private EndEffector() {
         mMaster = new TalonFX(Ports.END_EFFECTOR_A, Ports.CANBUS);
@@ -41,7 +42,7 @@ public class EndEffector extends Subsystem {
         mMaster.getConfigurator().apply(new TalonFXConfiguration());
         mSlave.getConfigurator().apply(new TalonFXConfiguration());
 
-        mSlave.setControl(new Follower(Ports.END_EFFECTOR_A, true));
+        mSlave.setControl(new Follower(Ports.END_EFFECTOR_A, false));
         setWantNeutralBrake(false);
 
         // mMaster.config_kP(0, 1.5, Constants.kLongCANTimeoutMs);
@@ -73,29 +74,19 @@ public class EndEffector extends Subsystem {
         return mState;
     }
 
-    /**
-     * 
-     * @param state the state to set the intake to, Idle, Intaking, or Outtaking
-     */
-    public void setState(State state) {
-        if (mState != state) {
-            if (state != State.IDLE) {
-                hasGamePiece = false;
-            }
-            //could change current configs depending
-            // if (state == State.INTAKING) {
-            //     mMaster.configStatorCurrentLimit(kEnabledStatorLimit, Constants.kCANTimeoutMs);
-            // } else {
-            //     mMaster.configStatorCurrentLimit(kDisabledStatorLimit, Constants.kCANTimeoutMs);
-            // }
-        }
-        mState = state;
+    public void stop() {
+        mState = IDLE;
+        mPeriodicIO.demand = mState.voltage;
     }
 
-    @Override
-    public void stop() {
-        mPeriodicIO.demand = 0.0;
-        setState(State.IDLE);
+    public void outtake() {
+        mState = OUTTAKING;
+        mPeriodicIO.demand = mState.voltage;
+    }
+
+    public void intake() {
+        mState = INTAKING;
+        mPeriodicIO.demand = mState.voltage;
     }
 
     @Override
@@ -126,7 +117,7 @@ public class EndEffector extends Subsystem {
         enabledLooper.register(new Loop() {
             @Override
             public void onStart(double timestamp) {
-                setState(State.IDLE);
+                stop();
             }
 
             @Override
@@ -138,30 +129,29 @@ public class EndEffector extends Subsystem {
                     case INTAKING:
                         mPeriodicIO.demand = mState.voltage;
 
-                        if (mPeriodicIO.beamBreak == true) {
-                            hasGamePiece = true; 
-                        } 
-
+                        // if (mPeriodicIO.beamBreak == true) {
+                        //     hasGamePiece = true;
+                        //     stop()
+                        // } 
                         break; 
                     case OUTTAKING:
                         mPeriodicIO.demand = mState.voltage;
-                        hasGamePiece = false;
+                        // if (mPeriodicIO.beamBreak == false) {
+                        // hasGamePiece = false;
+
+                        // }
                         break;
                 }
-            }
-
-            @Override
-            public void onStop(double timestamp) {
             }
         });
     }
     @Override
     public void writePeriodicOutputs() {       
         if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){     
-            //mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); //could enable FOC in the future
+            mMaster.setControl(new VoltageOut(mPeriodicIO.demand));
         }
         else{
-            //mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+            mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
         }
     }
 
