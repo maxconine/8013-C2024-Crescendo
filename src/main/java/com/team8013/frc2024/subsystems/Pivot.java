@@ -64,7 +64,7 @@ public class Pivot extends Subsystem{
     }
 
     public void resetToAbsolute(){
-       double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees() - Constants.PivotConstants.CANCODER_OFFSET,Constants.PivotConstants.PivotGearRatio);
+       double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees(),Constants.PivotConstants.PivotGearRatio);
         mMaster.setPosition(absolutePosition);
     }
 
@@ -219,7 +219,7 @@ public class Pivot extends Subsystem{
     }
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360,mCANcoder.getAbsolutePosition().getValueAsDouble()*360));
+        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.PivotConstants.CANCODER_OFFSET,mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.PivotConstants.CANCODER_OFFSET));
     }
 
     @Log
