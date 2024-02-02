@@ -120,7 +120,7 @@ public class ControlBoard {
         }
     }
 
-     public SwerveCardinal getSwerveSnap() {
+    public SwerveCardinal getSwerveSnap() {
         // CARDINAL SNAPS
 
         switch (operator.getController().getPOV()) {

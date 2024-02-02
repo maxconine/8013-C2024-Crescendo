@@ -57,7 +57,6 @@ public class Robot extends TimedRobot {
 	private final EndEffector mEndEffector = EndEffector.getInstance();
 	private final Shooter mShooter = Shooter.getInstance();
 
-
 	// instantiate enabled and disabled loopers
 	private final Looper mEnabledLooper = new Looper();
 	private final Looper mDisabledLooper = new Looper();
@@ -71,6 +70,11 @@ public class Robot extends TimedRobot {
 	public static boolean flip_trajectories = false;
 	public static boolean wantChase = false;
 	public static boolean doneChasing = true;
+
+	private final int kDpadUp = 0;
+	private final int kDpadRight = 90;
+	private final int kDpadDown = 180;
+	private final int kDpadLeft = 270;
 
 	public Robot() {
 		CrashTracker.logRobotConstruction();
@@ -245,7 +249,6 @@ public class Robot extends TimedRobot {
 
 			mDrive.setNeutralBrake(true);
 
-
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
@@ -262,31 +265,13 @@ public class Robot extends TimedRobot {
 				mDrive.resetModulesToAbsolute();
 			}
 
-			if ((mControlBoard.getWantChase()) && (!wantChase)) {
-				// mLimelight.setWantChase(true);
-				mSuperstructure.tagTrajectory(mControlBoard.tagToChase(), mControlBoard.chaseNearest());
-				wantChase = true;
-				doneChasing = false;
-			}
-			if ((!mControlBoard.getWantChase()) && (wantChase)) {
-				mDrive.stopModules();
-				// mLimelight.setWantChase(false);
-				wantChase = false;
-				doneChasing = true;
-			} else {
-				// mLimelight.updatePoseWithLimelight();
-			}
-
-			// SmartDashboard.putBoolean("Done with tag trajectory",
-			// mSuperstructure.isFinishedWithTagTrajectory());
-
 			if (mControlBoard.getBrake()) {
 				mDrive.orientModules(List.of(
 						Rotation2d.fromDegrees(45),
 						Rotation2d.fromDegrees(-45),
 						Rotation2d.fromDegrees(-45),
 						Rotation2d.fromDegrees(45)));
-			} else if (!wantChase) {
+			} else {
 				mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(
 						mControlBoard.getSwerveTranslation().x(),
 						mControlBoard.getSwerveTranslation().y(),
@@ -294,78 +279,112 @@ public class Robot extends TimedRobot {
 						mDrive.getHeading()));
 			}
 
-			/* PIVOT */
-
-			if (Math.abs(mControlBoard.pivotPercentOutput())>0.1){
-				mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
-			}
-			else if (mControlBoard.pivotUp()){
-				mPivot.setSetpointMotionMagic(80);
-			}
-			else if (mControlBoard.pivotDown()){
-				mPivot.setSetpointMotionMagic(10);
-			}
-
-			/* ELEVATOR */
-
-			
-			// if (Math.abs(mControlBoard.elevatorPercentOutput())){
-				mSuperstructure.controlElevatorManually(mControlBoard.elevatorPercentOutput());
-			// }
-		if(mControlBoard.operator.getButton(Button.RB)){
-				mWrist.setSetpointMotionMagic(0);
-				//mElevator.setSetpointMotionMagic(0.4);
-			}
-			else if(mControlBoard.operator.getButton(Button.LB)){
-				mWrist.setSetpointMotionMagic(176);
-				//mElevator.setSetpointMotionMagic(0.00);
-			}
-
-
-			if (mControlBoard.zeroElevator()){
+			if (mControlBoard.zeroElevator()) {
 				mElevator.setWantHome(true);
 			}
 
-			/* WRIST */
+			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
+			if (Constants.isManualControlMode) {
+				/* PIVOT */
 
-			// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
-			// 	mSuperstructure.controlWristManually(mControlBoard.operator.getController().getLeftX());
-				
-			// }
-			if (mControlBoard.operator.getButton(Button.X)){
-				mShooter.setOpenLoopDemand(0.95); //6380 max 
-				//mWrist.setSetpointMotionMagic(10);
-			}
-			else {//if (mControlBoard.operator.getButton(Button.B)){
-				mShooter.setOpenLoopDemand(0);
-			}
+				if (Math.abs(mControlBoard.pivotPercentOutput()) > 0.1) {
+					mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
+				} else if (mControlBoard.pivotUp()) {
+					mPivot.setSetpointMotionMagic(80);
+				} else if (mControlBoard.pivotDown()) {
+					mPivot.setSetpointMotionMagic(10);
+				}
 
+				/* ELEVATOR */
 
-			/* END EFFECTOR */
+				// if (Math.abs(mControlBoard.elevatorPercentOutput())){
+				mSuperstructure.controlElevatorManually(mControlBoard.elevatorPercentOutput());
+				// }
+				if (mControlBoard.operator.getButton(Button.RB)) {
+					mWrist.setSetpointMotionMagic(2);
+					// mElevator.setSetpointMotionMagic(0.4);
+				} else if (mControlBoard.operator.getButton(Button.LB)) {
+					mWrist.setSetpointMotionMagic(176);
+					// mElevator.setSetpointMotionMagic(0.00);
+				}
 
+				/* WRIST */
 
-			if (mControlBoard.operator.getTrigger(Side.RIGHT)){
-				mSuperstructure.intake(true);
-			}
-			else if(mControlBoard.operator.getTrigger(Side.LEFT)){
-				mSuperstructure.outtake(true);
+				// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
+				// mSuperstructure.controlWristManually(mControlBoard.operator.getController().getLeftX());
+
+				// }
+				if (mControlBoard.operator.getButton(Button.X)) {
+					mShooter.setOpenLoopDemand(0.95); // 6380 max
+					// mWrist.setSetpointMotionMagic(10);
+				} else {// if (mControlBoard.operator.getButton(Button.B)){
+					mShooter.setOpenLoopDemand(0);
+				}
+
+				/* END EFFECTOR */
+
+				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
+					mSuperstructure.intake(true);
+				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
+					mSuperstructure.outtake(true);
+				} else {
+					mSuperstructure.intake(false);
+				}
+
 			}
 			else{
-				mSuperstructure.intake(false);
+			if (mControlBoard.operator.getTrigger(Side.RIGHT)){
+				mSuperstructure.setSuperstuctureShoot();
 			}
-
-
-
+			else if	(mControlBoard.operator.getTrigger(Side.LEFT)){
+				mSuperstructure.setSuperstuctureScoreAmp();
+			}
+			else if (mControlBoard.operator.getController().getPOV() == kDpadDown){
+				mSuperstructure.setSuperstuctureIntakingGround();
+			}
+			else if (mControlBoard.operator.getController().getPOV() == kDpadRight){
+				mSuperstructure.setSuperstuctureStow();
+			}
+			else if (mControlBoard.operator.getController().getPOV() == kDpadLeft){
+				mSuperstructure.setSuperstuctureStow();
+			}
+			else if(mControlBoard.operator.getButton(Button.START)&&mControlBoard.operator.getButton(Button.BACK)){
+				mSuperstructure.setClimbMode();
+			}
+			else if(mControlBoard.operator.getButton(Button.RB)){
+				mSuperstructure.setSuperstuctureTransferToShooter();
+			}
+		
+		
+			mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
+		}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
-			// 	mDrive.setHeadingControlTarget(mControlBoard.getSwerveSnap().degrees);
-			// 	SmartDashboard.putNumber("Snapping Drgrees",
-			// 			mControlBoard.getSwerveSnap().degrees);
+			// mDrive.setHeadingControlTarget(mControlBoard.getSwerveSnap().degrees);
+			// SmartDashboard.putNumber("Snapping Drgrees",
+			// mControlBoard.getSwerveSnap().degrees);
 			// } else {
-			// 	SmartDashboard.putNumber("Snapping Drgrees", -1);
+			// SmartDashboard.putNumber("Snapping Drgrees", -1);
 			// }
 
-			
+			// if ((mControlBoard.getWantChase()) && (!wantChase)) {
+			// // mLimelight.setWantChase(true);
+			// mSuperstructure.tagTrajectory(mControlBoard.tagToChase(),
+			// mControlBoard.chaseNearest());
+			// wantChase = true;
+			// doneChasing = false;
+			// }
+			// if ((!mControlBoard.getWantChase()) && (wantChase)) {
+			// mDrive.stopModules();
+			// // mLimelight.setWantChase(false);
+			// wantChase = false;
+			// doneChasing = true;
+			// } else {
+			// // mLimelight.updatePoseWithLimelight();
+			// }
+
+			// SmartDashboard.putBoolean("Done with tag trajectory",
+			// mSuperstructure.isFinishedWithTagTrajectory());
 
 			// /* SUPERSTRUCTURE */
 
@@ -461,30 +480,29 @@ public class Robot extends TimedRobot {
 			mPivot.resetToAbsolute();
 			mWrist.resetToAbsolute();
 
-
 			// mDrive.outputTelemetryDisabled();
 
 			boolean alliance_changed = false;
 			if (DriverStation.isDSAttached()) {
 				Optional<Alliance> ally = DriverStation.getAlliance();
 				if (ally.isPresent()) {
-    			if (ally.get() == Alliance.Red) {
-       				if (!is_red_alliance) {
-						alliance_changed = true;
-					} else {
-						alliance_changed = false;
+					if (ally.get() == Alliance.Red) {
+						if (!is_red_alliance) {
+							alliance_changed = true;
+						} else {
+							alliance_changed = false;
+						}
+						is_red_alliance = true;
 					}
-					is_red_alliance = true;
-    				}
-    			if (ally.get() == Alliance.Blue) {
-					if (is_red_alliance) {
-						alliance_changed = true;
-					} else {
-						alliance_changed = false;
+					if (ally.get() == Alliance.Blue) {
+						if (is_red_alliance) {
+							alliance_changed = true;
+						} else {
+							alliance_changed = false;
+						}
+						is_red_alliance = false;
 					}
-					is_red_alliance = false;
-    			}
-			}
+				}
 			} else {
 				alliance_changed = true;
 			}

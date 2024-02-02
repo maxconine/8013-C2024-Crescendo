@@ -51,6 +51,8 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
+    public static final boolean isManualControlMode = true;
+
     // robot loop time
     public static final double kLooperDt = 0.02;
 
@@ -551,6 +553,7 @@ public class Constants {
         public static final int kMaxVoltage = 12;
         public static final double kGearRatio = 16;
         public static final double kWheelCircumference = Conversions.inchesToMeters(1.625)*Math.PI;
+        public static final double kPositionError = Conversions.inchesToMeters(0.5);
 
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
