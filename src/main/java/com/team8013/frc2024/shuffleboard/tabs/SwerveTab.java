@@ -93,7 +93,7 @@ public class SwerveTab extends ShuffleboardTabBase {
     @Override
     public void update() {
         for (int i = 0; i < mDriveCancoders.length; i++) {
-            // mDriveCancoders[i].setDouble(truncate(mDriveModules[i].getCanCoder().getDegrees()));
+            mDriveCancoders[i].setDouble(truncate(mDriveModules[i].getCanCoder()));
             mDriveIntegrated[i].setDouble(truncate(MathUtil.inputModulus(mDriveModules[i].getState().angle.getDegrees(), 0, 360)));
             mDriveMPS[i].setDouble(mDriveModules[i].getState().speedMetersPerSecond);
             mDriveCurrent[i].setDouble(mDriveModules[i].getDriveMotorCurrent());

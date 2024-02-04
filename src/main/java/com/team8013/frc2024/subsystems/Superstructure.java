@@ -6,6 +6,7 @@ import java.util.List;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.team254.lib.util.Util;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
@@ -44,11 +45,14 @@ public class Superstructure extends Subsystem {
     private boolean allRequestsComplete = false;
 
     private double pivotManualPosition = mPivot.getPivotAngleDeg();
-        private double elevatorManualPosition = mElevator.getElevatorUnits();
+    private double elevatorManualPosition = mElevator.getElevatorUnits();
+    private double wristManualPosition = mWrist.getWristAngleDeg();
     private SuperstructureState mSuperstructureState;
 
     private boolean manualControlMode;
     private boolean outtake;
+    private boolean outtakingTimerStarted = false;
+    private Timer outtakingTimer = new Timer();
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -308,59 +312,53 @@ public class Superstructure extends Subsystem {
             return false;
     }
 
-    public void controlPivotManually(double demand){
+    public void controlPivotManually(double demand) {
         // double position = mPivot.getPivotAngleDeg();
-        if ((demand>0)&&(pivotManualPosition<Constants.PivotConstants.kMaxAngle)){
-            pivotManualPosition += 0.5;
-        }
-        else if ((demand<0)){ //&&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
-            pivotManualPosition += -0.5;
+        if ((demand > 0) && (pivotManualPosition < Constants.PivotConstants.kMaxAngle)) {
+            pivotManualPosition += 0.2;
+        } else if ((demand < 0)) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
+            pivotManualPosition += -0.2;
         }
         mPivot.setSetpointMotionMagic(pivotManualPosition);
     }
 
-    public void controlElevatorManually(double demand){
-        if ((demand>0.2)){
-            elevatorManualPosition += 0.005;
-        }
-        else if ((demand<-0.2)){ //&&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
-            elevatorManualPosition += -0.005;
+    public void controlElevatorManually(double demand) {
+        if ((demand > 0.2)) {
+            elevatorManualPosition += 0.002;
+        } else if ((demand < -0.2)) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
+            elevatorManualPosition += -0.002;
         }
 
         mElevator.setSetpointMotionMagic(elevatorManualPosition);
     }
-    
-    public void controlWristManually(double demand){
-        double position = mWrist.getWristAngleDeg();
-        if (demand>0){//&&(position<Constants.WristConstants.kMaxPosition)){
-            position += 0.8;
+
+    public void controlWristManually(double demand) {
+        if (demand > 0) {// &&(position<Constants.WristConstants.kMaxPosition)){
+            wristManualPosition += 0.2;
+        } else if (demand < 0) {// &&(position<Constants.WristConstants.kMinPosition)){
+            wristManualPosition = wristManualPosition - 0.2;
         }
-        else if (demand<0){//&&(position<Constants.WristConstants.kMinPosition)){
-            position = position -0.8;
-        }
-        System.out.println(demand);
-        mWrist.setSetpointMotionMagic(position);
+        // SmartDashboard.putNumber("wristManualPosition", wristManualPosition);
+        mWrist.setSetpointMotionMagic(wristManualPosition);
     }
 
-    public void intake(boolean intake){
-        if (intake){
-        mEndEffector.setState(State.INTAKING);
-        }
-        else{
-        mEndEffector.setState(State.IDLE);
+    public void intake(boolean intake) {
+        if (intake) {
+            mEndEffector.setState(State.INTAKING);
+        } else {
+            mEndEffector.setState(State.IDLE);
         }
     }
 
-    public void outtake(boolean outtake){
-        if (outtake){
-        mEndEffector.setState(State.OUTTAKING);
-        }
-        else{
-        mEndEffector.setState(State.IDLE);
+    public void outtake(boolean outtake) {
+        if (outtake) {
+            mEndEffector.setState(State.OUTTAKING);
+        } else {
+            mEndEffector.setState(State.IDLE);
         }
     }
 
-    public enum SuperstructureState{
+    public enum SuperstructureState {
         INTAKING_GROUND,
         INTAKING_SOURCE,
         SCORE_AMP,
@@ -370,119 +368,183 @@ public class Superstructure extends Subsystem {
         CLIMB
     }
 
-    public void setSuperstuctureIntakingGround(){
-        if (mSuperstructureState != SuperstructureState.INTAKING_GROUND){
+    public void setSuperstuctureIntakingGround() {
+        if (mSuperstructureState != SuperstructureState.INTAKING_GROUND) {
             mSuperstructureState = SuperstructureState.INTAKING_GROUND;
         }
     }
 
-    public void setSuperstuctureIntakingSource(){
-        if (mSuperstructureState != SuperstructureState.INTAKING_SOURCE){
+    public void setSuperstuctureIntakingSource() {
+        if (mSuperstructureState != SuperstructureState.INTAKING_SOURCE) {
             mSuperstructureState = SuperstructureState.INTAKING_SOURCE;
         }
     }
 
-    public void setSuperstuctureScoreAmp(){
-        if (mSuperstructureState != SuperstructureState.SCORE_AMP){
+    public void setSuperstuctureScoreAmp() {
+        if (mSuperstructureState != SuperstructureState.SCORE_AMP) {
             mSuperstructureState = SuperstructureState.SCORE_AMP;
         }
     }
 
-    public void setSuperstuctureTransferToShooter(){
-        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER){
+    public void setSuperstuctureTransferToShooter() {
+        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
         }
     }
 
-    public void setSuperstuctureShoot(){
-        if (mSuperstructureState != SuperstructureState.SHOOT){
+    public void setSuperstuctureShoot() {
+        if (mSuperstructureState != SuperstructureState.SHOOT) {
             mSuperstructureState = SuperstructureState.SHOOT;
         }
     }
 
-    public void setSuperstuctureStow(){
-        if (mSuperstructureState != SuperstructureState.STOW){
+    public void setSuperstuctureStow() {
+        if (mSuperstructureState != SuperstructureState.STOW) {
             mSuperstructureState = SuperstructureState.STOW;
         }
     }
 
-    public void setManualControlMode(boolean isManualControl){
-        if (manualControlMode != isManualControl){
-                manualControlMode = isManualControl;
+    public void setManualControlMode(boolean isManualControl) {
+        if (manualControlMode != isManualControl) {
+            manualControlMode = isManualControl;
         }
     }
 
-    public void setClimbMode(){
-        if (mSuperstructureState != SuperstructureState.CLIMB){
+    public void setClimbMode() {
+        if (mSuperstructureState != SuperstructureState.CLIMB) {
             mSuperstructureState = SuperstructureState.CLIMB;
         }
     }
 
-    public void setWantOuttake(boolean _outtake){
-        if (outtake != _outtake){
-        outtake = _outtake;
-    }
-    }
-
-
-        @Override
-    public void writePeriodicOutputs() { 
-        if (manualControlMode){
-            //do manual control things
-        }
-        else{
-        if (mSuperstructureState == SuperstructureState.STOW){
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
-            }
-        else if (mSuperstructureState == SuperstructureState.SHOOT){
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle); //in the future this will adjust based on position from goal
-        }
-        else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER){
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kTransferToShooterAngle);
-            //then outtake
-        }
-        else if (mSuperstructureState == SuperstructureState.SCORE_AMP){
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kAmpScoreAngle);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kAmpScoreAngle);
-            if (outtake){ // puit delayed boolean here
-                mEndEffector.setState(State.OUTTAKING);
-            }
-        }
-        else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND){
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kFloorIntakeAngle);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kFloorIntakeAngle);
-        }
-        else if (mSuperstructureState == SuperstructureState.INTAKING_SOURCE){
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceIntakeHeight);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kSourceIntakeAngle);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceIntakeAngle);
-        }
-        else if (mSuperstructureState == SuperstructureState.CLIMB){
-            //setup climb
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
-            
-
-            //once elevator and pivot are in position, wait for pull down 
-            if(mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbHeight - Constants.ElevatorConstants.kPositionError && mPivot.getPivotAngleDeg() == Constants.PivotConstants.kClimbAngle){
-                SmartDashboard.putBoolean("Climber In Position", true);
-            }
-            else{
-                SmartDashboard.putBoolean("Climber In Position", false);
-            }
-
+    public void setWantOuttake(boolean _outtake) {
+        if (outtake != _outtake) {
+            outtake = _outtake;
         }
     }
 
+    @Override
+    public void writePeriodicOutputs() {
+        if (manualControlMode) {
+            // do manual control things
+        } else {
+            if (mSuperstructureState == SuperstructureState.STOW) {
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
+
+                mWrist.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[0]);
+                mPivot.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[1]);
+
+                if (mWrist.getWristAngleDeg() < 290) {
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
+                }
+                // mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
+                // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
+            } else if (mSuperstructureState == SuperstructureState.SHOOT) {
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
+                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle); // in the future
+                                                                                                     // this will adjust
+                                                                                                     // based on
+                                                                                                     // position from
+                                                                                                     // goal
+            } else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER) {
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kTransferToShooterAngle);
+                // then outtake
+            } else if (mSuperstructureState == SuperstructureState.SCORE_AMP) {
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kAmpScoreAngle);
+                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kAmpScoreAngle);
+                if (outtake) { // puit delayed boolean here so that we can manually press to outtake and it
+                               // stops outtaking when done
+
+                    if (!outtakingTimerStarted) {
+                        outtakingTimer.start();
+                    }
+
+                    if (outtakingTimer.get() < 1.5) {
+                        mEndEffector.setState(State.OUTTAKING);
+                    } else {
+                        mEndEffector.setState(State.IDLE);
+                        outtakingTimerStarted = false;
+                        outtake = false;
+                        outtakingTimer.reset();
+                    }
+                }
+            } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
+                mWrist.setSetpointMotionMagic(280);
+
+                if (mWrist.getWristAngleDeg() > 270) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
+
+                    mWrist.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[0]);
+                    mPivot.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[1]);
+                }
+
+                if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 350) {
+                    mEndEffector.setState(State.INTAKING);
+                } else {
+                    mEndEffector.setState(State.IDLE);
+                    // Once game piece aquired, then stow
+                    mSuperstructureState = SuperstructureState.STOW;
+                }
+
+                // mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
+                // mWrist.setSetpointMotionMagic(Constants.WristConstants.kFloorIntakeAngle);
+                // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kFloorIntakeAngle);
+            } else if (mSuperstructureState == SuperstructureState.INTAKING_SOURCE) {
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceIntakeHeight);
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kSourceIntakeAngle);
+                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceIntakeAngle);
+            } else if (mSuperstructureState == SuperstructureState.CLIMB) {
+                // setup climb
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
+                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
+
+                // once elevator and pivot are in position, wait for pull down
+                if (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbHeight
+                        - Constants.ElevatorConstants.kPositionError
+                        && mPivot.getPivotAngleDeg() == Constants.PivotConstants.kClimbAngle) {
+                    SmartDashboard.putBoolean("Climber In Position", true);
+                } else {
+                    SmartDashboard.putBoolean("Climber In Position", false);
+                }
+
+            }
+        }
+        if (outtake) {
+            mEndEffector.setState(State.OUTTAKING);
+        }
+
+        // SmartDashboard.putString("Superstructure State",
+        // mSuperstructureState.toString());
+
     }
 
-
+    private double[] getPositionsGroundIntakeOut(double elevatorPosition) {
+        /*
+         * { 0.004, 280,0.0},
+         * {0.03,288,0.0},
+         * {0.052,293,0.0},
+         * {0.075,300,1},
+         * {0.1,306,2},
+         * {0.125, 313,4},
+         * {0.15,321,5.2},
+         * {0.175,327,5.3},
+         * {0.2,335,5.5},
+         * {0.215,338,5.1},
+         * {0.23,343,5.2},
+         * {0.25,347,3.5},
+         * {0.275,359.5,1.6}
+         * 
+         */
+        int index = 0;
+        for (int i = 0; i < Constants.ElevatorConstants.groundIntakeWristPositions.length; i++) {
+            if (Constants.ElevatorConstants.groundIntakeWristPositions[i][0] < elevatorPosition) {
+                index = i;
+            }
+        }
+        return new double[] { Constants.ElevatorConstants.groundIntakeWristPositions[index][1],
+                Constants.ElevatorConstants.groundIntakeWristPositions[index][2] };
+    }
 
     // public void updateLEDs() {
     // if (mLEDs.getUsingSmartdash()) {

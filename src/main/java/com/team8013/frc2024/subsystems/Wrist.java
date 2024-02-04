@@ -1,6 +1,5 @@
 package com.team8013.frc2024.subsystems;
 
-
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
@@ -8,7 +7,6 @@ import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
-
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -23,7 +21,7 @@ import com.team254.lib.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Wrist extends Subsystem{
+public class Wrist extends Subsystem {
 
     private static Wrist mInstance;
     private TalonFX mMotor;
@@ -39,29 +37,27 @@ public class Wrist extends Subsystem{
     }
 
     private Wrist() {
-        mMotor = new TalonFX(Ports.WRIST,Ports.CANBUS);
+        mMotor = new TalonFX(Ports.WRIST, Ports.CANBUS);
         mCANcoder = new CANcoder(Ports.WRIST_CANCODER, Ports.CANBUS);
 
-        //Customize these configs from constants in the future
+        // Customize these configs from constants in the future
         mMotor.getConfigurator().apply(Constants.WristConstants.wristMotorConfig());
-        mCANcoder.getConfigurator().apply(new CANcoderConfiguration());
+        mCANcoder.getConfigurator().apply(Constants.WristConstants.wristCancoderConfig());
 
         setWantNeutralBrake(true);
         resetToAbsolute();
     }
 
-    public void resetToAbsolute(){
-        double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.position_degrees, getCanCoder().getDegrees());
+    public void resetToAbsolute() {
+        double angle = Util.placeIn0To360Scope(getCanCoder());
         double absolutePosition = Conversions.degreesToRotation(angle, Constants.WristConstants.kGearRatio);
         mMotor.setPosition(absolutePosition);
     }
-
 
     private void setWantNeutralBrake(boolean brake) {
         NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         mMotor.setNeutralMode(mode);
     }
-
 
     @Override
     public void registerEnabledLoops(ILooper mEnabledLooper) {
@@ -83,81 +79,83 @@ public class Wrist extends Subsystem{
         });
     }
 
-
     @Override
     public synchronized void writePeriodicOutputs() {
-        if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC){
+        if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
             mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
         }
-        else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
-            if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
-                mMotor.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the future?
-            }
-            else{
-                
-                mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand)); //needs a feedforward
-            }
-        }
+        // else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
+        // if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
+        // mMotor.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the
+        // future?
+        // }
+        // else{
 
+        // mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand)); //needs a
+        // feedforward
+        // }
+        // }
+
+        if (Math.abs(mPeriodicIO.position_degrees - getCanCoder()) > 8) {
+            resetToAbsolute();
+        }
 
     }
 
-
     public void setSetpointMotionMagic(double degrees) {
-                if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
-                    mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
-            }
-        double rotationDemand = Conversions.degreesToRotation(degrees,Constants.WristConstants.kGearRatio);
+        if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
+            mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
+        }
+        double rotationDemand = Conversions.degreesToRotation(degrees, Constants.WristConstants.kGearRatio);
         mPeriodicIO.demand = rotationDemand;
     }
 
     public void setDemandOpenLoop(double demand) {
-                if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
-                    mPeriodicIO.mControlModeState = ControlModeState.OPEN_LOOP;
-            }
+        if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
+            mPeriodicIO.mControlModeState = ControlModeState.OPEN_LOOP;
+        }
         mPeriodicIO.demand = demand;
     }
 
-    public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.WristConstants.CANCODER_OFFSET,mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.WristConstants.CANCODER_OFFSET));
-    }
-    @Log
-    public double getWristAngleDeg(){
-        return mPeriodicIO.position_degrees;
+    public double getCanCoder() {
+        return Util.placeIn0To360Scope(
+                mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.WristConstants.CANCODER_OFFSET);
     }
 
-    
     @Log
-    public double getWristDemand(){
+    public double getWristAngleDeg() {
+        return getCanCoder();
+    }
+
+    @Log
+    public double getWristDemand() {
         return mPeriodicIO.demand;
     }
-    
+
     @Log
-    public double getWristVelocity(){
+    public double getWristVelocity() {
         return mPeriodicIO.velocity_rps;
     }
-    
+
     @Log
-    public double getWristVolts(){
+    public double getWristVolts() {
         return mPeriodicIO.output_voltage;
     }
-    
+
     @Log
-    public double getWristCurrent(){
+    public double getWristCurrent() {
         return mPeriodicIO.current;
     }
-    
 
     @Log
     public double getTimestamp() {
         return mPeriodicIO.timestamp;
     }
-    
+
     @Log
     public double getMainMotorBusVolts() {
         return mMotor.getSupplyVoltage().getValue();
     }
-
 
     public static class mPeriodicIO {
         // Inputs
@@ -174,30 +172,32 @@ public class Wrist extends Subsystem{
         public ControlModeState mControlModeState;
     }
 
-    private enum ControlModeState{
+    private enum ControlModeState {
         OPEN_LOOP,
         MOTION_MAGIC
     }
 
     @Override
     public synchronized void readPeriodicInputs() {
-        mPeriodicIO.position_degrees = Conversions.rotationsToDegrees(mMotor.getRotorPosition().getValue(), Constants.WristConstants.kGearRatio);
+        mPeriodicIO.position_degrees = Conversions.rotationsToDegrees(mMotor.getRotorPosition().getValue(),
+                Constants.WristConstants.kGearRatio);
         mPeriodicIO.current = mMotor.getTorqueCurrent().getValue();
         mPeriodicIO.output_voltage = mMotor.getMotorVoltage().getValue();
-        mPeriodicIO.velocity_rps = Conversions.rotationsToDegrees(mMotor.getVelocity().getValue(), Constants.WristConstants.kGearRatio);
+        mPeriodicIO.velocity_rps = Conversions.rotationsToDegrees(mMotor.getVelocity().getValue(),
+                Constants.WristConstants.kGearRatio);
     }
-
 
     @Override
     public void outputTelemetry() {
         SmartDashboard.putNumber("WristAngle (degrees)", mPeriodicIO.position_degrees);
-        SmartDashboard.putNumber("Wrist CANCODER (degrees)", getCanCoder().getDegrees());
+        SmartDashboard.putNumber("Wrist CANCODER (degrees)", getCanCoder());
         SmartDashboard.putNumber("Wrist Motor Rotations", mMotor.getRotorPosition().getValueAsDouble());
         SmartDashboard.putNumber("Wrist Demand", mPeriodicIO.demand);
         SmartDashboard.putNumber("Wrist Velocity rad/s", mPeriodicIO.velocity_rps);
         SmartDashboard.putNumber("Wrist Demand", mPeriodicIO.demand);
         SmartDashboard.putNumber("Wrist Volts", mPeriodicIO.output_voltage);
         SmartDashboard.putNumber("Wrist Current", mPeriodicIO.current);
-        //SmartDashboard.putString("Wrist Control State", mPeriodicIO.mControlModeState.toString());
+        // SmartDashboard.putString("Wrist Control State",
+        // mPeriodicIO.mControlModeState.toString());
     }
 }

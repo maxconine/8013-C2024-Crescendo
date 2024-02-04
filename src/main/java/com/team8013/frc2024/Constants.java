@@ -51,7 +51,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = true;
+    public static final boolean isManualControlMode = false;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -72,37 +72,34 @@ public class Constants {
         public static final double trackWidth = Units.inchesToMeters(20.25);
         public static final double wheelBase = Units.inchesToMeters(20.25);
 
-        public static final double wheelDiameter = Units.inchesToMeters(4.0);
+        public static final double wheelDiameter = Units.inchesToMeters(3.85);
         public static final double wheelCircumference = wheelDiameter * Math.PI;
 
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
 
-        // TODO: this is for the comp bot
+        // this is for the comp bot
         // public static final double driveGearRatio = 6.75; //flipped gear ratio
         // https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = 6.525 * 8.215 / 8; // 6.55
-        public static final double angleGearRatio = 10.29; // 72:14:24:12
+        public static final double driveGearRatio = 5.3; // TODO: This needs to be done // 6.525 * 8.215 / 8; // 6.55
+        public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
 
         // 43.75 - number to divide driven distance by
 
-        public static final Translation2d m_frontLeftLocation = new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
-        public static final Translation2d m_frontRightLocation = new Translation2d(wheelBase / 2.0, -trackWidth / 2.0);
-        public static final Translation2d m_backLeftLocation = new Translation2d(-wheelBase / 2.0, trackWidth / 2.0);
-        public static final Translation2d m_backRightLocation = new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0);
-
         public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
-                m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation };
+                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+                new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
+                new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+        };
+
+        public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(swerveModuleLocations);
 
         // public static final SwerveDriveKinematics swerveKinematics = new
         // SwerveDriveKinematics(swerveModuleLocations);
-
-        public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(swerveModuleLocations);
-        public static final edu.wpi.first.math.kinematics.SwerveDriveKinematics mKinematics = new edu.wpi.first.math.kinematics.SwerveDriveKinematics(
-                swerveModuleLocations);
 
         /* Swerve Current Limiting */
         public static final int angleContinuousCurrentLimit = 25;
@@ -128,7 +125,7 @@ public class Constants {
                                                                          // attainable (4.6 mps)
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.6; //0.3 originally
+        public static final double angleKP = 0.6; // 0.3 originally
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
         public static final double angleKF = 0.0;
@@ -144,15 +141,23 @@ public class Constants {
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
 
         /* Motor Inverts */
-        public static final InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive; //false TODO: check if this is right
-        public static final InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive; //true;
+        public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive; // false TODO:
+                                                                                                      // check if
+        // this is right
+        public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive; // true;
+
+        // THIS MIGHT HAVE FIXED IT!
 
         /* Angle Encoder Invert */
-        public static final SensorDirectionValue canCoderInvert = SensorDirectionValue.Clockwise_Positive; // false TODO:is this right?
+        public static final SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive; // false
+        // TODO:is
+        // this
+        // right?
+        // Changed above inverts but not this yet..
 
         /* Controller Invert */
         public static final boolean invertYAxis = false;
-        public static final boolean invertRAxis = false;
+        public static final boolean invertRAxis = true;
         public static final boolean invertXAxis = true;
 
         public static final KinematicLimits kUncappedLimits = new KinematicLimits();
@@ -202,52 +207,50 @@ public class Constants {
          * 
          */
 
-                        /*** MODULE SPECIFIC CONSTANTS ***/
-            /* Front Left Module - Module 0 */
-            public static final class Mod0 {
-                    public static final double betaAngleOffset = 319.4;
-                    public static final double compAngleOffset = 319.4;
+        /*** MODULE SPECIFIC CONSTANTS ***/
+        /* Front Left Module - Module 0 */
+        public static final class Mod0 {
+            public static final double betaAngleOffset = 40.95;
+            public static final double compAngleOffset = 40.95;
 
-                    public static SwerveModuleConstants SwerveModuleConstants() {
-                            return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
-                                            isComp ? compAngleOffset : betaAngleOffset);
-                    }
+            public static SwerveModuleConstants SwerveModuleConstants() {
+                return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
+                        isComp ? compAngleOffset : betaAngleOffset);
             }
+        }
 
-            /* Front Right Module - Module 1 */
-            public static final class Mod1 {
-                    public static final double betaAngleOffset = 189.49;
-                    public static final double compAngleOffset = 189.49;
+        /* Front Right Module - Module 1 */
+        public static final class Mod1 {
+            public static final double betaAngleOffset = 170.59;
+            public static final double compAngleOffset = 170.59;
 
-                    public static SwerveModuleConstants SwerveModuleConstants() {
-                            return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
-                                            isComp ? compAngleOffset : betaAngleOffset);
-                    }
+            public static SwerveModuleConstants SwerveModuleConstants() {
+                return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
+                        isComp ? compAngleOffset : betaAngleOffset);
             }
+        }
 
-            /* Back Left Module - Module 2 */
-            public static final class Mod2 {
-                    public static final double betaAngleOffset = 178.24;
-                    public static final double compAngleOffset = 178.24;
+        /* Back Left Module - Module 2 */
+        public static final class Mod2 {
+            public static final double betaAngleOffset = 182.02;
+            public static final double compAngleOffset = 182.02;
 
-                    public static SwerveModuleConstants SwerveModuleConstants() {
-                            return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
-                                            isComp ? compAngleOffset : betaAngleOffset);
-                    }
+            public static SwerveModuleConstants SwerveModuleConstants() {
+                return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
+                        isComp ? compAngleOffset : betaAngleOffset);
             }
+        }
 
-            /* Back Right Module - Module 3 */
-            public static final class Mod3 {
-                    public static final double betaAngleOffset = 81.81;
-                    public static final double compAngleOffset = 81.81;
+        /* Back Right Module - Module 3 */
+        public static final class Mod3 {
+            public static final double betaAngleOffset = 278.17;
+            public static final double compAngleOffset = 278.17;
 
-                    
-                    public static SwerveModuleConstants SwerveModuleConstants() {
-                            return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
-                                            isComp ? compAngleOffset : betaAngleOffset);
-                    }
+            public static SwerveModuleConstants SwerveModuleConstants() {
+                return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
+                        isComp ? compAngleOffset : betaAngleOffset);
             }
-
+        }
 
         public static TalonFXConfiguration swerveDriveFXConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -262,7 +265,7 @@ public class Constants {
             config.Slot0.kP = Constants.SwerveConstants.driveKP;
             config.Slot0.kI = Constants.SwerveConstants.driveKI;
             config.Slot0.kD = Constants.SwerveConstants.driveKD;
-            //config.Slot0.kV = Constants.SwerveConstants.driveKF;
+            // config.Slot0.kV = Constants.SwerveConstants.driveKF;
 
             config.MotorOutput.NeutralMode = Constants.SwerveConstants.driveNeutralMode;
             config.MotorOutput.Inverted = Constants.SwerveConstants.driveMotorInvert;
@@ -272,10 +275,9 @@ public class Constants {
             return config;
         }
 
-
         public static TalonFXConfiguration swerveAngleFXConfig() {
             TalonFXConfiguration angleConfig = new TalonFXConfiguration();
-            //TODO: do any of these configs even matter?
+            // TODO: do any of these configs even matter?
             angleConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.SwerveConstants.angleEnableCurrentLimit;
             angleConfig.CurrentLimits.SupplyCurrentLimit = Constants.SwerveConstants.angleContinuousCurrentLimit;
             angleConfig.CurrentLimits.SupplyCurrentThreshold = Constants.SwerveConstants.anglePeakCurrentLimit;
@@ -289,25 +291,25 @@ public class Constants {
             angleConfig.MotorOutput.NeutralMode = Constants.SwerveConstants.angleNeutralMode;
             angleConfig.MotorOutput.Inverted = Constants.SwerveConstants.angleMotorInvert;
 
-            // angleConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.SwerveConstants.openLoopRamp;
-            // angleConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.SwerveConstants.openLoopRamp;
+            // angleConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod =
+            // Constants.SwerveConstants.openLoopRamp;
+            // angleConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod =
+            // Constants.SwerveConstants.openLoopRamp;
             return angleConfig;
         }
 
         public static CANcoderConfiguration swerveCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
-            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1; //TODO: PROBLEM
+            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1; // TODO: PROBLEM
             config.MagnetSensor.SensorDirection = Constants.SwerveConstants.canCoderInvert;
             // config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
             // config.sensorDirection = Constants.SwerveConstants.canCoderInvert;
-            // config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+            // config.initializationStrategy =
+            // SensorInitializationStrategy.BootToAbsolutePosition;
             // config.sensorTimeBase = SensorTimeBase.PerSecond;
             return config;
         }
-}
-
-
-
+    }
 
     public static final class SnapConstants {
         public static final double kP = 6; // og 5.0 //6.0 seems to work with 0.15 kD
@@ -444,15 +446,14 @@ public class Constants {
 
     /*** SUBSYSTEM CONSTANTS ***/
 
-
-
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
         public static final double CANCODER_OFFSET = 36.38;
 
-        public static final double gravityFeedforward = 0.0; //idk how this works
+        public static final double gravityFeedforward = 0.0; // idk how this works
 
-        public static final double PivotGearRatio = (25)*(74/18);//25:1 74:18 revolutions of the pivot per 1 rotation of the motor
+        public static final double PivotGearRatio = (25) * (74 / 18);// 25:1 74:18 revolutions of the pivot per 1
+                                                                     // rotation of the motor
 
         public static final int kMinAngle = 0; // deg
         public static final int kMaxAngle = 90; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
@@ -464,7 +465,7 @@ public class Constants {
         public static final double kAmpScoreAngle = 0;
         public static final double kShootAgainstSubwooferAngle = 0; // deg
         public static final double kClimbAngle = 0; // deg
-        
+
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
             config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
@@ -472,12 +473,11 @@ public class Constants {
             return config;
         }
 
-        
         public static TalonFXConfiguration pivotMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            //TODO: do any of these configs even matter?
+            // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 25; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 25; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 40;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -491,8 +491,10 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 100;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.degreesToRotation(kMaxHeight,PivotGearRatio);
-        //     config.MotorOutput.PeakReverseDutyCycle = Conversions.degreesToRotation(kMinHeight,PivotGearRatio);
+            // config.MotorOutput.PeakForwardDutyCycle =
+            // Conversions.degreesToRotation(kMaxHeight,PivotGearRatio);
+            // config.MotorOutput.PeakReverseDutyCycle =
+            // Conversions.degreesToRotation(kMinHeight,PivotGearRatio);
 
             return config;
         }
@@ -500,26 +502,25 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 0;
+        public static final double CANCODER_OFFSET = 69.8; // 68
 
-        public static final double kGearRatio = 25; //radians per rotation
+        public static final double kGearRatio = 25; // radians per rotation
 
         public static final double kMinPosition = 0; // degrees
-        public static final double kMaxPosition = 180; // degrees
+        public static final double kMaxPosition = 200; // degrees
 
-        public static final double kFloorIntakeAngle = 180;
+        public static final double kFloorIntakeAngle = 200;
         public static final double kSourceIntakeAngle = 0;
-        public static final double kStowAngle = 0;
+        public static final double kStowAngle = 150;
         public static final double kAmpScoreAngle = 0;
         public static final double kTransferToShooterAngle = 0;
         public static final double kShootAngle = 0;
         public static final double kClimbAngle = 0;
 
-
         public static TalonFXConfiguration wristMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 15; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -533,14 +534,16 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 40;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.degreesToRotation(kMaxPosition, kGearRatio);
-        //     config.MotorOutput.PeakReverseDutyCycle = Conversions.degreesToRotation(kMinPosition, kGearRatio);
-            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //down to intake is increasing, up to load is decreasing
+            // config.MotorOutput.PeakForwardDutyCycle =
+            // Conversions.degreesToRotation(kMaxPosition, kGearRatio);
+            // config.MotorOutput.PeakReverseDutyCycle =
+            // Conversions.degreesToRotation(kMinPosition, kGearRatio);
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // down to intake is increasing, up to load
+                                                                            // is decreasing
 
             return config;
         }
 
-                
         public static CANcoderConfiguration wristCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
             config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
@@ -549,18 +552,18 @@ public class Constants {
         }
     }
 
-    public static final class ElevatorConstants{
+    public static final class ElevatorConstants {
         public static final int kMaxVoltage = 12;
         public static final double kGearRatio = 16;
-        public static final double kWheelCircumference = Conversions.inchesToMeters(1.625)*Math.PI;
+        public static final double kWheelCircumference = Conversions.inchesToMeters(1.625) * Math.PI;
         public static final double kPositionError = Conversions.inchesToMeters(0.5);
 
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
 
-        public static final double kFloorIntakeHeight = 0;
+        public static final double kFloorIntakeHeight = 0.270;
         public static final double kSourceIntakeHeight = 0;
-        public static final double kStowHeight = 0;
+        public static final double kStowHeight = 0.015;
         public static final double kAmpScoreHeight = 0;
         public static final double kShootHeight = 0.0244;
 
@@ -568,9 +571,9 @@ public class Constants {
 
         public static TalonFXConfiguration elevatorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            //TODO: do any of these configs even matter?
+            // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -579,40 +582,62 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 100;
+            config.MotionMagic.MotionMagicCruiseVelocity = 40;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 300;
+            config.MotionMagic.MotionMagicAcceleration = 80;
 
-        //     config.MotorOutput.PeakForwardDutyCycle = Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
-        //     config.MotorOutput.PeakReverseDutyCycle = 0
+            // config.MotorOutput.PeakForwardDutyCycle =
+            // Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
+            // config.MotorOutput.PeakReverseDutyCycle = 0
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
             return config;
         }
+
+        public static final double[][] groundIntakeWristPositions = {
+                // @0 --> position of elevator (in meters)
+                // @1 --> position of wrist (in degrees)
+                // @2 --> position of the pivot(in degrees)
+                { 0.004, 280, 0.0 },
+                { 0.03, 288, 0.0 },
+                { 0.052, 293, 0.0 },
+                { 0.075, 300, 1 },
+                { 0.1, 306, 2 },
+                { 0.125, 313, 4 },
+                { 0.15, 321, 5.2 },
+                { 0.175, 327, 5.3 },
+                { 0.2, 335, 5.5 },
+                { 0.215, 338, 5.1 },
+                { 0.23, 343, 5.2 },
+                { 0.25, 347, 3.5 },
+                { 0.270, 359.5, 1.6 } // really 0.275, but less so that everything else goes into position
+
+        };
     }
 
-    public static final class EndEffectorConstants{
+    public static final class EndEffectorConstants {
         public static TalonFXConfiguration endEffectorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
             return config;
         }
     }
 
-        public static final class ShooterConstants{
+    public static final class ShooterConstants {
         public static TalonFXConfiguration shooterMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 30; //start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -625,10 +650,8 @@ public class Constants {
         }
     }
 
-
-
     public static final class ControllerConstants {
-        public static final boolean isMamboController = true; //this overrides everything
+        public static final boolean isMamboController = true; // this overrides everything
         public static final boolean isControllerOne = true;
 
         // Controller 1 left side:

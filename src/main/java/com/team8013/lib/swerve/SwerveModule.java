@@ -84,13 +84,14 @@ public class SwerveModule extends Subsystem {
     }
 
     public void resetToAbsolute() {
-        double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.rotationPosition, getCanCoder().getDegrees() - kAngleOffset);
+        double angle = Util.placeInAppropriate0To360Scope(mPeriodicIO.rotationPosition, getCanCoder() - kAngleOffset);
         double absolutePosition = Conversions.degreesToRotation(angle, Constants.SwerveConstants.angleGearRatio);
         mAngleMotor.setPosition(absolutePosition);
     }
 
-    public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(angleEncoder.getAbsolutePosition().getValueAsDouble()*360, angleEncoder.getAbsolutePosition().getValueAsDouble()*360));
+    /**degrees */
+    public double getCanCoder() {
+        return Util.placeIn0To360Scope(angleEncoder.getAbsolutePosition().getValueAsDouble()*360);
     }
 
     public ModuleState getState() {
@@ -195,6 +196,7 @@ public class SwerveModule extends Subsystem {
     @Override
     public void outputTelemetry() {
         SmartDashboard.putNumber("Module" + kModuleNumber + " Angle Position", mPeriodicIO.rotationPosition);
+        SmartDashboard.putNumber("Module" + kModuleNumber + " CANCODER Position", getCanCoder());
         SmartDashboard.putNumber("Module" + kModuleNumber + " Drive Position", mPeriodicIO.drivePosition);
         SmartDashboard.putNumber("Module" + kModuleNumber + " Velocity", mPeriodicIO.velocity);
     }

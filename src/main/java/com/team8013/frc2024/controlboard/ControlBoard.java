@@ -101,8 +101,8 @@ public class ControlBoard {
     }
 
     public boolean zeroGyro() {
-        SmartDashboard.putBoolean("Zero Gyro", m_driver.getRawButtonPressed(2));
-        return m_driver.getRawButtonPressed(2);
+        //SmartDashboard.putBoolean("Zero Gyro", m_driver.getRawButton(2));
+        return m_driver.getRawButton(2);
     }
     
         public enum SwerveCardinal {
@@ -230,7 +230,8 @@ public class ControlBoard {
 
     // // Locks wheels in X formation
     public boolean getBrake() {
-        return m_driver.getRawButton(4); //far left switch
+        SmartDashboard.putNumber("Get Brake", m_driver.getRawAxis(4));
+        return  (m_driver.getRawAxis(4)<-0.3); //m_driver.getRawButton(4); //far left switch
     }
 
     // // Intake Controls

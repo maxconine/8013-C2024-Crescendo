@@ -3,6 +3,7 @@ package com.team8013.frc2024.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -26,33 +27,32 @@ public class EndEffector extends Subsystem {
     private final TalonFX mMaster;
     private final TalonFX mSlave;
 
-    // private final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new SupplyCurrentLimitConfiguration(true, 40, 40,
-    //         0.02);
-   
-    // private final StatorCurrentLimitConfiguration kDisabledStatorLimit = new StatorCurrentLimitConfiguration(false, 0, 0, 0);
-    // private final StatorCurrentLimitConfiguration kEnabledStatorLimit = new StatorCurrentLimitConfiguration(true, 40, 40,
-    //         0.0);
+    // private final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new
+    // SupplyCurrentLimitConfiguration(true, 40, 40,
+    // 0.02);
 
-        
+    // private final StatorCurrentLimitConfiguration kDisabledStatorLimit = new
+    // StatorCurrentLimitConfiguration(false, 0, 0, 0);
+    // private final StatorCurrentLimitConfiguration kEnabledStatorLimit = new
+    // StatorCurrentLimitConfiguration(true, 40, 40,
+    // 0.0);
+
     private EndEffector() {
         mMaster = new TalonFX(Ports.END_EFFECTOR_A, Ports.CANBUS);
         mSlave = new TalonFX(Ports.END_EFFECTOR_B, Ports.CANBUS);
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
-        //Customize these configs from constants in the future
+        // Customize these configs from constants in the future
         mMaster.getConfigurator().apply(Constants.EndEffectorConstants.endEffectorMotorConfig());
         mSlave.getConfigurator().apply(Constants.EndEffectorConstants.endEffectorMotorConfig());
 
         mSlave.setControl(new Follower(Ports.END_EFFECTOR_A, false));
         setWantNeutralBrake(false);
 
-        // mMaster.config_kP(0, 1.5, Constants.kLongCANTimeoutMs);
-        // mMaster.config_kI(0, 0.0, Constants.kLongCANTimeoutMs);
-        // mMaster.config_kD(0, 0.5, Constants.kLongCANTimeoutMs);
-        // mMaster.config_kF(0, 0.0, Constants.kLongCANTimeoutMs);
     }
-    
+
     public static EndEffector mInstance;
+
     public static EndEffector getInstance() {
         if (mInstance == null) {
             mInstance = new EndEffector();
@@ -61,12 +61,14 @@ public class EndEffector extends Subsystem {
     }
 
     public enum State {
-        IDLE(0.0), 
-        INTAKING(-12.0), //max 12
-        OUTTAKING(12.0); //max 12
-        
+        IDLE(0.0),
+        INTAKING(-12.0), // max 12
+        OUTTAKING(12.0), // max 12
+        SHOOTING(0.0);
+
         public double voltage;
-        State (double voltage) {
+
+        State(double voltage) {
             this.voltage = voltage;
         }
     }
@@ -75,7 +77,7 @@ public class EndEffector extends Subsystem {
         return mState;
     }
 
-    public void setState(State state){
+    public void setState(State state) {
         mState = state;
     }
 
@@ -129,47 +131,55 @@ public class EndEffector extends Subsystem {
             public void onLoop(double timestamp) {
                 switch (mState) {
                     case IDLE:
-                        mPeriodicIO.demand = mState.voltage; 
-                        break; 
+                        mPeriodicIO.demand = mState.voltage;
+                        break;
                     case INTAKING:
-                        mPeriodicIO.demand = 0.99;
-
-                        // if (mPeriodicIO.beamBreak == true) {
-                        //     hasGamePiece = true;
-                        //     stop()
-                        // } 
-                        break; 
+                        mPeriodicIO.demand = 0.3;
+                        break;
                     case OUTTAKING:
-                        mPeriodicIO.demand = -0.99; //mState.voltage;
-                        // if (mPeriodicIO.beamBreak == false) {
-                        // hasGamePiece = false;
-
-                        // }
+                        mPeriodicIO.demand = -0.3; // mState.voltage;
+                        break;
+                    case SHOOTING:
                         break;
                 }
             }
+
             @Override
             public void onStop(double timestamp) {
                 stop();
             }
         });
     }
+
     @Override
-    public void writePeriodicOutputs() {       
-        if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){     
-            mMaster.setControl(new VoltageOut(mPeriodicIO.demand));
+    public void writePeriodicOutputs() {
+        if (mState == State.SHOOTING) {
+            mMaster.setControl(new MotionMagicVelocityTorqueCurrentFOC(mPeriodicIO.demand));
+        } else {
+            if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
+                mMaster.setControl(new VoltageOut(mPeriodicIO.demand));
+            } else {
+                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+            }
         }
-        else{
-            mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+
+        if (mState == State.INTAKING) {
+            if (mPeriodicIO.beamBreak) {
+                hasGamePiece = true;
+            }
+        }
+        if (mState == State.OUTTAKING) {
+            hasGamePiece = false;
         }
     }
 
-    public Request effectorRequest (State _wantedState) {
-        return new Request () {
+    public Request effectorRequest(State _wantedState) {
+        return new Request() {
             @Override
             public void act() {
-                setState(_wantedState); 
+                setState(_wantedState);
             }
+
             @Override
             public boolean isFinished() {
                 return mPeriodicIO.demand == _wantedState.voltage;
@@ -177,17 +187,25 @@ public class EndEffector extends Subsystem {
         };
     }
 
-    public Request waitForGamePieceRequest () {
+    public Request waitForGamePieceRequest() {
         return new Request() {
             @Override
-            public void act () {
+            public void act() {
 
             }
+
             @Override
             public boolean isFinished() {
                 return hasGamePiece;
             }
         };
+    }
+
+    public void setEndEffectorVelocity(double rpm) {
+        if (mState != State.SHOOTING) {
+            mState = State.SHOOTING;
+        }
+        mPeriodicIO.demand = rpm / 60;
     }
 
     private void setWantNeutralBrake(boolean brake) {
@@ -200,19 +218,18 @@ public class EndEffector extends Subsystem {
         return hasGamePiece;
     }
 
-
     @Log
-    public double getEndEffectorDemand(){
+    public double getEndEffectorDemand() {
         return mPeriodicIO.demand;
     }
-    
+
     @Log
-    public double getEndEffectorVoltage(){
+    public double getEndEffectorVoltage() {
         return mPeriodicIO.voltage;
     }
-    
+
     @Log
-    public double getEndEffectorCurrent(){
+    public double getEndEffectorCurrent() {
         return mPeriodicIO.current;
     }
 
@@ -225,7 +242,7 @@ public class EndEffector extends Subsystem {
     public double getVelocity() {
         return mPeriodicIO.velocity;
     }
- 
+
     @Log
     public double getMainMotorBusVolts() {
         return mMaster.getSupplyVoltage().getValue();
@@ -237,8 +254,8 @@ public class EndEffector extends Subsystem {
         SmartDashboard.putNumber("Intake Volts", mPeriodicIO.voltage);
         SmartDashboard.putNumber("Intake Current", mPeriodicIO.current);
         SmartDashboard.putString("Intake State", mState.toString());
-        SmartDashboard.putBoolean("Has game piece", hasGamePiece); 
-        SmartDashboard.putBoolean("Beam Break", mPeriodicIO.beamBreak); 
+        SmartDashboard.putBoolean("Has game piece", hasGamePiece);
+        SmartDashboard.putBoolean("END EFFECTOR Beam Break", mPeriodicIO.beamBreak);
     }
 
     @Override

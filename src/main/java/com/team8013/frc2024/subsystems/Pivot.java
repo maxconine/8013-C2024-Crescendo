@@ -1,6 +1,5 @@
 package com.team8013.frc2024.subsystems;
 
-
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
@@ -8,7 +7,6 @@ import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
-
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -26,7 +24,7 @@ import com.team254.lib.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Pivot extends Subsystem{
+public class Pivot extends Subsystem {
 
     private static Pivot mInstance;
     private TalonFX mMaster;
@@ -36,8 +34,9 @@ public class Pivot extends Subsystem{
     private mPeriodicIO mPeriodicIO = new mPeriodicIO();
     // private ControlModeState mControlModeState = new ControlModeState();
 
-    // private final StatorCurrentLimitConfiguration kScrapeCurrentLimit = new StatorCurrentLimitConfiguration(true, 2, 2,
-    //         0.0);
+    // private final StatorCurrentLimitConfiguration kScrapeCurrentLimit = new
+    // StatorCurrentLimitConfiguration(true, 2, 2,
+    // 0.0);
 
     public static Pivot getInstance() {
         if (mInstance == null) {
@@ -47,12 +46,12 @@ public class Pivot extends Subsystem{
     }
 
     private Pivot() {
-        mMaster = new TalonFX(Ports.PIVOT_A,Ports.CANBUS);
-        mSlave = new TalonFX(Ports.PIVOT_B,Ports.CANBUS);
+        mMaster = new TalonFX(Ports.PIVOT_A, Ports.CANBUS);
+        mSlave = new TalonFX(Ports.PIVOT_B, Ports.CANBUS);
         mCANcoder = new CANcoder(Ports.PIVOT_CANCODER, Ports.CANBUS);
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
-        //Customize these configs from constants in the future
+        // Customize these configs from constants in the future
         mMaster.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
         mSlave.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
 
@@ -63,18 +62,17 @@ public class Pivot extends Subsystem{
         resetToAbsolute();
     }
 
-    public void resetToAbsolute(){
-       double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees(),Constants.PivotConstants.PivotGearRatio);
+    public void resetToAbsolute() {
+        double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees(),
+                Constants.PivotConstants.PivotGearRatio);
         mMaster.setPosition(absolutePosition);
     }
-
 
     private void setWantNeutralBrake(boolean brake) {
         NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         mMaster.setNeutralMode(mode);
         mSlave.setNeutralMode(mode);
     }
-
 
     @Override
     public void registerEnabledLoops(ILooper mEnabledLooper) {
@@ -96,178 +94,170 @@ public class Pivot extends Subsystem{
         });
     }
 
-
     @Override
     public synchronized void writePeriodicOutputs() {
-        if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC){
+        if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
             mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
-        }
-        else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
-            if (mPeriodicIO.demand>1||mPeriodicIO.demand<-1){
-                mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); //Enable FOC in the future?
-            }
-            else{
-                
-                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand)); //needs a feedforward
-            }
-        }
+        } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
+            if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
+                mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?
+            } else {
 
+                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand)); // needs a feedforward
+            }
+        }
 
     }
 
     // public Request PivotRequest(double angle, boolean waitForPosition) {
-    //     return new Request() {
-    //         @Override
-    //         public void act() {
-    //             setSetpointMotionMagic(angle);
-    //             is_climb = false;
-    //             is_scraping = false;
-    //             updateCurrentLimits();
-    //         }
+    // return new Request() {
+    // @Override
+    // public void act() {
+    // setSetpointMotionMagic(angle);
+    // is_climb = false;
+    // is_scraping = false;
+    // updateCurrentLimits();
+    // }
 
-    //         @Override
-    //         public boolean isFinished() {
-    //             return waitForPosition ? Util.epsilonEquals(mPeriodicIO.position, angle, 3.0) : true;
-    //         }
-    //     };
+    // @Override
+    // public boolean isFinished() {
+    // return waitForPosition ? Util.epsilonEquals(mPeriodicIO.position, angle, 3.0)
+    // : true;
+    // }
+    // };
     // }
 
     // public Request climbRequest(double angle) {
-    //     return new Request() {
-    //         @Override
-    //         public void act() {
-    //             setSetpointMotionMagic(angle);
-    //             is_climb = true;
-    //             is_scraping = false;
-    //             updateCurrentLimits();
-    //         }
+    // return new Request() {
+    // @Override
+    // public void act() {
+    // setSetpointMotionMagic(angle);
+    // is_climb = true;
+    // is_scraping = false;
+    // updateCurrentLimits();
+    // }
 
-    //         @Override
-    //         public boolean isFinished() {
-    //             return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    //         }
-    //     };
+    // @Override
+    // public boolean isFinished() {
+    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
+    // }
+    // };
     // }
 
     // public Request scrapeRequest(double angle) {
-    //     return new SequentialRequest(
-    //         scrapeDropRequest(angle),
-    //         scrapeHoldRequest(angle)
-    //     );
+    // return new SequentialRequest(
+    // scrapeDropRequest(angle),
+    // scrapeHoldRequest(angle)
+    // );
     // }
-    
 
     // private Request scrapeDropRequest(double angle) {
-    //     return new Request() {
-    //         @Override
-    //         public void act() {
-    //             setSetpointMotionMagic(angle);
-    //             is_scraping = false;
-    //             updateCurrentLimits();
-    //         }
+    // return new Request() {
+    // @Override
+    // public void act() {
+    // setSetpointMotionMagic(angle);
+    // is_scraping = false;
+    // updateCurrentLimits();
+    // }
 
-    //         @Override
-    //         public boolean isFinished() {
-    //             return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    //         }
-    //     };
+    // @Override
+    // public boolean isFinished() {
+    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
+    // }
+    // };
     // }
 
     // private Request scrapeHoldRequest(double angle) {
-    //     return new Request() {
-    //         @Override
-    //         public void act() {
-    //             is_scraping = true;
-    //             updateCurrentLimits();
-    //         }
+    // return new Request() {
+    // @Override
+    // public void act() {
+    // is_scraping = true;
+    // updateCurrentLimits();
+    // }
 
-    //         @Override
-    //         public boolean isFinished() {
-    //             return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    //         }
-    //     };
+    // @Override
+    // public boolean isFinished() {
+    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
+    // }
+    // };
     // }
 
     // public Request PivotWaitRequest(double angle) {
-    //     return new Request() {
-    //         @Override 
-    //         public void act() {
+    // return new Request() {
+    // @Override
+    // public void act() {
 
-    //         }
-
-    //         @Override 
-    //         public boolean isFinished() {
-    //             return Util.epsilonEquals(mPeriodicIO.position_degrees, angle, 1.0);
-    //         }
-    //     };
     // }
 
+    // @Override
+    // public boolean isFinished() {
+    // return Util.epsilonEquals(mPeriodicIO.position_degrees, angle, 1.0);
+    // }
+    // };
+    // }
 
     public void setSetpointMotionMagic(double degrees) {
-                if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
-                    mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
-            }
-
-        //Limit forward and backward movement
-        if (degrees > Constants.PivotConstants.kMaxAngle){
-            degrees = Constants.PivotConstants.kMaxAngle;
+        if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
+            mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
-        else if (degrees < Constants.PivotConstants.kMinAngle){
+
+        // Limit forward and backward movement
+        if (degrees > Constants.PivotConstants.kMaxAngle) {
+            degrees = Constants.PivotConstants.kMaxAngle;
+        } else if (degrees < Constants.PivotConstants.kMinAngle) {
             degrees = Constants.PivotConstants.kMinAngle;
         }
-        
-        double rotationDemand = Conversions.degreesToRotation(degrees,Constants.PivotConstants.PivotGearRatio);
+
+        double rotationDemand = Conversions.degreesToRotation(degrees, Constants.PivotConstants.PivotGearRatio);
         mPeriodicIO.demand = rotationDemand;
     }
 
     public void setDemandOpenLoop(double demand) {
-                if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
-                    mPeriodicIO.mControlModeState = ControlModeState.OPEN_LOOP;
-            }
+        if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
+            mPeriodicIO.mControlModeState = ControlModeState.OPEN_LOOP;
+        }
         mPeriodicIO.demand = demand;
     }
 
     public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeInAppropriate0To360Scope(mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.PivotConstants.CANCODER_OFFSET,mCANcoder.getAbsolutePosition().getValueAsDouble()*360 - Constants.PivotConstants.CANCODER_OFFSET));
+        return Rotation2d.fromDegrees(Util.placeIn0To360Scope(
+                mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.PivotConstants.CANCODER_OFFSET));
     }
 
     @Log
-    public double getPivotAngleDeg(){
+    public double getPivotAngleDeg() {
         return mPeriodicIO.position_degrees;
     }
 
-    
     @Log
-    public double getPivotDemand(){
+    public double getPivotDemand() {
         return mPeriodicIO.demand;
     }
-    
+
     @Log
-    public double getPivotVelocity(){
+    public double getPivotVelocity() {
         return mPeriodicIO.velocity_radPerSec;
     }
-    
+
     @Log
-    public double getPivotVolts(){
+    public double getPivotVolts() {
         return mPeriodicIO.output_voltage;
     }
-    
+
     @Log
-    public double getPivotCurrent(){
+    public double getPivotCurrent() {
         return mPeriodicIO.current;
     }
-    
 
     @Log
     public double getTimestamp() {
         return mPeriodicIO.timestamp;
     }
-    
+
     @Log
     public double getMainMotorBusVolts() {
         return mMaster.getSupplyVoltage().getValueAsDouble();
     }
-
 
     public static class mPeriodicIO {
         // Inputs
@@ -284,19 +274,20 @@ public class Pivot extends Subsystem{
         public ControlModeState mControlModeState = ControlModeState.OPEN_LOOP;
     }
 
-    private enum ControlModeState{
+    private enum ControlModeState {
         OPEN_LOOP,
         MOTION_MAGIC
     }
 
     @Override
     public synchronized void readPeriodicInputs() {
-        mPeriodicIO.position_degrees = Conversions.rotationsToDegrees(mMaster.getRotorPosition().getValueAsDouble(), Constants.PivotConstants.PivotGearRatio);
+        mPeriodicIO.position_degrees = Conversions.rotationsToDegrees(mMaster.getRotorPosition().getValueAsDouble(),
+                Constants.PivotConstants.PivotGearRatio);
         mPeriodicIO.current = mMaster.getTorqueCurrent().getValueAsDouble();
         mPeriodicIO.output_voltage = mMaster.getMotorVoltage().getValueAsDouble();
-        mPeriodicIO.velocity_radPerSec = Conversions.rotationsToDegrees(mMaster.getVelocity().getValueAsDouble(), Constants.PivotConstants.PivotGearRatio)*Math.PI/180;
+        mPeriodicIO.velocity_radPerSec = Conversions.rotationsToDegrees(mMaster.getVelocity().getValueAsDouble(),
+                Constants.PivotConstants.PivotGearRatio) * Math.PI / 180;
     }
-
 
     @Override
     public void outputTelemetry() {

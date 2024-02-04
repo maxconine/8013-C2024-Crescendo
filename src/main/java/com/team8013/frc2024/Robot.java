@@ -37,6 +37,7 @@ import com.team8013.frc2024.subsystems.Pivot;
 import com.team8013.frc2024.subsystems.Shooter;
 import com.team8013.frc2024.subsystems.Superstructure;
 import com.team8013.frc2024.subsystems.Wrist;
+import com.team8013.frc2024.subsystems.EndEffector.State;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 public class Robot extends TimedRobot {
@@ -301,10 +302,10 @@ public class Robot extends TimedRobot {
 				mSuperstructure.controlElevatorManually(mControlBoard.elevatorPercentOutput());
 				// }
 				if (mControlBoard.operator.getButton(Button.RB)) {
-					mWrist.setSetpointMotionMagic(2);
+					mSuperstructure.controlWristManually(1);
 					// mElevator.setSetpointMotionMagic(0.4);
 				} else if (mControlBoard.operator.getButton(Button.LB)) {
-					mWrist.setSetpointMotionMagic(176);
+					mSuperstructure.controlWristManually(-1);
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
 
@@ -324,40 +325,33 @@ public class Robot extends TimedRobot {
 				/* END EFFECTOR */
 
 				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
-					mSuperstructure.intake(true);
+					mEndEffector.setState(State.INTAKING);
 				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
-					mSuperstructure.outtake(true);
+					mEndEffector.setState(State.OUTTAKING);
 				} else {
 					mSuperstructure.intake(false);
 				}
 
+			} else {
+				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
+					mSuperstructure.setSuperstuctureShoot();
+				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
+					mSuperstructure.setSuperstuctureScoreAmp();
+				} else if (mControlBoard.operator.getController().getPOV() == kDpadDown) {
+					mSuperstructure.setSuperstuctureIntakingGround();
+				} else if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
+					mSuperstructure.setSuperstuctureStow();
+				} else if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
+					mSuperstructure.setSuperstuctureStow();
+				} else if (mControlBoard.operator.getButton(Button.START)
+						&& mControlBoard.operator.getButton(Button.BACK)) {
+					mSuperstructure.setClimbMode();
+				} else if (mControlBoard.operator.getButton(Button.RB)) {
+					mSuperstructure.setSuperstuctureTransferToShooter();
+				}
+
+				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
 			}
-			else{
-			if (mControlBoard.operator.getTrigger(Side.RIGHT)){
-				mSuperstructure.setSuperstuctureShoot();
-			}
-			else if	(mControlBoard.operator.getTrigger(Side.LEFT)){
-				mSuperstructure.setSuperstuctureScoreAmp();
-			}
-			else if (mControlBoard.operator.getController().getPOV() == kDpadDown){
-				mSuperstructure.setSuperstuctureIntakingGround();
-			}
-			else if (mControlBoard.operator.getController().getPOV() == kDpadRight){
-				mSuperstructure.setSuperstuctureStow();
-			}
-			else if (mControlBoard.operator.getController().getPOV() == kDpadLeft){
-				mSuperstructure.setSuperstuctureStow();
-			}
-			else if(mControlBoard.operator.getButton(Button.START)&&mControlBoard.operator.getButton(Button.BACK)){
-				mSuperstructure.setClimbMode();
-			}
-			else if(mControlBoard.operator.getButton(Button.RB)){
-				mSuperstructure.setSuperstuctureTransferToShooter();
-			}
-		
-		
-			mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
-		}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
 			// mDrive.setHeadingControlTarget(mControlBoard.getSwerveSnap().degrees);

@@ -108,6 +108,19 @@ public class Util {
         return newAngle;
     }
 
+    public static double placeIn0To360Scope(double newAngle){
+        double lowerBound = 0;
+        double upperBound = 360;
+        while (newAngle < lowerBound) {
+            newAngle += 360;
+        }
+        while (newAngle > upperBound) {
+            newAngle -= 360;
+        }
+
+        return newAngle;
+    }
+
     public static double deadBand(double val, double deadband) {
         return (Math.abs(val) > Math.abs(deadband)) ? val : 0.0;
     }
