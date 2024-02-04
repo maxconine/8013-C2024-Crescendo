@@ -8,6 +8,7 @@ import com.team8013.lib.Conversions;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.util.DelayedBoolean;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
@@ -184,14 +185,14 @@ public class Elevator extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
 
-        if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1) {
+        if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position<0) {
             mHoming = false;
             zeroSensors();
             setSetpointMotionMagic(0.05);
         }
 
         if (mHoming) { // sets it moving backward until velocity slows down
-            mMaster.setControl(new VoltageOut(-2));
+            mMaster.setControl(new VoltageOut(-3));
             if (mHomingDelay.update(Timer.getFPGATimestamp(),
                     Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { // is this motor velocity or elevator
                                                                            // velocity
@@ -226,6 +227,21 @@ public class Elevator extends Subsystem {
         return mPeriodicIO.position < 0.0
                 || Util.epsilonEquals(mPeriodicIO.position, 0.0, 0.05);
     }
+
+    public void setMotionMagicCruiseVelocity(double cruiseVelocity){
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicCruiseVelocity = cruiseVelocity;
+        mMaster.getConfigurator().apply(configs);
+        mSlave.getConfigurator().apply(configs);
+    }
+
+    public void setMotionMagicAcceleration(double acceleration){
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicAcceleration = acceleration;
+        mMaster.getConfigurator().apply(configs);
+        mSlave.getConfigurator().apply(configs);
+    }
+
 
     @Log
     public double getElevatorUnits() {

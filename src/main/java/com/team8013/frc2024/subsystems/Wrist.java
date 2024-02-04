@@ -8,17 +8,11 @@ import com.team8013.lib.Conversions;
 import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.team254.lib.geometry.Rotation2d;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Wrist extends Subsystem {
@@ -96,9 +90,9 @@ public class Wrist extends Subsystem {
         // }
         // }
 
-        if (Math.abs(mPeriodicIO.position_degrees - getCanCoder()) > 8) {
-            resetToAbsolute();
-        }
+        // if (Math.abs(mPeriodicIO.position_degrees - getCanCoder()) > 8) {
+        //     resetToAbsolute();
+        // }
 
     }
 
@@ -120,6 +114,18 @@ public class Wrist extends Subsystem {
     public double getCanCoder() {
         return Util.placeIn0To360Scope(
                 mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.WristConstants.CANCODER_OFFSET);
+    }
+
+    public void setMotionMagicCruiseVelocity(double cruiseVelocity) {
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicCruiseVelocity = cruiseVelocity;
+        mMotor.getConfigurator().apply(configs);
+    }
+
+    public void setMotionMagicAcceleration(double acceleration) {
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicAcceleration = acceleration;
+        mMotor.getConfigurator().apply(configs);
     }
 
     @Log

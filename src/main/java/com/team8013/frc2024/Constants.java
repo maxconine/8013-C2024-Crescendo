@@ -449,6 +449,7 @@ public class Constants {
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
         public static final double CANCODER_OFFSET = 36.38;
+        public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
 
@@ -459,12 +460,18 @@ public class Constants {
         public static final int kMaxAngle = 90; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
 
         /* State Positions */
-        public static final double kFloorIntakeAngle = 0;
-        public static final double kSourceIntakeAngle = 0;
+        // public static final double kFloorIntakeAngle = 0;
+        public static final double kSourceIntakeAngle = 89 - 30;
         public static final double kStowAngle = 0;
-        public static final double kAmpScoreAngle = 0;
+        public static final double kAmpScoreAngle = 99.7 - 30;
         public static final double kShootAgainstSubwooferAngle = 0; // deg
+
+        /* CLIMB CONSTANTS */
         public static final double kClimbAngle = 0; // deg
+        public static final double kPullOntoChainHeight = 0;
+
+        public static final double kIntakeCruiseVelocity = 50;
+        public static final double kIntakeAcceleration = 100;
 
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
@@ -502,7 +509,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 69.8; // 68
+        public static final double CANCODER_OFFSET = 307.88 + 1; // +1 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -510,12 +517,15 @@ public class Constants {
         public static final double kMaxPosition = 200; // degrees
 
         public static final double kFloorIntakeAngle = 200;
-        public static final double kSourceIntakeAngle = 0;
+        public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 150;
-        public static final double kAmpScoreAngle = 0;
+        public static final double kAmpScoreAngle = 165;
         public static final double kTransferToShooterAngle = 0;
         public static final double kShootAngle = 0;
         public static final double kClimbAngle = 0;
+
+        public static final double kIntakeCruiseVelocity = 50;
+        public static final double kIntakeAcceleration = 120;
 
         public static TalonFXConfiguration wristMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -529,9 +539,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 10;
+            config.MotionMagic.MotionMagicCruiseVelocity = 50;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 40;
+            config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             // config.MotorOutput.PeakForwardDutyCycle =
@@ -561,13 +571,20 @@ public class Constants {
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
 
-        public static final double kFloorIntakeHeight = 0.270;
-        public static final double kSourceIntakeHeight = 0;
         public static final double kStowHeight = 0.015;
-        public static final double kAmpScoreHeight = 0;
+        public static final double kAmpScoreHeight = 0.22;
         public static final double kShootHeight = 0.0244;
 
-        public static final double kClimbHeight = 0;
+        /* INTAKING */
+        public static final double kIntakeCruiseVelocity = 90;
+        public static final double kIntakeAcceleration = 120;
+        public static final double kFloorIntakeHeight = 0.280;
+        public static final double kSourceIntakeHeight = 0.064;
+
+        /* CLIMB */
+        public static final double kClimbHeight = 0; // initial height pulling up to chain
+        public static final double kPullOntoChainHeight = 0; // height of the elevator when transfering chain
+        public static final double kExtendToScoreTrapHeight = 0; // height of the elvator when scoring in the trap
 
         public static TalonFXConfiguration elevatorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -582,9 +599,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 40;
+            config.MotionMagic.MotionMagicCruiseVelocity = 90;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 80;
+            config.MotionMagic.MotionMagicAcceleration = 120;
 
             // config.MotorOutput.PeakForwardDutyCycle =
             // Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
@@ -610,8 +627,8 @@ public class Constants {
                 { 0.2, 335, 5.5 },
                 { 0.215, 338, 5.1 },
                 { 0.23, 343, 5.2 },
-                { 0.25, 347, 3.5 },
-                { 0.270, 359.5, 1.6 } // really 0.275, but less so that everything else goes into position
+                { 0.25, 347, 2 },
+                { 0.270, 359.5, -2 } // really 0.275, but less so that everything else goes into position
 
         };
     }

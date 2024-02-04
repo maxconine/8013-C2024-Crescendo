@@ -11,6 +11,7 @@ import com.team8013.lib.logger.Log;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -222,6 +223,18 @@ public class Pivot extends Subsystem {
     public Rotation2d getCanCoder() {
         return Rotation2d.fromDegrees(Util.placeIn0To360Scope(
                 mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.PivotConstants.CANCODER_OFFSET));
+    }
+
+    public void setMotionMagicCruiseVelocity(double cruiseVelocity){
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicCruiseVelocity = cruiseVelocity;
+        mMaster.getConfigurator().apply(configs);
+    }
+    
+    public void setMotionMagicAcceleration(double acceleration){
+        MotionMagicConfigs configs = new MotionMagicConfigs();
+        configs.MotionMagicAcceleration = acceleration;
+        mMaster.getConfigurator().apply(configs);
     }
 
     @Log

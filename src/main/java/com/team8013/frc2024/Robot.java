@@ -333,14 +333,30 @@ public class Robot extends TimedRobot {
 				}
 
 			} else {
-				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
-					mSuperstructure.setSuperstuctureShoot();
-				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
+				/*
+				 * Dpads:
+				 * 	Down: intake ground
+				 * 	Right: intake source (human player)
+				 * 	Left: stow
+				 * 	Up: outtake for amp or shoot when in shooting mode
+				 * 
+				 * Triggers:
+				 * 	Left Trigger: Score Amp
+				 * 	Right Trigger: Manual intake
+				 * 
+				 * CLIMB:
+				 * 	press both Start+Back button to go to initial chain hook height
+				 * 	press both bumpers to engage stage 2 climb which pulls the robot onto the chain
+				 * 	press A to engage stage 3 climb which scores into the trap, press Dpad to eject note
+				 */
+				//if (!mSuperstructure.inClimbMode()){
+				if (mControlBoard.operator.getTrigger(Side.LEFT)) {
 					mSuperstructure.setSuperstuctureScoreAmp();
 				} else if (mControlBoard.operator.getController().getPOV() == kDpadDown) {
 					mSuperstructure.setSuperstuctureIntakingGround();
+					//setSuperstuctureShoot();
 				} else if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
-					mSuperstructure.setSuperstuctureStow();
+					mSuperstructure.setSuperstuctureIntakingSource();
 				} else if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
 					mSuperstructure.setSuperstuctureStow();
 				} else if (mControlBoard.operator.getButton(Button.START)
@@ -349,8 +365,14 @@ public class Robot extends TimedRobot {
 				} else if (mControlBoard.operator.getButton(Button.RB)) {
 					mSuperstructure.setSuperstuctureTransferToShooter();
 				}
+			
+			// } else{
+			// 	mSuperstructure.setClimbModeStage2(mControlBoard.operator.getButton(Button.RB)&&mControlBoard.operator.getButton(Button.LB));
+			// 	mSuperstructure.setClimbModeStage3(mControlBoard.operator.getButton(Button.A));
+			// }
 
 				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
+				mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 			}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
