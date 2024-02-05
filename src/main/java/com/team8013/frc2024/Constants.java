@@ -448,7 +448,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 36.38;
+        public static final double CANCODER_OFFSET = -15.4;
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -464,14 +464,16 @@ public class Constants {
         public static final double kSourceIntakeAngle = 89 - 30;
         public static final double kStowAngle = 0;
         public static final double kAmpScoreAngle = 99.7 - 30;
-        public static final double kShootAgainstSubwooferAngle = 0; // deg
+        public static final double kShootAgainstSubwooferAngle = 50; // deg
+
+        public static final double kShootLoadAngle =44;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbAngle = 0; // deg
         public static final double kPullOntoChainHeight = 0;
 
-        public static final double kIntakeCruiseVelocity = 50;
-        public static final double kIntakeAcceleration = 100;
+        public static final double kIntakeCruiseVelocity = 40;
+        public static final double kIntakeAcceleration = 80;
 
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
@@ -493,9 +495,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicCruiseVelocity = 40;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 100;
+            config.MotionMagic.MotionMagicAcceleration = 80;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             // config.MotorOutput.PeakForwardDutyCycle =
@@ -509,7 +511,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 307.88 + 1; // +1 so it never gets there
+        public static final double CANCODER_OFFSET = 86.3 + 4; // +4 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -523,6 +525,8 @@ public class Constants {
         public static final double kTransferToShooterAngle = 0;
         public static final double kShootAngle = 0;
         public static final double kClimbAngle = 0;
+
+        public static final double kloadShooterAngle = 118.8;
 
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
@@ -573,7 +577,12 @@ public class Constants {
 
         public static final double kStowHeight = 0.015;
         public static final double kAmpScoreHeight = 0.22;
-        public static final double kShootHeight = 0.0244;
+
+
+        /* SHOOTING */
+        public static final double kloadShooterInitialHeight = 0.32;
+        public static final double kloadShooterFinalHeight = 0.034;
+        public static final double kShootHeight = 0.32;
 
         /* INTAKING */
         public static final double kIntakeCruiseVelocity = 90;
@@ -616,19 +625,19 @@ public class Constants {
                 // @0 --> position of elevator (in meters)
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
-                { 0.004, 280, 0.0 },
-                { 0.03, 288, 0.0 },
-                { 0.052, 293, 0.0 },
-                { 0.075, 300, 1 },
-                { 0.1, 306, 2 },
-                { 0.125, 313, 4 },
-                { 0.15, 321, 5.2 },
-                { 0.175, 327, 5.3 },
-                { 0.2, 335, 5.5 },
-                { 0.215, 338, 5.1 },
-                { 0.23, 343, 5.2 },
-                { 0.25, 347, 2 },
-                { 0.270, 359.5, -2 } // really 0.275, but less so that everything else goes into position
+                { 0.004, 280+3, 0.0 },
+                { 0.03, 288+3, 0.0 },
+                { 0.052, 293+3, 0.0 },
+                { 0.075, 300+3, 1 },
+                { 0.1, 306+3, 2 },
+                { 0.125, 313+3, 4 },
+                { 0.15, 321+3, 5.2 },
+                { 0.175, 327+3, 5.3 },
+                { 0.2, 335+3, 5.5 },
+                { 0.215, 338+3, 5.1 },
+                { 0.23, 343+3, 5.2 },
+                { 0.25, 347+3, 2 },
+                { 0.270, 359.5+3, -2 } // really 0.275, but less so that everything else goes into position
 
         };
     }

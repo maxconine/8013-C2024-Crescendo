@@ -38,6 +38,7 @@ public class Superstructure extends Subsystem {
     private Limelight mLimelight = Limelight.getInstance();
     private ControlBoard mControlBoard = ControlBoard.getInstance();
     private Pivot mPivot = Pivot.getInstance();
+    private Shooter mShooter = Shooter.getInstance();
 
     private Request activeRequest = null;
     private ArrayList<Request> queuedRequests = new ArrayList<>(0);
@@ -55,6 +56,7 @@ public class Superstructure extends Subsystem {
     private boolean outtakingTimerStarted = false;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
+    private boolean bringElevatorIntoLoad = false;
     private Timer outtakingTimer = new Timer();
 
     public boolean requestsCompleted() {
@@ -317,11 +319,12 @@ public class Superstructure extends Subsystem {
 
     public void controlPivotManually(double demand) {
         // double position = mPivot.getPivotAngleDeg();
-        if ((demand > 0) && (pivotManualPosition < Constants.PivotConstants.kMaxAngle)) {
+        if (demand > 0.3) {
             pivotManualPosition += 0.2;
-        } else if ((demand < 0)) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
-            pivotManualPosition += -0.2;
+        } else if (demand < -0.3) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
+            pivotManualPosition = pivotManualPosition -0.2;
         }
+
         mPivot.setSetpointMotionMagic(pivotManualPosition);
     }
 
@@ -375,6 +378,8 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.INTAKING_GROUND) {
             mSuperstructureState = SuperstructureState.INTAKING_GROUND;
 
+            mWrist.setSetpointMotionMagic(275);
+
             // mElevator.setMotionMagicAcceleration(Constants.ElevatorConstants.kIntakeAcceleration);
             // mElevator.setMotionMagicCruiseVelocity(Constants.ElevatorConstants.kIntakeCruiseVelocity);
 
@@ -410,6 +415,9 @@ public class Superstructure extends Subsystem {
     public void setSuperstuctureTransferToShooter() {
         if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
+                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
         }
     }
 
@@ -490,26 +498,45 @@ public class Superstructure extends Subsystem {
                                                                                                      // position from
                                                                                                      // goal
             } else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER) {
-                mWrist.setSetpointMotionMagic(Constants.WristConstants.kTransferToShooterAngle);
+
+
+                //does stuff up above
+
+                //once wrist & elevator in position
+
+
+
+                if(bringElevatorIntoLoad && mElevator.getElevatorUnits() < Constants.ElevatorConstants.kloadShooterFinalHeight+Constants.ElevatorConstants.kPositionError){
+                    //once elevator down,
+                    bringElevatorIntoLoad = false;
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
+                    mEndEffector.setEndEffectorVelocity(2000);
+                    
+                    //if (want shoot) then shoot
+                }
+                else if(bringElevatorIntoLoad){
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    //mEndEffector.setState(State.OUTTAKING);
+                    //mShooter.setOpenLoopDemand(-0.1);
+                }
+                else if (mWrist.getWristAngleDeg()<Constants.WristConstants.kloadShooterAngle+10 
+                && mElevator.getElevatorUnits()>Constants.ElevatorConstants.kloadShooterInitialHeight-Constants.ElevatorConstants.kPositionError){
+                    bringElevatorIntoLoad = true;
+                }
+
+                //once loaded, bring elevator back out to shoot
+
+
+
                 // then outtake
             } else if (mSuperstructureState == SuperstructureState.SCORE_AMP) {
                 mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
                 mWrist.setSetpointMotionMagic(Constants.WristConstants.kAmpScoreAngle);
                 mPivot.setSetpointMotionMagic(Constants.PivotConstants.kAmpScoreAngle);
-                // if (outtake) { // puit delayed boolean here so that we can manually press to outtake and it
-                //                // stops outtaking when done
 
-                //     if (!outtakingTimerStarted) {
-                //         outtakingTimer.start();
-                //     }
-
-                //     if (outtakingTimer.get() < 1.5) {
-                //         mEndEffector.setState(State.OUTTAKING);
-                //     }
-                // }
             } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
-                System.out.println("RAAA");
-                mWrist.setSetpointMotionMagic(275);
+                
 
                 if (mWrist.getWristAngleDeg() > 250) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
@@ -531,8 +558,11 @@ public class Superstructure extends Subsystem {
                 // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kFloorIntakeAngle);
             } else if (mSuperstructureState == SuperstructureState.INTAKING_SOURCE) {
                 mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceIntakeHeight);
-                mWrist.setSetpointMotionMagic(Constants.WristConstants.kSourceIntakeAngle);
                 mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceIntakeAngle);
+
+                if(mPivot.getPivotAngleDeg()>Constants.PivotConstants.kSourceIntakeAngle-55){
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kSourceIntakeAngle);
+                }
 
             } else if (mSuperstructureState == SuperstructureState.CLIMB) {
                 // setup climb

@@ -280,7 +280,8 @@ public class Robot extends TimedRobot {
 						mDrive.getHeading()));
 			}
 
-			if (mControlBoard.zeroElevator()) {
+			if (mControlBoard.operator.getController().getRawButton(9)
+						&& mControlBoard.operator.getController().getRawButton(10)) {
 				mElevator.setWantHome(true);
 			}
 
@@ -288,13 +289,15 @@ public class Robot extends TimedRobot {
 			if (Constants.isManualControlMode) {
 				/* PIVOT */
 
-				if (Math.abs(mControlBoard.pivotPercentOutput()) > 0.1) {
-					mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
-				} else if (mControlBoard.pivotUp()) {
-					mPivot.setSetpointMotionMagic(80);
-				} else if (mControlBoard.pivotDown()) {
-					mPivot.setSetpointMotionMagic(10);
-				}
+				// if (Math.abs(mControlBoard.pivotPercentOutput()) > 0.1) {
+				// 	mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
+				// } else if (mControlBoard.pivotUp()) {
+				// 	mPivot.setSetpointMotionMagic(80);
+				// } else if (mControlBoard.pivotDown()) {
+				// 	mPivot.setSetpointMotionMagic(10);
+				// }
+
+				mSuperstructure.controlPivotManually(mControlBoard.operator.getController().getLeftY());
 
 				/* ELEVATOR */
 
@@ -373,6 +376,8 @@ public class Robot extends TimedRobot {
 
 				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
 				mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
+
+				mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
 			}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
