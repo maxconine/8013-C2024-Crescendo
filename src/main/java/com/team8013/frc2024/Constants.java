@@ -456,17 +456,17 @@ public class Constants {
         public static final double PivotGearRatio = (25) * (74 / 18);// 25:1 74:18 revolutions of the pivot per 1
                                                                      // rotation of the motor
 
-        public static final int kMinAngle = 0; // deg
-        public static final int kMaxAngle = 90; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
+        public static final int kMinAngle = 5; // deg
+        public static final int kMaxAngle = 95; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
 
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
-        public static final double kSourceIntakeAngle = 89 - 30;
+        public static final double kSourceIntakeAngle = 75;
         public static final double kStowAngle = 0;
-        public static final double kAmpScoreAngle = 99.7 - 30;
-        public static final double kShootAgainstSubwooferAngle = 50; // deg
+        public static final double kAmpScoreAngle = 65;
+        public static final double kShootAgainstSubwooferAngle = 55; // deg
 
-        public static final double kShootLoadAngle = 44;
+        public static final double kShootLoadAngle = 49;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbAngle = 0; // deg
@@ -662,18 +662,18 @@ public class Constants {
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
                 { 0.004, 280 + 3, 5 },
-                { 0.03, 288 + 3, 5},
-                { 0.052, 293 + 3, 5 },
-                { 0.075, 300 + 3, 6 },
-                { 0.1, 306 + 3, 7 },
-                { 0.125, 313 + 3, 9 },
-                { 0.15, 321 + 3, 10.2 },
-                { 0.175, 327 + 3, 10.3 },
-                { 0.2, 335 + 3, 10.5 },
-                { 0.215, 338 + 3, 10.1 },
-                { 0.23, 343 + 3, 10.2 },
-                { 0.25, 347 + 3, 7 },
-                { 0.270, 359.5 + 3, 6 } // really 0.275, but less so that everything else goes into position
+                { 0.03, 288 + 3, 6},
+                { 0.052, 293 + 3, 6 },
+                { 0.075, 300 + 3, 7 },
+                { 0.1, 306 + 3, 10 },
+                { 0.125, 313 + 3, 12 },
+                { 0.15, 321 + 3, 12 },
+                { 0.175, 327 + 3, 12 },
+                { 0.2, 335 + 3, 13 },
+                { 0.215, 338 + 3, 14 },
+                { 0.23, 343 + 3, 13 },
+                { 0.25, 350 + 3, 11 },
+                { 0.28, 359.7 + 3, 10 } // really 0.275, but less so that everything else goes into position
 
         };
     }

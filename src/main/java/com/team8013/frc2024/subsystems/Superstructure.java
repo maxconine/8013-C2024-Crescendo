@@ -380,7 +380,7 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.INTAKING_GROUND) {
             mSuperstructureState = SuperstructureState.INTAKING_GROUND;
 
-            mWrist.setSetpointMotionMagic(275);
+            mWrist.setSetpointMotionMagic(265);
             // flips the wrist down immediatly, then elevator waits for it to get into
             // position before extending
 
@@ -417,6 +417,7 @@ public class Superstructure extends Subsystem {
     public void setSuperstuctureStow() {
         if (mSuperstructureState != SuperstructureState.STOW) {
             mSuperstructureState = SuperstructureState.STOW;
+            mPivot.setSetpointMotionMagic(12);
         }
     }
 
