@@ -439,15 +439,15 @@ public class Superstructure extends Subsystem {
         }
     }
 
-    public void setClimbModeStage2(boolean wantStage2Climb) {
-        if (climbModeStage2 != wantStage2Climb) {
-            climbModeStage2 = wantStage2Climb;
+    public void setClimbModeStage2() {
+        if (mSuperstructureState == SuperstructureState.CLIMB) {
+            climbModeStage2 = true;
         }
     }
 
-    public void setClimbModeStage3(boolean wantStage3Climb) {
-        if (climbModeStage3 != wantStage3Climb) {
-            climbModeStage3 = wantStage3Climb;
+    public void setClimbModeStage3() {
+        if (mSuperstructureState == SuperstructureState.CLIMB) {
+            climbModeStage3 = true;
         }
     }
 
@@ -588,7 +588,11 @@ public class Superstructure extends Subsystem {
 
                 if (robotHookedOntoChain && climbModeStage3) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle);
+                    if (mElevator
+                            .getElevatorUnits() > Constants.ElevatorConstants.kDistanceToExtendBeforeRaisingPivotWhenClimbing) {
+                        mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle);
+                    }
+                    // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
                 }
 

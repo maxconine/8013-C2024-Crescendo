@@ -609,6 +609,8 @@ public class Constants {
         /* CLIMB */
         public static final double kClimbHeight = 0; // initial height pulling up to chain
         public static final double kPullOntoChainHeight = 0; // height of the elevator when transfering chain
+        public static final double kDistanceToExtendBeforeRaisingPivotWhenClimbing = Conversions.inchesToMeters(5); // totally
+                                                                                                                    // guessing
         public static final double kExtendToScoreTrapHeight = 0; // height of the elvator when scoring in the trap
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
