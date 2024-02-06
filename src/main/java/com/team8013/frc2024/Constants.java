@@ -51,7 +51,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = false;
+    public static final boolean isManualControlMode = true;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -448,7 +448,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -15.4;
+        public static final double CANCODER_OFFSET = -79-5;
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -478,7 +478,7 @@ public class Constants {
 
         public static CANcoderConfiguration pivotCancoderConfig() {
             CANcoderConfiguration config = new CANcoderConfiguration();
-            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+            config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
             config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
             return config;
         }
@@ -661,19 +661,19 @@ public class Constants {
                 // @0 --> position of elevator (in meters)
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
-                { 0.004, 280 + 3, 0.0 },
-                { 0.03, 288 + 3, 0.0 },
-                { 0.052, 293 + 3, 0.0 },
-                { 0.075, 300 + 3, 1 },
-                { 0.1, 306 + 3, 2 },
-                { 0.125, 313 + 3, 4 },
-                { 0.15, 321 + 3, 5.2 },
-                { 0.175, 327 + 3, 5.3 },
-                { 0.2, 335 + 3, 5.5 },
-                { 0.215, 338 + 3, 5.1 },
-                { 0.23, 343 + 3, 5.2 },
-                { 0.25, 347 + 3, 2 },
-                { 0.270, 359.5 + 3, -2 } // really 0.275, but less so that everything else goes into position
+                { 0.004, 280 + 3, 5 },
+                { 0.03, 288 + 3, 5},
+                { 0.052, 293 + 3, 5 },
+                { 0.075, 300 + 3, 6 },
+                { 0.1, 306 + 3, 7 },
+                { 0.125, 313 + 3, 9 },
+                { 0.15, 321 + 3, 10.2 },
+                { 0.175, 327 + 3, 10.3 },
+                { 0.2, 335 + 3, 10.5 },
+                { 0.215, 338 + 3, 10.1 },
+                { 0.23, 343 + 3, 10.2 },
+                { 0.25, 347 + 3, 7 },
+                { 0.270, 359.5 + 3, 6 } // really 0.275, but less so that everything else goes into position
 
         };
     }

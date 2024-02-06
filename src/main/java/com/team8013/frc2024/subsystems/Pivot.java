@@ -9,19 +9,14 @@ import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.team254.lib.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -64,7 +59,7 @@ public class Pivot extends Subsystem {
     }
 
     public void resetToAbsolute() {
-        double absolutePosition = Conversions.degreesToRotation(getCanCoder().getDegrees(),
+        double absolutePosition = Conversions.degreesToRotation(getCanCoder(),
                 Constants.PivotConstants.PivotGearRatio);
         mMaster.setPosition(absolutePosition);
     }
@@ -151,9 +146,8 @@ public class Pivot extends Subsystem {
         mPeriodicIO.demand = demand;
     }
 
-    public Rotation2d getCanCoder() {
-        return Rotation2d.fromDegrees(Util.placeIn0To360Scope(
-                mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.PivotConstants.CANCODER_OFFSET));
+    public double getCanCoder() {
+        return Util.placeIn0To360Scope((mCANcoder.getAbsolutePosition().getValueAsDouble() * 360) - Constants.PivotConstants.CANCODER_OFFSET);
     }
 
     public void setMotorConfig(TalonFXConfiguration config) {
@@ -228,7 +222,7 @@ public class Pivot extends Subsystem {
     @Override
     public void outputTelemetry() {
         SmartDashboard.putNumber("Pivot Angle (degrees)", mPeriodicIO.position_degrees);
-        SmartDashboard.putNumber("Pivot CANCODER (degrees)", getCanCoder().getDegrees());
+        SmartDashboard.putNumber("Pivot CANCODER (degrees)", getCanCoder());
         SmartDashboard.putNumber("Pivot Motor Rotations", mMaster.getRotorPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Demand", mPeriodicIO.demand);
         SmartDashboard.putNumber("Pivot" + " Velocity rad/s", mPeriodicIO.velocity_radPerSec);
