@@ -589,11 +589,14 @@ public class Superstructure extends Subsystem {
                 if (robotHookedOntoChain && climbModeStage3) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
                     if (mElevator
-                            .getElevatorUnits() > Constants.ElevatorConstants.kDistanceToExtendBeforeRaisingPivotWhenClimbing) {
+                            .getElevatorUnits() > Constants.ElevatorConstants.kDistanceToExtendBeforeRaisingPivotWhenClimbing
+                                    - Constants.ElevatorConstants.kPositionError) {
                         mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle);
                     }
-                    // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                    if (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle
+                            - Constants.PivotConstants.kPositionError) {
+                        mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                    }
                 }
 
             }
