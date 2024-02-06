@@ -466,11 +466,12 @@ public class Constants {
         public static final double kAmpScoreAngle = 99.7 - 30;
         public static final double kShootAgainstSubwooferAngle = 50; // deg
 
-        public static final double kShootLoadAngle =44;
+        public static final double kShootLoadAngle = 44;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbAngle = 0; // deg
-        public static final double kPullOntoChainHeight = 0;
+        public static final double kPullOntoChainAngle = 0;
+        public static final double kExtendToScoreTrapAngle = 0;
 
         public static final double kIntakeCruiseVelocity = 40;
         public static final double kIntakeAcceleration = 80;
@@ -482,7 +483,7 @@ public class Constants {
             return config;
         }
 
-        public static TalonFXConfiguration pivotMotorConfig() {
+        public static TalonFXConfiguration pivotFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -500,10 +501,28 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 80;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            // config.MotorOutput.PeakForwardDutyCycle =
-            // Conversions.degreesToRotation(kMaxHeight,PivotGearRatio);
-            // config.MotorOutput.PeakReverseDutyCycle =
-            // Conversions.degreesToRotation(kMinHeight,PivotGearRatio);
+
+            return config;
+        }
+
+        public static TalonFXConfiguration pivotSlowMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            // TODO: do any of these configs even matter?
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 25; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 40;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.7;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicExpo_kA = 0.7;
+            config.MotionMagic.MotionMagicAcceleration = 40;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
             return config;
         }
@@ -522,11 +541,13 @@ public class Constants {
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 150;
         public static final double kAmpScoreAngle = 165;
-        public static final double kTransferToShooterAngle = 0;
-        public static final double kShootAngle = 0;
-        public static final double kClimbAngle = 0;
-
+        public static final double kTransferToShooterAngle = 118.8;
         public static final double kloadShooterAngle = 118.8;
+
+        public static final double kShootAngle = 118.8;
+
+        public static final double kClimbAngle = 150;
+        public static final double kClimbScoreInTrapAngle = 0;
 
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
@@ -548,10 +569,6 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            // config.MotorOutput.PeakForwardDutyCycle =
-            // Conversions.degreesToRotation(kMaxPosition, kGearRatio);
-            // config.MotorOutput.PeakReverseDutyCycle =
-            // Conversions.degreesToRotation(kMinPosition, kGearRatio);
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // down to intake is increasing, up to load
                                                                             // is decreasing
 
@@ -578,7 +595,6 @@ public class Constants {
         public static final double kStowHeight = 0.015;
         public static final double kAmpScoreHeight = 0.22;
 
-
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32;
         public static final double kloadShooterFinalHeight = 0.034;
@@ -595,7 +611,7 @@ public class Constants {
         public static final double kPullOntoChainHeight = 0; // height of the elevator when transfering chain
         public static final double kExtendToScoreTrapHeight = 0; // height of the elvator when scoring in the trap
 
-        public static TalonFXConfiguration elevatorMotorConfig() {
+        public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -612,9 +628,27 @@ public class Constants {
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 120;
 
-            // config.MotorOutput.PeakForwardDutyCycle =
-            // Conversions.metersToRotations(kMaxHeight, kWheelCircumference, kGearRatio);
-            // config.MotorOutput.PeakReverseDutyCycle = 0
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+            return config;
+        }
+
+        public static TalonFXConfiguration elevatorSlowMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            // TODO: do any of these configs even matter?
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.6;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 90;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -625,19 +659,19 @@ public class Constants {
                 // @0 --> position of elevator (in meters)
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
-                { 0.004, 280+3, 0.0 },
-                { 0.03, 288+3, 0.0 },
-                { 0.052, 293+3, 0.0 },
-                { 0.075, 300+3, 1 },
-                { 0.1, 306+3, 2 },
-                { 0.125, 313+3, 4 },
-                { 0.15, 321+3, 5.2 },
-                { 0.175, 327+3, 5.3 },
-                { 0.2, 335+3, 5.5 },
-                { 0.215, 338+3, 5.1 },
-                { 0.23, 343+3, 5.2 },
-                { 0.25, 347+3, 2 },
-                { 0.270, 359.5+3, -2 } // really 0.275, but less so that everything else goes into position
+                { 0.004, 280 + 3, 0.0 },
+                { 0.03, 288 + 3, 0.0 },
+                { 0.052, 293 + 3, 0.0 },
+                { 0.075, 300 + 3, 1 },
+                { 0.1, 306 + 3, 2 },
+                { 0.125, 313 + 3, 4 },
+                { 0.15, 321 + 3, 5.2 },
+                { 0.175, 327 + 3, 5.3 },
+                { 0.2, 335 + 3, 5.5 },
+                { 0.215, 338 + 3, 5.1 },
+                { 0.23, 343 + 3, 5.2 },
+                { 0.25, 347 + 3, 2 },
+                { 0.270, 359.5 + 3, -2 } // really 0.275, but less so that everything else goes into position
 
         };
     }

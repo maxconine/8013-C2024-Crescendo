@@ -9,6 +9,7 @@ import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.util.DelayedBoolean;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
@@ -40,8 +41,8 @@ public class Elevator extends Subsystem {
         mSlave = new TalonFX(Ports.ELEVATOR_B, Ports.CANBUS);
 
         // Customize these configs from constants in the future
-        mMaster.getConfigurator().apply(Constants.ElevatorConstants.elevatorMotorConfig());
-        mSlave.getConfigurator().apply(Constants.ElevatorConstants.elevatorMotorConfig());
+        mMaster.getConfigurator().apply(Constants.ElevatorConstants.elevatorFastMotorConfig());
+        mSlave.getConfigurator().apply(Constants.ElevatorConstants.elevatorFastMotorConfig());
 
         mSlave.setControl(new Follower(Ports.ELEVATOR_A, true));
         setNeutralBrake(false);
@@ -185,7 +186,7 @@ public class Elevator extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
 
-        if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position<0) {
+        if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position < 0) {
             mHoming = false;
             zeroSensors();
             setSetpointMotionMagic(0.05);
@@ -228,20 +229,9 @@ public class Elevator extends Subsystem {
                 || Util.epsilonEquals(mPeriodicIO.position, 0.0, 0.05);
     }
 
-    public void setMotionMagicCruiseVelocity(double cruiseVelocity){
-        MotionMagicConfigs configs = new MotionMagicConfigs();
-        configs.MotionMagicCruiseVelocity = cruiseVelocity;
-        mMaster.getConfigurator().apply(configs);
-        mSlave.getConfigurator().apply(configs);
+    public void setMotorConfig(TalonFXConfiguration config) {
+        mMaster.getConfigurator().apply(config);
     }
-
-    public void setMotionMagicAcceleration(double acceleration){
-        MotionMagicConfigs configs = new MotionMagicConfigs();
-        configs.MotionMagicAcceleration = acceleration;
-        mMaster.getConfigurator().apply(configs);
-        mSlave.getConfigurator().apply(configs);
-    }
-
 
     @Log
     public double getElevatorUnits() {

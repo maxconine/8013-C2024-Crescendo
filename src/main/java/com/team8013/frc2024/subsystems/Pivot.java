@@ -53,8 +53,8 @@ public class Pivot extends Subsystem {
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
         // Customize these configs from constants in the future
-        mMaster.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
-        mSlave.getConfigurator().apply(Constants.PivotConstants.pivotMotorConfig());
+        mMaster.getConfigurator().apply(Constants.PivotConstants.pivotFastMotorConfig());
+        mSlave.getConfigurator().apply(Constants.PivotConstants.pivotFastMotorConfig());
 
         mCANcoder.getConfigurator().apply(CANCoderConfig);
 
@@ -128,86 +128,17 @@ public class Pivot extends Subsystem {
     // };
     // }
 
-    // public Request climbRequest(double angle) {
-    // return new Request() {
-    // @Override
-    // public void act() {
-    // setSetpointMotionMagic(angle);
-    // is_climb = true;
-    // is_scraping = false;
-    // updateCurrentLimits();
-    // }
-
-    // @Override
-    // public boolean isFinished() {
-    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    // }
-    // };
-    // }
-
-    // public Request scrapeRequest(double angle) {
-    // return new SequentialRequest(
-    // scrapeDropRequest(angle),
-    // scrapeHoldRequest(angle)
-    // );
-    // }
-
-    // private Request scrapeDropRequest(double angle) {
-    // return new Request() {
-    // @Override
-    // public void act() {
-    // setSetpointMotionMagic(angle);
-    // is_scraping = false;
-    // updateCurrentLimits();
-    // }
-
-    // @Override
-    // public boolean isFinished() {
-    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    // }
-    // };
-    // }
-
-    // private Request scrapeHoldRequest(double angle) {
-    // return new Request() {
-    // @Override
-    // public void act() {
-    // is_scraping = true;
-    // updateCurrentLimits();
-    // }
-
-    // @Override
-    // public boolean isFinished() {
-    // return Util.epsilonEquals(mPeriodicIO.position_units, angle, 1.5);
-    // }
-    // };
-    // }
-
-    // public Request PivotWaitRequest(double angle) {
-    // return new Request() {
-    // @Override
-    // public void act() {
-
-    // }
-
-    // @Override
-    // public boolean isFinished() {
-    // return Util.epsilonEquals(mPeriodicIO.position_degrees, angle, 1.0);
-    // }
-    // };
-    // }
-
     public void setSetpointMotionMagic(double degrees) {
         if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
             mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
 
         // Limit forward and backward movement
-        if (degrees > Constants.PivotConstants.kMaxAngle) {
-            degrees = Constants.PivotConstants.kMaxAngle;
-        } else if (degrees < Constants.PivotConstants.kMinAngle) {
-            degrees = Constants.PivotConstants.kMinAngle;
-        }
+        // if (degrees > Constants.PivotConstants.kMaxAngle) {
+        // degrees = Constants.PivotConstants.kMaxAngle;
+        // } else if (degrees < Constants.PivotConstants.kMinAngle) {
+        // degrees = Constants.PivotConstants.kMinAngle;
+        // }
 
         double rotationDemand = Conversions.degreesToRotation(degrees, Constants.PivotConstants.PivotGearRatio);
         mPeriodicIO.demand = rotationDemand;
@@ -225,16 +156,8 @@ public class Pivot extends Subsystem {
                 mCANcoder.getAbsolutePosition().getValueAsDouble() * 360 - Constants.PivotConstants.CANCODER_OFFSET));
     }
 
-    public void setMotionMagicCruiseVelocity(double cruiseVelocity){
-        MotionMagicConfigs configs = new MotionMagicConfigs();
-        configs.MotionMagicCruiseVelocity = cruiseVelocity;
-        mMaster.getConfigurator().apply(configs);
-    }
-    
-    public void setMotionMagicAcceleration(double acceleration){
-        MotionMagicConfigs configs = new MotionMagicConfigs();
-        configs.MotionMagicAcceleration = acceleration;
-        mMaster.getConfigurator().apply(configs);
+    public void setMotorConfig(TalonFXConfiguration config) {
+        mMaster.getConfigurator().apply(config);
     }
 
     @Log
