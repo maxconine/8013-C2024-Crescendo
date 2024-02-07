@@ -448,7 +448,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -79-5;
+        public static final double CANCODER_OFFSET = -79 - 5; // -5 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -469,9 +469,13 @@ public class Constants {
         public static final double kShootLoadAngle = 49;
 
         /* CLIMB CONSTANTS */
-        public static final double kClimbAngle = 0; // deg
-        public static final double kPullOntoChainAngle = 0;
-        public static final double kExtendToScoreTrapAngle = 0;
+        public static final double kClimbAngle = 85; // deg
+        public static final double kPullOntoChainAngle1 = 35;
+        public static final double kPullOntoChainAngle2 = 6; // once elevator is down, goto this angle
+        public static final double kExtendOffChainAngle1 = 18; // Once chain hooked go up to this angle and wait for
+                                                               // release
+        public static final double kExtendOffChainAngle2 = 25; // Angle before abrupt flip over to trap
+        public static final double kExtendToScoreTrapAngle = 94.5; // angle when pressed up against trap wall
 
         public static final double kIntakeCruiseVelocity = 40;
         public static final double kIntakeAcceleration = 80;
@@ -537,7 +541,6 @@ public class Constants {
         public static final double kMinPosition = 0; // degrees
         public static final double kMaxPosition = 200; // degrees
 
-        public static final double kFloorIntakeAngle = 200;
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 150;
         public static final double kAmpScoreAngle = 165;
@@ -547,7 +550,7 @@ public class Constants {
         public static final double kShootAngle = 118.8;
 
         public static final double kClimbAngle = 150;
-        public static final double kClimbScoreInTrapAngle = 0;
+        public static final double kClimbScoreInTrapAngle = 0; // ~200?
 
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
@@ -607,10 +610,11 @@ public class Constants {
         public static final double kSourceIntakeHeight = 0.064;
 
         /* CLIMB */
-        public static final double kClimbHeight = 0; // initial height pulling up to chain
+        public static final double kClimbHeight = 0; // initial height going up to chain
         public static final double kPullOntoChainHeight = 0; // height of the elevator when transfering chain
         public static final double kDistanceToExtendBeforeRaisingPivotWhenClimbing = Conversions.inchesToMeters(5); // totally
-                                                                                                                    // guessing
+        public static final double kExtendOffChain1 = 0; // guessing
+        public static final double kExtendOffChain2 = 0;
         public static final double kExtendToScoreTrapHeight = 0; // height of the elvator when scoring in the trap
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
@@ -662,7 +666,7 @@ public class Constants {
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
                 { 0.004, 280 + 3, 5 },
-                { 0.03, 288 + 3, 6},
+                { 0.03, 288 + 3, 6 },
                 { 0.052, 293 + 3, 6 },
                 { 0.075, 300 + 3, 7 },
                 { 0.1, 306 + 3, 10 },
