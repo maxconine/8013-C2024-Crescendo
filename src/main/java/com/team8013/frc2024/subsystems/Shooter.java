@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -61,7 +62,8 @@ public class Shooter extends Subsystem {
 
     public enum ControlState {
         OPEN_LOOP,
-        CLOSED_LOOP
+        CLOSED_LOOP,
+        SLINGSHOT
     }
 
     @Override
@@ -133,6 +135,9 @@ public class Shooter extends Subsystem {
         } else if (mControlState == ControlState.CLOSED_LOOP) {
             mMaster.setControl(new MotionMagicVelocityDutyCycle(mPeriodicIO.demand));
         }
+        // else if (mControlState == ControlState.SLINGSHOT){
+        //     mMaster.setControl(new TorqueCurrentFOC(780,1,1,false,false,false));
+        // }
     }
 
     // public Request effectorRequest (State _wantedState) {

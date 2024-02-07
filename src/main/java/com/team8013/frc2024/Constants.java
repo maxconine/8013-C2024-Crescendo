@@ -469,7 +469,7 @@ public class Constants {
         public static final double kShootLoadAngle = 49;
 
         /* CLIMB CONSTANTS */
-        public static final double kClimbAngle = 85; // deg
+        public static final double kClimbInitAngle = 76; // deg
         public static final double kPullOntoChainAngle1 = 35;
         public static final double kPullOntoChainAngle2 = 6; // once elevator is down, goto this angle
         public static final double kExtendOffChainAngle1 = 18; // Once chain hooked go up to this angle and wait for
@@ -544,13 +544,12 @@ public class Constants {
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 150;
         public static final double kAmpScoreAngle = 165;
-        public static final double kTransferToShooterAngle = 118.8;
         public static final double kloadShooterAngle = 118.8;
 
         public static final double kShootAngle = 118.8;
 
         public static final double kClimbAngle = 150;
-        public static final double kClimbScoreInTrapAngle = 0; // ~200?
+        public static final double kClimbScoreInTrapAngle = 155; // ~200?
 
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
@@ -610,12 +609,12 @@ public class Constants {
         public static final double kSourceIntakeHeight = 0.064;
 
         /* CLIMB */
-        public static final double kClimbHeight = 0; // initial height going up to chain
-        public static final double kPullOntoChainHeight = 0; // height of the elevator when transfering chain
-        public static final double kDistanceToExtendBeforeRaisingPivotWhenClimbing = Conversions.inchesToMeters(5); // totally
-        public static final double kExtendOffChain1 = 0; // guessing
-        public static final double kExtendOffChain2 = 0;
-        public static final double kExtendToScoreTrapHeight = 0; // height of the elvator when scoring in the trap
+        public static final double kClimbInitHeight = 0.43; // initial height going up to chain
+        public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
+
+        public static final double kExtendOffChain1 = 0.18;
+        public static final double kExtendOffChain2 = 0.31;
+        public static final double kExtendToScoreTrapHeight = 0.47; // height of the elvator when scoring in the trap
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -683,6 +682,7 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
+        public static final double kShootRPM = 6000; 
         public static TalonFXConfiguration endEffectorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -699,6 +699,9 @@ public class Constants {
     }
 
     public static final class ShooterConstants {
+        public static final double kLoadShooterRPM = -100;
+         public static final double kSlingshotDemand = 0.95;
+
         public static TalonFXConfiguration shooterMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 

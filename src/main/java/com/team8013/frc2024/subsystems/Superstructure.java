@@ -51,8 +51,11 @@ public class Superstructure extends Subsystem {
     private boolean wantsManualIntake;
     private boolean outtakingTimerStarted = false;
     private int climbingTracker = -1;
+    private int transfterToShooterTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
+    private boolean mShooterLoaded = false;
+    private boolean mWantsToShoot = false;
     private boolean bringElevatorIntoLoad = false;
     private Timer outtakingTimer = new Timer();
 
@@ -397,16 +400,14 @@ public class Superstructure extends Subsystem {
     public void setSuperstuctureTransferToShooter() {
         if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
+            transfterToShooterTracker = -1;
+            mWantsToShoot = false;
+
         }
     }
 
     public void setSuperstuctureShoot() {
-        if (mSuperstructureState != SuperstructureState.SHOOT) {
-            mSuperstructureState = SuperstructureState.SHOOT;
-        }
+        mWantsToShoot = true;
     }
 
     public void setSuperstuctureStow() {
@@ -493,33 +494,54 @@ public class Superstructure extends Subsystem {
                                                                                                      // goal
             } else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER) {
 
-                // does stuff up above
+                /*
+                 * Steps:
+                 * 0: set elevaotr, pivot, and wrist to load shooter initial angle
+                 * 1:
+                 */
 
-                // once wrist & elevator in position
-
-                if (bringElevatorIntoLoad
-                        && mElevator.getElevatorUnits() < Constants.ElevatorConstants.kloadShooterFinalHeight
-                                + Constants.ElevatorConstants.kPositionError) {
-                    // once elevator down,
-                    bringElevatorIntoLoad = false;
+                if (transfterToShooterTracker == -1) {
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
-                    mEndEffector.setEndEffectorVelocity(2000);
-
-                    // if (want shoot) then shoot
-                } else if (bringElevatorIntoLoad) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
-                    // mEndEffector.setState(State.OUTTAKING);
-                    // mShooter.setOpenLoopDemand(-0.1);
-                } else if (mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 10
-                        && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
-                                - Constants.ElevatorConstants.kPositionError) {
-                    bringElevatorIntoLoad = true;
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
+                    transfterToShooterTracker = 0;
                 }
 
-                // once loaded, bring elevator back out to shoot
+                if ((transfterToShooterTracker == 0)
+                        && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
+                                - Constants.ElevatorConstants.kPositionError)
+                        && mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 10) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    mShooter.setClosedLoopDemand(Constants.ShooterConstants.kLoadShooterRPM);
+                    transfterToShooterTracker = 1;
+                }
 
-                // then outtake
+                // mShooterLoaded = mShooter.getBeamBreak();
+
+                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.16) && (!mShooterLoaded)) {
+                    mEndEffector.setState(State.OUTTAKING);
+                }
+
+                if (mShooterLoaded && transfterToShooterTracker == 1) {
+                    mEndEffector.setEndEffectorVelocity(Constants.EndEffectorConstants.kShootRPM);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
+                    transfterToShooterTracker = 2;
+                }
+
+                if ((transfterToShooterTracker == 2) && (mWantsToShoot)
+                        && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
+                                - Constants.ElevatorConstants.kPositionError)) {
+                    mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
+                    transfterToShooterTracker = 3;
+                }
+
+                if ((transfterToShooterTracker == 3) && (!mShooterLoaded)) {
+                    // done shooting
+                    mShooter.setOpenLoopDemand(0);
+                    mEndEffector.setState(State.IDLE);
+                    mSuperstructureState = SuperstructureState.STOW;
+                }
+
             } else if (mSuperstructureState == SuperstructureState.SCORE_AMP) {
                 mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
                 mWrist.setSetpointMotionMagic(Constants.WristConstants.kAmpScoreAngle);
@@ -567,8 +589,8 @@ public class Superstructure extends Subsystem {
 
                 // Stage 1: set up climb
                 if (climbingTracker == -1) { // and bot is in position
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle);
                     climbingTracker = 0;
                 }
@@ -576,9 +598,9 @@ public class Superstructure extends Subsystem {
                 // Stage 2: once climb set up, wait for user to press button to pull down to
                 // chain
                 if ((climbModeStage2) && (climbingTracker == 0)
-                        && (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbHeight
+                        && (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbInitHeight
                                 - Constants.ElevatorConstants.kPositionError)
-                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbAngle
+                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle
                                 - Constants.PivotConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
