@@ -14,6 +14,7 @@ import com.team8013.frc2024.subsystems.Shooter.ControlState;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.requests.SequentialRequest;
+import com.team8013.lib.swerve.SwerveModule.mPeriodicIO;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -320,9 +321,9 @@ public class Superstructure extends Subsystem {
     public void controlPivotManually(double demand) {
         // double position = mPivot.getPivotAngleDeg();
         if (demand > 0.3) {
-            pivotManualPosition += 0.2;
+            pivotManualPosition += 0.3;
         } else if (demand < -0.3) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
-            pivotManualPosition = pivotManualPosition - 0.2;
+            pivotManualPosition = pivotManualPosition - 0.3;
         }
 
         mPivot.setSetpointMotionMagic(pivotManualPosition);
@@ -330,9 +331,9 @@ public class Superstructure extends Subsystem {
 
     public void controlElevatorManually(double demand) {
         if ((demand > 0.2)) {
-            elevatorManualPosition += 0.001;
+            elevatorManualPosition += 0.0015;
         } else if ((demand < -0.2)) { // &&(pivotManualPosition>Constants.PivotConstants.kMinAngle)
-            elevatorManualPosition += -0.001;
+            elevatorManualPosition += -0.0015;
         }
 
         mElevator.setSetpointMotionMagic(elevatorManualPosition);
@@ -340,9 +341,9 @@ public class Superstructure extends Subsystem {
 
     public void controlWristManually(double demand) {
         if (demand > 0) {// &&(position<Constants.WristConstants.kMaxPosition)){
-            wristManualPosition += 0.2;
+            wristManualPosition += 0.4;
         } else if (demand < 0) {// &&(position<Constants.WristConstants.kMinPosition)){
-            wristManualPosition = wristManualPosition - 0.2;
+            wristManualPosition = wristManualPosition - 0.4;
         }
         // SmartDashboard.putNumber("wristManualPosition", wristManualPosition);
         mWrist.setSetpointMotionMagic(wristManualPosition);
@@ -589,9 +590,12 @@ public class Superstructure extends Subsystem {
 
                 // Stage 1: set up climb
                 if (climbingTracker == -1) { // and bot is in position
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight); // Change this to
+                                                                                                    // manual control of
+                                                                                                    // height using
+                                                                                                    // joystick
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle1);
                     climbingTracker = 0;
                 }
 
@@ -615,7 +619,7 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (climbingTracker == 2 && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
-                        + Constants.PivotConstants.kPositionError)) {
+                        + 1)) {
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain1);
                     climbingTracker = 3;
@@ -625,7 +629,7 @@ public class Superstructure extends Subsystem {
                 if (climbingTracker == 3 && climbModeStage3) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain2);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle2);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle2);
                     climbingTracker = 4;
                 }
 
@@ -636,12 +640,19 @@ public class Superstructure extends Subsystem {
                                 - Constants.PivotConstants.kPositionError) {
                     climbingTracker = 5;
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle); // fast
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle3);
                 }
 
                 if ((climbingTracker == 5)
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle
                                 - Constants.PivotConstants.kPositionError)) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                    mPivot.setMotorConfig(Constants.PivotConstants.pivotFastMotorConfig());
+                    mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorFastMotorConfig());
+                    climbingTracker = 6;
+
                     // on the trap wall pressed against it, maybe shake the pivot to wedge the end
                     // effector in
                 }

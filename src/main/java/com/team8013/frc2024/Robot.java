@@ -23,7 +23,6 @@ import com.team8013.frc2024.auto.AutoModeBase;
 import com.team8013.frc2024.auto.AutoModeExecutor;
 import com.team8013.frc2024.auto.AutoModeSelector;
 import com.team8013.frc2024.controlboard.ControlBoard;
-import com.team8013.frc2024.controlboard.ControlBoard.SwerveCardinal;
 import com.team8013.frc2024.controlboard.CustomXboxController.Button;
 import com.team8013.frc2024.controlboard.CustomXboxController.Side;
 import com.team8013.frc2024.loops.CrashTracker;
@@ -353,6 +352,13 @@ public class Robot extends TimedRobot {
 				 * chain
 				 * press A to engage stage 3 climb which scores into the trap, press Dpad to
 				 * eject note
+				 */
+
+				/*
+				 * TODO:
+				 * Manual Control of elevator during climb
+				 * Do more climbing tests
+				 * 
 				 */
 				if (!mSuperstructure.inClimbMode()) {
 					if (mControlBoard.operator.getTrigger(Side.LEFT)) {

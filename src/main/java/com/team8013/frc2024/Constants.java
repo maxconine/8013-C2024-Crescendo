@@ -51,7 +51,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = true;
+    public static final boolean isManualControlMode = false;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -470,12 +470,12 @@ public class Constants {
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle = 76; // deg
-        public static final double kPullOntoChainAngle1 = 35;
-        public static final double kPullOntoChainAngle2 = 6; // once elevator is down, goto this angle
+        public static final double kPullOntoChainAngle1 = 45;
+        public static final double kPullOntoChainAngle2 = 5; // once elevator is down, goto this angle
         public static final double kExtendOffChainAngle1 = 18; // Once chain hooked go up to this angle and wait for
                                                                // release
-        public static final double kExtendOffChainAngle2 = 25; // Angle before abrupt flip over to trap
-        public static final double kExtendToScoreTrapAngle = 94.5; // angle when pressed up against trap wall
+        public static final double kExtendOffChainAngle2 = 24; // Angle before abrupt flip over to trap
+        public static final double kExtendToScoreTrapAngle = 100; // angle when pressed up against trap wall
 
         public static final double kIntakeCruiseVelocity = 40;
         public static final double kIntakeAcceleration = 80;
@@ -548,7 +548,9 @@ public class Constants {
 
         public static final double kShootAngle = 118.8;
 
-        public static final double kClimbAngle = 150;
+        public static final double kClimbAngle1 = 140;
+        public static final double kClimbAngle2 = 190;
+        public static final double kClimbAngle3 = 185;
         public static final double kClimbScoreInTrapAngle = 155; // ~200?
 
         public static final double kIntakeCruiseVelocity = 50;
@@ -605,20 +607,22 @@ public class Constants {
         /* INTAKING */
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
+
         public static final double kFloorIntakeHeight = 0.280;
         public static final double kSourceIntakeHeight = 0.064;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.43; // initial height going up to chain
+        public static final double kClimbInitHeight = 0.43 - Conversions.inchesToMeters(3); // initial height going up
+                                                                                            // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
         public static final double kExtendOffChain1 = 0.18;
-        public static final double kExtendOffChain2 = 0.31;
-        public static final double kExtendToScoreTrapHeight = 0.47; // height of the elvator when scoring in the trap
+        public static final double kExtendOffChain2 = 0.24;
+        public static final double kExtendOffChain3 = 0.43;
+        public static final double kExtendToScoreTrapHeight = 0.43; // height of the elvator when scoring in the trap
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
             config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
@@ -651,9 +655,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 90;
+            config.MotionMagic.MotionMagicCruiseVelocity = 40;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 120;
+            config.MotionMagic.MotionMagicAcceleration = 60;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -666,15 +670,15 @@ public class Constants {
                 // @2 --> position of the pivot(in degrees)
                 { 0.004, 280 + 3, 5 },
                 { 0.03, 288 + 3, 6 },
-                { 0.052, 293 + 3, 6 },
-                { 0.075, 300 + 3, 7 },
-                { 0.1, 306 + 3, 10 },
+                { 0.052, 293 + 3, 8 },
+                { 0.075, 300 + 3, 9 },
+                { 0.1, 306 + 3, 12 },
                 { 0.125, 313 + 3, 12 },
                 { 0.15, 321 + 3, 12 },
                 { 0.175, 327 + 3, 12 },
                 { 0.2, 335 + 3, 13 },
-                { 0.215, 338 + 3, 14 },
-                { 0.23, 343 + 3, 13 },
+                { 0.215, 338 + 3, 13 },
+                { 0.23, 343 + 3, 12 },
                 { 0.25, 350 + 3, 11 },
                 { 0.28, 359.7 + 3, 10 } // really 0.275, but less so that everything else goes into position
 
@@ -682,7 +686,8 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        public static final double kShootRPM = 6000; 
+        public static final double kShootRPM = 6000;
+
         public static TalonFXConfiguration endEffectorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
@@ -700,7 +705,7 @@ public class Constants {
 
     public static final class ShooterConstants {
         public static final double kLoadShooterRPM = -100;
-         public static final double kSlingshotDemand = 0.95;
+        public static final double kSlingshotDemand = 0.95;
 
         public static TalonFXConfiguration shooterMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
