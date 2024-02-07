@@ -429,10 +429,12 @@ public class Superstructure extends Subsystem {
             mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
             mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
 
-            mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
-            mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
-            mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle);
+            // tell the robot limelight to automatically get the bot in position
+
+            // reset everything
             climbingTracker = -1;
+            climbModeStage2 = false;
+            climbModeStage3 = false;
         }
     }
 
@@ -564,22 +566,20 @@ public class Superstructure extends Subsystem {
                  */
 
                 // Stage 1: set up climb
-                if ((mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbHeight
-                        - Constants.ElevatorConstants.kPositionError
-                        && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbAngle
-                                - Constants.PivotConstants.kPositionError)
-                        && (!climbModeStage2) && (!climbModeStage3)) {
-
-                    // climbSetup = true;
+                if (climbingTracker == -1) { // and bot is in position
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbHeight);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle);
                     climbingTracker = 0;
-                    // SmartDashboard.putBoolean("Climber In Position", true);
-                    // SmartDashboard.putNumber("Climbing Stage", 1);
-
                 }
 
                 // Stage 2: once climb set up, wait for user to press button to pull down to
                 // chain
-                if (climbModeStage2 && climbingTracker == 0) {
+                if ((climbModeStage2) && (climbingTracker == 0)
+                        && (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbHeight
+                                - Constants.ElevatorConstants.kPositionError)
+                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbAngle
+                                - Constants.PivotConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
                     climbingTracker = 1;
