@@ -55,6 +55,7 @@ public class Superstructure extends Subsystem {
     private int transfterToShooterTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
+    private double manualControClimbHeight = Constants.ElevatorConstants.kClimbInitHeight;
     private boolean mShooterLoaded = false;
     private boolean mWantsToShoot = false;
     private boolean bringElevatorIntoLoad = false;
@@ -596,6 +597,7 @@ public class Superstructure extends Subsystem {
                                                                                                     // joystick
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle1);
+
                     climbingTracker = 0;
                 }
 
@@ -609,6 +611,13 @@ public class Superstructure extends Subsystem {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
                     climbingTracker = 1;
+                } else if (climbingTracker == 0) {
+                    if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                        manualControClimbHeight += 0.0015;
+                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                        manualControClimbHeight -= 0.0015;
+                    }
+                    mElevator.setSetpointMotionMagic(manualControClimbHeight);
                 }
 
                 if (climbingTracker == 1
