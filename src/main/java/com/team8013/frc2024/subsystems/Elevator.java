@@ -209,7 +209,7 @@ public class Elevator extends Subsystem {
             }
 
         } else if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
-            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         }
     }
 

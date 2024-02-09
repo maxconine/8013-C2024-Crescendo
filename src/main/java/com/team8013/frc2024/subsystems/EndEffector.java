@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -154,12 +155,12 @@ public class EndEffector extends Subsystem {
     @Override
     public void writePeriodicOutputs() {
         if (mState == State.SHOOTING) {
-            mMaster.setControl(new MotionMagicVelocityTorqueCurrentFOC(mPeriodicIO.demand));
+            mMaster.setControl(new VelocityTorqueCurrentFOC(mPeriodicIO.demand));
         } else {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
-                mMaster.setControl(new VoltageOut(mPeriodicIO.demand));
+                mMaster.setControl(new VoltageOut(mPeriodicIO.demand, true, false, false, false));
             } else {
-                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand, true, false, false, false));
             }
         }
 
