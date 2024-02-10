@@ -9,6 +9,7 @@ import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -42,8 +43,8 @@ public class Pivot extends Subsystem {
     }
 
     private Pivot() {
-        mMaster = new TalonFX(Ports.PIVOT_A, Ports.CANBUS);
-        mSlave = new TalonFX(Ports.PIVOT_B, Ports.CANBUS);
+        mMaster = new TalonFX(Ports.PIVOT_B, Ports.CANBUS);
+        mSlave = new TalonFX(Ports.PIVOT_A, Ports.CANBUS);
         mCANcoder = new CANcoder(Ports.PIVOT_CANCODER, Ports.CANBUS);
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
@@ -53,7 +54,7 @@ public class Pivot extends Subsystem {
 
         mCANcoder.getConfigurator().apply(CANCoderConfig);
 
-        mSlave.setControl(new Follower(Ports.PIVOT_A, true));
+        mSlave.setControl(new Follower(Ports.PIVOT_B, true));
         setWantNeutralBrake(true);
         resetToAbsolute();
     }
@@ -93,7 +94,8 @@ public class Pivot extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
-            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
+            System.out.println(mPeriodicIO.demand);
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0,0,false,false,false));
         } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
                 mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?

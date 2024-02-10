@@ -52,7 +52,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = false;
+    public static final boolean isManualControlMode = true;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -108,8 +108,8 @@ public class Constants {
         public static final double anglePeakCurrentDuration = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveContinuousCurrentLimit = 50;
-        public static final int drivePeakCurrentLimit = 60;
+        public static final int driveContinuousCurrentLimit = 75;
+        public static final int drivePeakCurrentLimit = 80;
         public static final double drivePeakCurrentDuration = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
 
@@ -465,7 +465,7 @@ public class Constants {
         public static final double kSourceIntakeAngle = 71;
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
-        public static final double kShootAgainstSubwooferAngle = 65; // deg
+        public static final double kShootAgainstSubwooferAngle = 45;//60; // deg
 
         public static final double kShootLoadAngle = 65;
 
@@ -506,6 +506,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 100;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
             return config;
         }
@@ -689,7 +690,7 @@ public class Constants {
     public static final class EndEffectorConstants {
         public static final double kShootRPM = 6000;
         
-        public static final double kP = 2;
+        public static final double kP = 0.01;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double Ff = 0;
@@ -744,7 +745,7 @@ public class Constants {
         
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimitEnable = false;
             config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;

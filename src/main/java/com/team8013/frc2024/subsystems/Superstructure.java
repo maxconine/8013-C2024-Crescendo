@@ -62,7 +62,7 @@ public class Superstructure extends Subsystem {
     private boolean mShooterLoaded = false;
     private boolean mWantsToShoot = false;
     private boolean bringElevatorIntoLoad = false;
-    private Timer outtakingTimer = new Timer();
+    private Timer shootingTimer = new Timer();
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -417,7 +417,7 @@ public class Superstructure extends Subsystem {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
             transfterToShooterTracker = -1;
             mWantsToShoot = false;
-
+            shootingTimer.reset();
         }
     }
 
@@ -528,6 +528,7 @@ public class Superstructure extends Subsystem {
                                 - Constants.ElevatorConstants.kPositionError)
                         && mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 10) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
                     
                     transfterToShooterTracker = 1;
                 }
@@ -552,7 +553,14 @@ public class Superstructure extends Subsystem {
                     transfterToShooterTracker = 3;
                 }
 
-                if ((transfterToShooterTracker == 3) && (!mShooter.getBeamBreak())) {
+                if ((transfterToShooterTracker == 3) && (!mShooter.getBeamBreak())){
+                    shootingTimer.start();
+                    transfterToShooterTracker = 4;
+                }
+
+                if ((transfterToShooterTracker == 4) && (shootingTimer.get() > 0.3)) {
+                    shootingTimer.stop();
+                    shootingTimer.reset();
                     // done shooting
                     mShooter.setOpenLoopDemand(0);
                     mEndEffector.setState(State.IDLE);
@@ -590,9 +598,9 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setEndEffectorVelocity(2500);
+                    mEndEffector.setOpenLoopDemand(0.22);
                 } else if (mEndEffector.hasGamePiece()) {
-                    mEndEffector.setEndEffectorVelocity(0);
+                    mEndEffector.setOpenLoopDemand(0);
                     // Once game piece aquired, then stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }
