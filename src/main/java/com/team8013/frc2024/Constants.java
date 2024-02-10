@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.SparkPIDController;
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -51,7 +52,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = true;
+    public static final boolean isManualControlMode = false;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -461,12 +462,12 @@ public class Constants {
 
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
-        public static final double kSourceIntakeAngle = 75;
-        public static final double kStowAngle = 0;
-        public static final double kAmpScoreAngle = 65;
-        public static final double kShootAgainstSubwooferAngle = 55; // deg
+        public static final double kSourceIntakeAngle = 71;
+        public static final double kStowAngle = 6;
+        public static final double kAmpScoreAngle = 88;
+        public static final double kShootAgainstSubwooferAngle = 65; // deg
 
-        public static final double kShootLoadAngle = 49;
+        public static final double kShootLoadAngle = 65;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle = 76; // deg
@@ -500,9 +501,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 40;
+            config.MotionMagic.MotionMagicCruiseVelocity = 70;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 80;
+            config.MotionMagic.MotionMagicAcceleration = 100;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -542,7 +543,7 @@ public class Constants {
         public static final double kMaxPosition = 200; // degrees
 
         public static final double kSourceIntakeAngle = 294;
-        public static final double kStowAngle = 150;
+        public static final double kStowAngle = 155;
         public static final double kAmpScoreAngle = 165;
         public static final double kloadShooterAngle = 118.8;
 
@@ -596,19 +597,19 @@ public class Constants {
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
 
-        public static final double kStowHeight = 0.015;
-        public static final double kAmpScoreHeight = 0.22;
+        public static final double kStowHeight = 0.02;
+        public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
-        public static final double kloadShooterInitialHeight = 0.32;
-        public static final double kloadShooterFinalHeight = 0.034;
+        public static final double kloadShooterInitialHeight = 0.32 - Conversions.inchesToMeters(2);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(2);
         public static final double kShootHeight = 0.32;
 
         /* INTAKING */
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
 
-        public static final double kFloorIntakeHeight = 0.280;
+        public static final double kFloorIntakeHeight = 0.270;
         public static final double kSourceIntakeHeight = 0.064;
 
         /* CLIMB */
@@ -633,9 +634,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 90;
+            config.MotionMagic.MotionMagicCruiseVelocity = 180;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 120;
+            config.MotionMagic.MotionMagicAcceleration = 200;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -680,18 +681,29 @@ public class Constants {
                 { 0.215, 338 + 3, 13 },
                 { 0.23, 343 + 3, 12 },
                 { 0.25, 350 + 3, 11 },
-                { 0.28, 359.7 + 3, 10 } // really 0.275, but less so that everything else goes into position
+                { 0.26, 359.7 + 3, 7 } // really 0.275, but less so that everything else goes into position
 
         };
     }
 
     public static final class EndEffectorConstants {
         public static final double kShootRPM = 6000;
+        
+        public static final double kP = 2;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double Ff = 0;
+        public static final double Izone = 0;
+        public static final double minOut = -1;
+        public static final double maxOut = 1;
+        public static final double openLoopRamp = 0;
+        public static final double closedLoopRamp = 0;
+
 
         public static TalonFXConfiguration endEffectorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
 
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimitEnable = false;
             config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
@@ -704,7 +716,7 @@ public class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final double kLoadShooterRPM = -100;
+        public static final double kLoadShooterDemand = -0.3;
         public static final double kSlingshotDemand = 0.95;
 
         public static TalonFXConfiguration shooterMotorConfig() {

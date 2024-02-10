@@ -6,6 +6,7 @@ import java.util.List;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
+import com.team8013.frc2024.controlboard.CustomXboxController.Button;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
@@ -518,6 +519,7 @@ public class Superstructure extends Subsystem {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
+                    mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
                     transfterToShooterTracker = 0;
                 }
 
@@ -526,30 +528,31 @@ public class Superstructure extends Subsystem {
                                 - Constants.ElevatorConstants.kPositionError)
                         && mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 10) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
-                    mShooter.setClosedLoopDemand(Constants.ShooterConstants.kLoadShooterRPM);
+                    
                     transfterToShooterTracker = 1;
                 }
 
-                // mShooterLoaded = mShooter.getBeamBreak();
+                mShooterLoaded = mShooter.getBeamBreak();
 
-                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.16) && (!mShooterLoaded)) {
+                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.32) && (!mShooter.getBeamBreak())) {
                     mEndEffector.setState(State.OUTTAKING);
                 }
 
-                if (mShooterLoaded && transfterToShooterTracker == 1) {
+                if (mShooter.getBeamBreak() && transfterToShooterTracker == 1) {
+                    mShooter.setOpenLoopDemand(-0.05);
                     mEndEffector.setEndEffectorVelocity(Constants.EndEffectorConstants.kShootRPM);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
                     transfterToShooterTracker = 2;
                 }
 
-                if ((transfterToShooterTracker == 2) && (mWantsToShoot)
+                if ((transfterToShooterTracker == 2) && (mControlBoard.operator.getButton(Button.B))
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
 
-                if ((transfterToShooterTracker == 3) && (!mShooterLoaded)) {
+                if ((transfterToShooterTracker == 3) && (!mShooter.getBeamBreak())) {
                     // done shooting
                     mShooter.setOpenLoopDemand(0);
                     mEndEffector.setState(State.IDLE);
@@ -587,9 +590,9 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setState(State.INTAKING);
+                    mEndEffector.setEndEffectorVelocity(2500);
                 } else if (mEndEffector.hasGamePiece()) {
-                    mEndEffector.setState(State.IDLE);
+                    mEndEffector.setEndEffectorVelocity(0);
                     // Once game piece aquired, then stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }
@@ -695,7 +698,7 @@ public class Superstructure extends Subsystem {
         }
 
         if (mSuperstructureState != SuperstructureState.INTAKING_GROUND &&
-                mSuperstructureState != SuperstructureState.INTAKING_SOURCE) {
+                mSuperstructureState != SuperstructureState.INTAKING_SOURCE && mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             if (outtake) {
                 mEndEffector.setState(State.OUTTAKING);
             } else if (wantsManualIntake) {
@@ -703,6 +706,10 @@ public class Superstructure extends Subsystem {
             } else {
                 mEndEffector.setState(State.IDLE);
             }
+        }
+
+        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER){
+            mShooter.setOpenLoopDemand(0);
         }
 
         // SmartDashboard.putString("Superstructure State",

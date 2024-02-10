@@ -389,6 +389,7 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setSuperstuctureTransferToShooter();
 					}
 
+
 				} else {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
 						mSuperstructure.setClimbModeStage2();
@@ -401,7 +402,7 @@ public class Robot extends TimedRobot {
 				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
 				mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 
-				mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
+				//mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
 			}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {

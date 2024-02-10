@@ -173,8 +173,12 @@ public class Shooter extends Subsystem {
         mSlave.setNeutralMode(mode);
     }
 
-    public boolean hasGamePiece() {
-        return hasGamePiece;
+    // public boolean hasGamePiece() {
+    //     return hasGamePiece;
+    // }
+
+    public boolean getBeamBreak(){
+        return mPeriodicIO.beamBreak;
     }
 
     @Log
@@ -223,6 +227,6 @@ public class Shooter extends Subsystem {
         mPeriodicIO.current = mMaster.getStatorCurrent().getValue();
         // mPeriodicIO.position = mMaster.getRotorPosition().getValue();
         mPeriodicIO.velocity = mMaster.getRotorVelocity().getValue();
-        mPeriodicIO.beamBreak = mBeamBreak.get();
+        mPeriodicIO.beamBreak = !mBeamBreak.get();
     }
 }
