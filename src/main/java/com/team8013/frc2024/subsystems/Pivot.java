@@ -93,7 +93,7 @@ public class Pivot extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
-            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
                 mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?
@@ -147,7 +147,8 @@ public class Pivot extends Subsystem {
     }
 
     public double getCanCoder() {
-        return Util.placeIn0To360Scope((mCANcoder.getAbsolutePosition().getValueAsDouble() * 360) - Constants.PivotConstants.CANCODER_OFFSET);
+        return Util.placeIn0To360Scope(
+                (mCANcoder.getAbsolutePosition().getValueAsDouble() * 360) - Constants.PivotConstants.CANCODER_OFFSET);
     }
 
     public void setMotorConfig(TalonFXConfiguration config) {

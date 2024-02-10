@@ -128,15 +128,16 @@ public class Shooter extends Subsystem {
     public void writePeriodicOutputs() {
         if (mControlState == ControlState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
-                mMaster.setControl(new VoltageOut(mPeriodicIO.demand));
+                mMaster.setControl(new VoltageOut(mPeriodicIO.demand, true, false, false, false));
             } else {
-                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand));
+                mMaster.setControl(new DutyCycleOut(mPeriodicIO.demand, true, false, false, false));
             }
         } else if (mControlState == ControlState.CLOSED_LOOP) {
-            mMaster.setControl(new MotionMagicVelocityDutyCycle(mPeriodicIO.demand));
+            mMaster.setControl(
+                    new MotionMagicVelocityDutyCycle(mPeriodicIO.demand, 0, true, 0, 0, false, false, false));
         }
         // else if (mControlState == ControlState.SLINGSHOT){
-        //     mMaster.setControl(new TorqueCurrentFOC(780,1,1,false,false,false));
+        // mMaster.setControl(new TorqueCurrentFOC(780,1,1,false,false,false));
         // }
     }
 
