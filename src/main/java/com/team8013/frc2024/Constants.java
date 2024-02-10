@@ -51,7 +51,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = false;
+    public static final boolean isManualControlMode = true;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -720,6 +720,34 @@ public class Constants {
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
+            return config;
+        }
+    }
+
+    public static final class ClimberHookConstants{
+        public static final double kHookAngle = 103; //degrees
+        public static final double kMaxAngle = 131;
+        public static final double kMinAngle = 0;
+        public static final double kGearRatio = 16;
+        
+        public static TalonFXConfiguration climberHookMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.6;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 120;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
             return config;
         }
     }

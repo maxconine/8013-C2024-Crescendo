@@ -28,15 +28,16 @@ import com.team8013.frc2024.controlboard.CustomXboxController.Side;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.Looper;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
+import com.team8013.frc2024.subsystems.ClimberHook;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Elevator;
-import com.team8013.frc2024.subsystems.EndEffector;
+import com.team8013.frc2024.subsystems.EndEffectorREV;
 import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Pivot;
 import com.team8013.frc2024.subsystems.Shooter;
 import com.team8013.frc2024.subsystems.Superstructure;
 import com.team8013.frc2024.subsystems.Wrist;
-import com.team8013.frc2024.subsystems.EndEffector.State;
+import com.team8013.frc2024.subsystems.EndEffectorREV.State;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 public class Robot extends TimedRobot {
@@ -54,8 +55,9 @@ public class Robot extends TimedRobot {
 	private final Pivot mPivot = Pivot.getInstance();
 	private final Elevator mElevator = Elevator.getInstance();
 	private final Wrist mWrist = Wrist.getInstance();
-	private final EndEffector mEndEffector = EndEffector.getInstance();
+	private final EndEffectorREV mEndEffector = EndEffectorREV.getInstance();
 	private final Shooter mShooter = Shooter.getInstance();
+	private final ClimberHook mClimberHook = ClimberHook.getInstance();
 
 	// instantiate enabled and disabled loopers
 	private final Looper mEnabledLooper = new Looper();
@@ -176,7 +178,8 @@ public class Robot extends TimedRobot {
 					mElevator,
 					mWrist,
 					mEndEffector,
-					mShooter
+					mShooter,
+					mClimberHook
 
 			);
 
@@ -311,6 +314,15 @@ public class Robot extends TimedRobot {
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
 
+				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
+					mSuperstructure.controlClimberHookManually(1);
+					// mElevator.setSetpointMotionMagic(0.4);
+				} else if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
+					mSuperstructure.controlClimberHookManually(-1);
+					// mElevator.setSetpointMotionMagic(0.00);
+				}
+
+
 				/* WRIST */
 
 				// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
@@ -331,7 +343,7 @@ public class Robot extends TimedRobot {
 				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
 					mEndEffector.setState(State.OUTTAKING);
 				} else {
-					mSuperstructure.intake(false);
+					mEndEffector.setState(State.IDLE);
 				}
 
 			} else {

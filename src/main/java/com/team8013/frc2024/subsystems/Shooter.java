@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean hasGamePiece = false;
-    // private DigitalInput mBeamBreak;
+    private DigitalInput mBeamBreak;
 
     private final TalonFX mMaster;
     private final TalonFX mSlave;
@@ -41,7 +41,7 @@ public class Shooter extends Subsystem {
     private Shooter() {
         mMaster = new TalonFX(Ports.Shooter_A, Ports.CANBUS);
         mSlave = new TalonFX(Ports.Shooter_B, Ports.CANBUS);
-        // mBeamBreak = new DigitalInput(Ports.SHOOTER_BEAM_BREAK);
+        mBeamBreak = new DigitalInput(Ports.SHOOTER_BEAM_BREAK);
 
         // Customize these configs from constants in the future
         mMaster.getConfigurator().apply(Constants.ShooterConstants.shooterMotorConfig());
@@ -212,7 +212,7 @@ public class Shooter extends Subsystem {
         SmartDashboard.putNumber("Intake Volts", mPeriodicIO.voltage);
         SmartDashboard.putNumber("Intake Current", mPeriodicIO.current);
         SmartDashboard.putBoolean("Has game piece", hasGamePiece);
-        SmartDashboard.putBoolean("Beam Break", mPeriodicIO.beamBreak);
+        SmartDashboard.putBoolean("Shooter Beam Break", mPeriodicIO.beamBreak);
     }
 
     @Override
@@ -222,6 +222,6 @@ public class Shooter extends Subsystem {
         mPeriodicIO.current = mMaster.getStatorCurrent().getValue();
         // mPeriodicIO.position = mMaster.getRotorPosition().getValue();
         mPeriodicIO.velocity = mMaster.getRotorVelocity().getValue();
-        // mPeriodicIO.beamBreak = mBeamBreak.get();
+        mPeriodicIO.beamBreak = mBeamBreak.get();
     }
 }
