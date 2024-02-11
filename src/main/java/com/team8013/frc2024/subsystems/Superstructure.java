@@ -64,6 +64,8 @@ public class Superstructure extends Subsystem {
     private boolean bringElevatorIntoLoad = false;
     private Timer shootingTimer = new Timer();
 
+    private double manualControlPivotShootMode = Constants.PivotConstants.kShootAgainstSubwooferAngle;
+
     public boolean requestsCompleted() {
         return allRequestsComplete;
     }
@@ -540,10 +542,21 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (mShooter.getBeamBreak() && transfterToShooterTracker == 1) {
-                    mShooter.setOpenLoopDemand(-0.05);
-                    mEndEffector.setEndEffectorVelocity(Constants.EndEffectorConstants.kShootRPM);
+                    mShooter.setOpenLoopDemand(-0.005);
+                    mEndEffector.setOpenLoopDemand(0.95);
+                    //mEndEffector.setEndEffectorVelocity(Constants.EndEffectorConstants.kShootRPM);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
                     transfterToShooterTracker = 2;
+                }
+
+                if (transfterToShooterTracker == 2){
+                    /*Manual control here */
+                    // if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                    //     manualControlPivotShootMode += 0.1;
+                    // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                    //     manualControlPivotShootMode -= 0.1;
+                    // }
+                    mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
                 }
 
                 if ((transfterToShooterTracker == 2) && (mControlBoard.operator.getButton(Button.B))
@@ -564,7 +577,7 @@ public class Superstructure extends Subsystem {
                     // done shooting
                     mShooter.setOpenLoopDemand(0);
                     mEndEffector.setState(State.IDLE);
-                    mSuperstructureState = SuperstructureState.STOW;
+                    //mSuperstructureState = SuperstructureState.STOW; //TODO: ENABLE THIS
                 }
 
             } else if (mSuperstructureState == SuperstructureState.SCORE_AMP) {
@@ -703,15 +716,18 @@ public class Superstructure extends Subsystem {
                 }
 
             }
-        }
+        
 
         if (mSuperstructureState != SuperstructureState.INTAKING_GROUND &&
                 mSuperstructureState != SuperstructureState.INTAKING_SOURCE && mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             if (outtake) {
                 mEndEffector.setState(State.OUTTAKING);
+                
             } else if (wantsManualIntake) {
+
                 mEndEffector.setState(State.INTAKING);
             } else {
+                //mEndEffector.setEndEffectorVelocity(2000);
                 mEndEffector.setState(State.IDLE);
             }
         }
@@ -719,6 +735,7 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER){
             mShooter.setOpenLoopDemand(0);
         }
+    }
 
         // SmartDashboard.putString("Superstructure State",
         // mSuperstructureState.toString());

@@ -138,6 +138,10 @@ public class ControlBoard {
             
     }
 
+    public boolean snapToTarget(){
+        return m_driver.getRawButton(1);
+    }
+
     public double pivotPercentOutput(){
         return operator.getAxis(Side.LEFT, Axis.Y);
     }

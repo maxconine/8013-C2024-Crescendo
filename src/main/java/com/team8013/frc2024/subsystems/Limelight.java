@@ -27,8 +27,6 @@ import java.util.Optional;
  * Subsystem for interacting with the Limelight 3
  */
 public class Limelight extends Subsystem {
-    public final static int kDefaultPipeline = 0;
-    //public final static int kZoomedInPipeline = 1;
 
     private static Limelight mInstance;
     private final Drive mSwerve = Drive.getInstance();
@@ -37,31 +35,38 @@ public class Limelight extends Subsystem {
     private ProfiledPIDController yController;
     private ProfiledPIDController omegaController;
     private Pose3d robotPose;
-    boolean isRedAlliance = false;
-
-    // logger
-    // LogStorage<PeriodicIO> mStorage = null;
+    boolean isRedAlliance = true;
 
     private int mLatencyCounter = 0;
 
     // distance to target
     public Optional<Double> mDistanceToTarget = Optional.empty();
 
-    public static class LimelightConstants {
-        public String kName = "";
-        public String kTableName = "Limelight_0";
-        public double kHeight = 0.0;
-        public Rotation2d kHorizontalPlaneToLens = Rotation2d.identity();
-    }
+    //private final NetworkTableInstance instance;// = NetworkTableInstance.getDefault(); // changed networktable setup
+    //NetworkTable mNetworkTable;// = instance.getTable("Limelight_0"); // changed table name to match limelights name
 
-    private final NetworkTableInstance instance = NetworkTableInstance.getDefault(); // changed networktable setup
-    NetworkTable mNetworkTable = instance.getTable("Limelight_0"); // changed table name to match limelights name
+    NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    private PeriodicIO mPeriodicIO = new PeriodicIO();
+    private boolean mOutputsHaveChanged = true;
+    //private final NetworkTableEntry tCameraPose = mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
+    private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
+    private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
+    private final NetworkTableEntry tTargetID = mNetworkTable.getEntry("tid");
+
 
     private Limelight() {
-        mConstants = Constants.VisionConstants.kLimelightConstants;
+
+
+
+
+
+        // mNetworkTable.getEntry("tv");
+
+        // mNetworkTable.getEntry("ledMode").setNumber(3);
 
         /* Aril Tag Chase */
-        initializeAprilTagChase();
+        //initializeAprilTagChase();
     }
 
     public static Limelight getInstance() {
@@ -84,18 +89,18 @@ public class Limelight extends Subsystem {
             public void onLoop(double timestamp) {
                 final double start = Timer.getFPGATimestamp();
 
-                synchronized (Limelight.this) {
-                    List<TargetInfo> targetInfo = getTarget();
-                    if (mPeriodicIO.sees_target && targetInfo != null) {
-                        // RobotState.getInstance().addVisionUpdate(timestamp - getLatency(),
-                        // getTarget(), Limelight.this);
-                        updateDistanceToTarget();
-                    }
-                }
+                // synchronized (Limelight.this) {
+                //     List<TargetInfo> targetInfo = getTarget();
+                //     if (mPeriodicIO.sees_target && targetInfo != null) {
+                //         // RobotState.getInstance().addVisionUpdate(timestamp - getLatency(),
+                //         // getTarget(), Limelight.this);
+                //         updateDistanceToTarget();
+                //     }
+                // }
 
-                if (mPeriodicIO.wantsChaseMode) {
-                    aprilTagChasePeriodic();
-                }
+                // if (mPeriodicIO.wantsChaseMode) {
+                //     aprilTagChasePeriodic();
+                // }
 
                 // send log data
                 // SendLog();
@@ -144,6 +149,8 @@ public class Limelight extends Subsystem {
         public double botPosePitch;
         public double botPoseYaw;
 
+        public double tanLineToSpeaker;
+
         public double dt;
 
         // OUTPUTS
@@ -155,14 +162,7 @@ public class Limelight extends Subsystem {
         public double latencyTimestamp;
     }
 
-    private LimelightConstants mConstants = null;
-    private PeriodicIO mPeriodicIO = new PeriodicIO();
-    private boolean mOutputsHaveChanged = true;
-    // private final NetworkTableEntry tCameraPose =
-    // mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
-    private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
-    private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
-    private final NetworkTableEntry tTargetID = mNetworkTable.getEntry("tid");
+
 
     public synchronized List<TargetInfo> getTarget() {
         List<TargetInfo> targets = new ArrayList<TargetInfo>(); // getRawTargetInfos();
@@ -186,7 +186,7 @@ public class Limelight extends Subsystem {
         omegaController.setTolerance(Units.degreesToRadians(0.2));
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        mNetworkTable.getEntry("ledMode").setNumber(3);
+        
 
         // lastTarget = null;
         robotPose = new Pose3d(
@@ -293,47 +293,51 @@ public class Limelight extends Subsystem {
         mPeriodicIO.wantsChaseMode = chase;
     }
 
-    public double getLensHeight() {
-        return mConstants.kHeight;
-    }
+    // public double getLensHeight() {
+    //     return mConstants.kHeight;
+    // }
 
-    public Rotation2d getHorizontalPlaneToLens() {
-        return mConstants.kHorizontalPlaneToLens;
-    }
+    // public Rotation2d getHorizontalPlaneToLens() {
+    //     return mConstants.kHorizontalPlaneToLens;
+    // }
 
     public Optional<Double> getLimelightDistanceToTarget() {
         return mDistanceToTarget;
     }
 
-    public void updateDistanceToTarget() {
-        double goal_theta = Constants.VisionConstants.kLimelightConstants.kHorizontalPlaneToLens.getRadians()
-                + Math.toRadians(mPeriodicIO.yOffset);
-        double height_diff = Constants.VisionConstants.kGoalHeight
-                - Constants.VisionConstants.kLimelightConstants.kHeight;
+    public double getPivotShootingAngle(){
+        
+        double pivAngle = Math.pow((-0.105*(mPeriodicIO.tanLineToSpeaker))+2.404,4.87);
+        //double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker + 0.95*Math.pow(mPeriodicIO.tanLineToSpeaker, 2);
+        SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
 
-        mDistanceToTarget = Optional.of(height_diff / Math.tan(goal_theta) + Constants.VisionConstants.kGoalRadius); // add
-                                                                                                                     // goal
-                                                                                                                     // radius
-                                                                                                                     // for
-                                                                                                                     // offset
-                                                                                                                     // to
-                                                                                                                     // center
-                                                                                                                     // of
-                                                                                                                     // target
+        if (pivAngle>Constants.PivotConstants.kMaxAngle){
+            pivAngle = Constants.PivotConstants.kMaxAngle;
+        }
+        else if (pivAngle<Constants.PivotConstants.kMinAngle){
+            pivAngle = Constants.PivotConstants.kMinAngle;
+        }
+
+        return pivAngle + 3;
+    }
+
+    /**returns the degrees the robot should snap to */
+    public double getTargetSnap(){
+        double degreesToSnap = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
+        SmartDashboard.putNumber("degrees to snap to", degreesToSnap);
+        return degreesToSnap;
     }
 
     @Override
     public synchronized void readPeriodicInputs() {
         final double latency = mNetworkTable.getEntry("tl").getDouble(0) / 1000.0
-                + Constants.VisionConstants.kImageCaptureLatency; // 90fps original latency calculation
+                + (11.0 / 1000.0); // 90fps original latency calculation
         final double latencyTimestamp = Timer.getFPGATimestamp() - (mNetworkTable.getEntry("cl").getDouble(0) / 1000.0)
                 - (mNetworkTable
                         .getEntry("tl").getDouble(0) / 1000.0);
         mPeriodicIO.givenLedMode = (int) mNetworkTable.getEntry("ledMode").getDouble(1.0);
         mPeriodicIO.givenPipeline = (int) mNetworkTable.getEntry("pipeline").getDouble(0);
-        // mPeriodicIO.xOffset = mNetworkTable.getEntry("tx").getDouble(0.0);
-        // mPeriodicIO.yOffset = mNetworkTable.getEntry("ty").getDouble(0.0);
-        // mPeriodicIO.area = mNetworkTable.getEntry("ta").getDouble(0.0);
+
 
         if (latency == mPeriodicIO.latency) {
             mLatencyCounter++;
@@ -348,16 +352,7 @@ public class Limelight extends Subsystem {
         mPeriodicIO.sees_target = mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
 
         // double[] limelightCameraPose3d = tCameraPose.getDoubleArray(new double[]
-        // {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}); // for some reason doing the array like this
-        // made it less buggy?
-        // mPeriodicIO.limelightCameraPosex = limelightCameraPose3d[0];
-        // mPeriodicIO.limelightCameraPosey = -limelightCameraPose3d[2];
-        // mPeriodicIO.limelightCameraPosez = -limelightCameraPose3d[1];
-        // mPeriodicIO.limelightCameraPoseRoll = limelightCameraPose3d[3];
-        // mPeriodicIO.limelightCameraPosePith = limelightCameraPose3d[4];
-        // mPeriodicIO.limelightCameraPoseYaw = limelightCameraPose3d[5];
 
-        // double[] robotPose3d = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         if (isRedAlliance) {
             double[] robotPose3d = botpose_wpiblue.getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
             mPeriodicIO.botPosex = robotPose3d[0];
@@ -378,7 +373,18 @@ public class Limelight extends Subsystem {
 
         mPeriodicIO.tagInView = tTargetID.getDouble(0.0); // .getDoubleArray(new double[] {0.0, 0.0, 0.0, 0.0, 0.0,
                                                           // 0.0})[0];
-        SmartDashboard.putNumber("tag In view", mPeriodicIO.tagInView);
+        // {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}); // for some reason doing the array like this
+        // made it less buggy?
+        // mPeriodicIO.limelightCameraPosex = limelightCameraPose3d[0];
+        // mPeriodicIO.limelightCameraPosey = -limelightCameraPose3d[2];
+        // mPeriodicIO.limelightCameraPosez = -limelightCameraPose3d[1];
+        // mPeriodicIO.limelightCameraPoseRoll = limelightCameraPose3d[3];
+        // mPeriodicIO.limelightCameraPosePith = limelightCameraPose3d[4];
+        // mPeriodicIO.limelightCameraPoseYaw = limelightCameraPose3d[5];
+
+        // double[] robotPose3d = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+        mPeriodicIO.tanLineToSpeaker = Math.sqrt(mPeriodicIO.botPosex*mPeriodicIO.botPosex+Math.pow(mPeriodicIO.botPosey-2.61, 2));
     }
 
     @Override
@@ -396,23 +402,17 @@ public class Limelight extends Subsystem {
 
             mOutputsHaveChanged = false;
         }
-    }
 
+    }
+    
     @Override
-    public void stop() {
-    }
-
-    @Override
-    public boolean checkSystem() {
-        return true;
-    }
-
-    public synchronized void outputTelemetry() {
-        SmartDashboard.putBoolean("Limelight Ok", mPeriodicIO.has_comms);
-        SmartDashboard.putNumber(mConstants.kName + ": Pipeline Latency (ms)", mPeriodicIO.latency);
+    public void outputTelemetry() {
+        SmartDashboard.putBoolean("Limelight Ok (Has Comms)", mPeriodicIO.has_comms);
+        SmartDashboard.putNumber("Limelight Pipeline Latency (ms)", mPeriodicIO.latency);
         SmartDashboard.putNumber("Limelight dt", mPeriodicIO.dt);
 
-        SmartDashboard.putBoolean(mConstants.kName + ": Has Target", mPeriodicIO.sees_target);
+        SmartDashboard.putBoolean("Limelight Has Target", mPeriodicIO.sees_target);
+         SmartDashboard.putNumber("Limelight tag ID In view", mPeriodicIO.tagInView);
         // SmartDashboard.putNumber("Limelight Tx: ", mPeriodicIO.xOffset);
         // SmartDashboard.putNumber("Limelight Ty: ", mPeriodicIO.yOffset);
 
@@ -431,8 +431,20 @@ public class Limelight extends Subsystem {
 
         SmartDashboard.putNumber("Tag In View", mPeriodicIO.tagInView);
 
+        SmartDashboard.putNumber("Limelight Tangent Line to Speaker", mPeriodicIO.tanLineToSpeaker);
+
         SmartDashboard.putBoolean("WantChaseMode", mPeriodicIO.wantsChaseMode);
     }
+
+    @Override
+    public void stop() {
+    }
+
+    @Override
+    public boolean checkSystem() {
+        return true;
+    }
+
 
     public enum LedMode {
         PIPELINE, OFF, BLINK, ON
@@ -445,14 +457,14 @@ public class Limelight extends Subsystem {
         }
     }
 
-    public synchronized void setPipeline(int mode) {
-        if (mode != mPeriodicIO.pipeline) {
-            mPeriodicIO.pipeline = mode;
+    // public synchronized void setPipeline(int mode) {
+    //     if (mode != mPeriodicIO.pipeline) {
+    //         mPeriodicIO.pipeline = mode;
 
-            System.out.println(mPeriodicIO.pipeline + ", " + mode);
-            mOutputsHaveChanged = true;
-        }
-    }
+    //         System.out.println(mPeriodicIO.pipeline + ", " + mode);
+    //         mOutputsHaveChanged = true;
+    //     }
+    // }
 
     public synchronized void triggerOutputs() {
         mOutputsHaveChanged = true;
@@ -498,44 +510,5 @@ public class Limelight extends Subsystem {
         return new double[] { mPeriodicIO.xOffset, mPeriodicIO.yOffset };
     }
 
-    // logger
 
-    // @Override
-    // public void registerLogger(LoggingSystem LS) {
-    // SetupLog();
-    // LS.register(mStorage, "LIMELIGHT_LOGS.csv");
-    // }
-
-    // public void SetupLog() {
-    // mStorage = new LogStorage<PeriodicIO>();
-
-    // ArrayList<String> headers = new ArrayList<String>();
-    // headers.add("timestamp");
-
-    // headers.add("has_comms");
-    // headers.add("dt");
-    // headers.add("latency");
-
-    // headers.add("xOffset");
-    // headers.add("yOffset");
-    // headers.add("area");
-
-    // mStorage.setHeaders(headers);
-    // }
-
-    // public void SendLog() {
-    // ArrayList<Number> items = new ArrayList<Number>();
-    // items.add(Timer.getFPGATimestamp());
-
-    // items.add(mPeriodicIO.has_comms ? 1.0 : 0.0);
-    // items.add(mPeriodicIO.dt);
-    // items.add(mPeriodicIO.latency);
-
-    // items.add(mPeriodicIO.xOffset);
-    // items.add(mPeriodicIO.yOffset);
-    // items.add(mPeriodicIO.area);
-
-    // // send data to logging storage
-    // mStorage.addData(items);
-    // }
 }

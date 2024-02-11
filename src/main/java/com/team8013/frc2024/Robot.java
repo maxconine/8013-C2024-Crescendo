@@ -287,6 +287,10 @@ public class Robot extends TimedRobot {
 				mElevator.setWantHome(true);
 			}
 
+			if(mControlBoard.snapToTarget()){
+				mDrive.setHeadingControlTarget(90);//mLimelight.getTargetSnap());
+			}
+
 			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
 			if (Constants.isManualControlMode) {
 				/* PIVOT */
@@ -321,6 +325,9 @@ public class Robot extends TimedRobot {
 					mSuperstructure.controlClimberHookManually(-1);
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
+				
+
+
 
 
 				/* WRIST */
@@ -337,6 +344,13 @@ public class Robot extends TimedRobot {
 				}
 
 				/* END EFFECTOR */
+
+				// if (mControlBoard.operator.getController().getPOV() == kDpadUp){
+				// 	mEndEffector.setEndEffectorVelocity(2000);
+				// }
+				// else if(mControlBoard.operator.getController().getPOV() == kDpadDown){
+				// 	mEndEffector.setEndEffectorVelocity(0);
+				// }
 
 				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
 					mEndEffector.setState(State.INTAKING);
@@ -486,6 +500,7 @@ public class Robot extends TimedRobot {
 			// (mControlBoard.driver.getController().getRightStickButtonReleased()) {
 			// mDrive.setKinematicLimits(Constants.SwerveConstants.kUncappedLimits);
 			// }
+			
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);

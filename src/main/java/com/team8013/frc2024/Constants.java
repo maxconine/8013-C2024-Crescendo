@@ -17,7 +17,6 @@ import com.revrobotics.SparkPIDController;
 // import com.ctre.phoenixpro.signals.NeutralModeValue;
 import com.team254.lib.geometry.Rotation2d;
 import com.team8013.frc2024.subsystems.Drive.KinematicLimits;
-import com.team8013.frc2024.subsystems.Limelight.LimelightConstants;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.swerve.SwerveModule.SwerveModuleConstants;
 
@@ -313,19 +312,40 @@ public class Constants {
     }
 
     public static final class SnapConstants {
-        public static final double kP = 6; // og 5.0 //6.0 seems to work with 0.15 kD
-        public static final double kI = 0.5; // og 0
-        public static final double kD = 0.2; // og 0
-        public static final double kTimeout = 0.25;
-        public static final double kEpsilon = 1.0; // og 1.0
+        public static final double kP = 6.0;
+        public static final double kI = 0.5;
+        public static final double kD = 0.2;
+        public static final double snapTimeout = 0.25;
+        public static final double snapEpsilon = 1.0;
+    
+    }
 
-        // Constraints for the profiled angle controller
-        public static final double kMaxAngularSpeedRadiansPerSecond = 2.0 * Math.PI; // og 2.0 * pi
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.pow(kMaxAngularSpeedRadiansPerSecond,
-                2); // 10.0 * Math.PI; //og Math.pow(kMaxAngularSpeedRadiansPerSecond, 2);
+    public static final class AutoConstants {
+
+        public static final double kPXController = 6.7;
+        public static final double kPYController = 6.7;
+
+        public static final double kDXController = 0.0;
+        public static final double kDYController = 0.0;
+
+        public static final double kPThetaController = 2.0;
+
+        // Constraint for the motion profilied robot angle controller (Radians)
+        public static final double kMaxAngularSpeed = 2.0 * Math.PI;
+        public static final double kMaxAngularAccel = 2.0 * Math.PI * kMaxAngularSpeed;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+                kMaxAngularSpeed, kMaxAngularAccel);
+
+        // Static factory for creating trajectory configs
+        public static TrajectoryConfig createConfig(double maxSpeed, double maxAccel, double startSpeed,
+                double endSpeed) {
+            TrajectoryConfig config = new TrajectoryConfig(maxSpeed, maxAccel);
+            config.setStartVelocity(startSpeed);
+            config.setEndVelocity(endSpeed);
+            config.addConstraint(new CentripetalAccelerationConstraint(10.0));
+            return config;
+        }
     }
 
     public static final class VisionAlignConstants {
@@ -374,33 +394,6 @@ public class Constants {
 
     }
 
-    public static final class AutoConstants {
-
-        public static final double kPXController = 6.7;
-        public static final double kPYController = 6.7;
-
-        public static final double kDXController = 0.0;
-        public static final double kDYController = 0.0;
-
-        public static final double kPThetaController = 2.0;
-
-        // Constraint for the motion profilied robot angle controller (Radians)
-        public static final double kMaxAngularSpeed = 2.0 * Math.PI;
-        public static final double kMaxAngularAccel = 2.0 * Math.PI * kMaxAngularSpeed;
-
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-                kMaxAngularSpeed, kMaxAngularAccel);
-
-        // Static factory for creating trajectory configs
-        public static TrajectoryConfig createConfig(double maxSpeed, double maxAccel, double startSpeed,
-                double endSpeed) {
-            TrajectoryConfig config = new TrajectoryConfig(maxSpeed, maxAccel);
-            config.setStartVelocity(startSpeed);
-            config.setEndVelocity(endSpeed);
-            config.addConstraint(new CentripetalAccelerationConstraint(10.0));
-            return config;
-        }
-    }
 
     public static final class MacAddressConstants {
         public static final byte[] COMP_ADDRESS = new byte[] {
@@ -414,36 +407,36 @@ public class Constants {
         };
     }
 
-    public static final class VisionConstants {
-        public static final LimelightConstants kLimelightConstants = new LimelightConstants();
-        static {
-            kLimelightConstants.kName = "Limelight";
-            kLimelightConstants.kTableName = "limelight";
-            kLimelightConstants.kHeight = 0.79; // meters
-            kLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(0.0);
-        }
+    // public static final class VisionConstants {
+    //     public static final LimelightConstants kLimelightConstants = new LimelightConstants();
+    //     static {
+    //         kLimelightConstants.kName = "Limelight";
+    //         kLimelightConstants.kTableName = "limelight";
+    //         kLimelightConstants.kHeight = 0.79; // meters
+    //         kLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(0.0);
+    //     }
 
-        public static final double kHorizontalFOV = 59.6; // degrees
-        public static final double kVerticalFOV = 49.7; // degrees
-        public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
+    //     public static final double kHorizontalFOV = 59.6; // degrees
+    //     public static final double kVerticalFOV = 49.7; // degrees
+    //     public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
 
-        // lookahead time
-        public static final double kLookaheadTime = 0.0; // 1.10 as latest
+    //     // lookahead time
+    //     public static final double kLookaheadTime = 0.0; // 1.10 as latest
 
-        /* Goal Tracker Constants */
-        public static final double kMaxTrackerDistance = 8.0;
-        public static final double kMaxGoalTrackAge = 10.0;
-        public static final double kMaxGoalTrackSmoothingTime = 1.5;
-        public static final double kCameraFrameRate = 90.0;
+    //     /* Goal Tracker Constants */
+    //     public static final double kMaxTrackerDistance = 8.0;
+    //     public static final double kMaxGoalTrackAge = 10.0;
+    //     public static final double kMaxGoalTrackSmoothingTime = 1.5;
+    //     public static final double kCameraFrameRate = 90.0;
 
-        public static final double kTrackStabilityWeight = 0.0;
-        public static final double kTrackAgeWeight = 10.0;
-        public static final double kTrackSwitchingWeight = 100.0;
+    //     public static final double kTrackStabilityWeight = 0.0;
+    //     public static final double kTrackAgeWeight = 10.0;
+    //     public static final double kTrackSwitchingWeight = 100.0;
 
-        public static final int kDefaultPipeline = 0;
-        public static final double kGoalHeight = 2.63; // meters
-        public static final double kGoalRadius = Units.inchesToMeters(.5); // meters
-    }
+    //     public static final int kDefaultPipeline = 0;
+    //     public static final double kGoalHeight = 2.63; // meters
+    //     public static final double kGoalRadius = Units.inchesToMeters(.5); // meters
+    // }
 
     /*** SUBSYSTEM CONSTANTS ***/
 
@@ -465,7 +458,7 @@ public class Constants {
         public static final double kSourceIntakeAngle = 71;
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
-        public static final double kShootAgainstSubwooferAngle = 45;//60; // deg
+        public static final double kShootAgainstSubwooferAngle = 54;
 
         public static final double kShootLoadAngle = 65;
 
@@ -604,7 +597,7 @@ public class Constants {
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32 - Conversions.inchesToMeters(2);
         public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(2);
-        public static final double kShootHeight = 0.32;
+        public static final double kShootHeight = 0.26;
 
         /* INTAKING */
         public static final double kIntakeCruiseVelocity = 90;
@@ -690,11 +683,11 @@ public class Constants {
     public static final class EndEffectorConstants {
         public static final double kShootRPM = 6000;
         
-        public static final double kP = 0.01;
+        public static final double kP = 0.0000000006;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double Ff = 0;
-        public static final double Izone = 0;
+        public static final double Izone = 0.01;
         public static final double minOut = -1;
         public static final double maxOut = 1;
         public static final double openLoopRamp = 0;
@@ -750,7 +743,7 @@ public class Constants {
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
-            config.Slot0.kP = 0.000006;
+            config.Slot0.kP = 0.006;
             config.Slot0.kI = 0.0;
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;

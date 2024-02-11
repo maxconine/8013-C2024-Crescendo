@@ -22,6 +22,8 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.ExponentialProfile.Constraints;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,11 +40,12 @@ public class EndEffectorREV extends Subsystem {
     private final CANSparkFlex mMaster;
     private final CANSparkFlex mSlave;
 
-    private final SparkPIDController pidMaster;
-    private final SparkPIDController pidSlave;
+    //private final SparkPIDController pidMaster;
+    //private final SparkPIDController pidSlave;
 
-    // private SparkPIDController pidMaster;
-    // private SparkPIDController pidSlave;
+    private PIDController pidMaster;
+    private PIDController pidSlave;
+
 
     // private final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new
     // SupplyCurrentLimitConfiguration(true, 40, 40,
@@ -62,17 +65,18 @@ public class EndEffectorREV extends Subsystem {
 
         mMaster.setInverted(false);
         mSlave.setInverted(false);
+        
 
         // Customize these configs from constants in the future
 
-        //pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI, Constants.EndEffectorConstants.kD);
-        //pidSlave = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI, Constants.EndEffectorConstants.kD);
+        pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI, Constants.EndEffectorConstants.kD);
+        pidSlave = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI, Constants.EndEffectorConstants.kD);
 
         //pidMaster.setTolerance(0.1,1);
 
         setWantNeutralBrake(true);
-        pidMaster = mMaster.getPIDController();
-        pidSlave = mSlave.getPIDController();
+        //pidMaster = mMaster.getPIDController();
+        //pidSlave = mSlave.getPIDController();
         m_encoderMaster = mMaster.getEncoder();
         m_encoderSlave = mSlave.getEncoder();
         //configurePIDF();
@@ -93,7 +97,8 @@ public class EndEffectorREV extends Subsystem {
         IDLE(0.0),
         INTAKING(-12.0), // max 12
         OUTTAKING(12.0), // max 12
-        SHOOTING(0.0);
+        SHOOTING(0.0),
+        OPEN_LOOP(0);
 
         public double voltage;
 
@@ -146,6 +151,9 @@ public class EndEffectorREV extends Subsystem {
     }
 
     public void setOpenLoopDemand(double demand) {
+        if (mState != State.OPEN_LOOP){
+        mState = State.OPEN_LOOP;
+        }
         mPeriodicIO.demand = demand;
     }
 
@@ -171,6 +179,8 @@ public class EndEffectorREV extends Subsystem {
                         break;
                     case SHOOTING:
                         break;
+                    case OPEN_LOOP:
+                        break;
                 }
             }
 
@@ -185,11 +195,11 @@ public class EndEffectorREV extends Subsystem {
     public void writePeriodicOutputs() {
         if (mState == State.SHOOTING) {
 
-            //mMaster.set(pidMaster.calculate(mPeriodicIO.velocityMaster, mPeriodicIO.demand));
-            //mSlave.set(pidSlave.calculate(mPeriodicIO.velocitySlave, mPeriodicIO.demand));
+            mMaster.set(pidMaster.calculate(mPeriodicIO.velocityMaster, mPeriodicIO.demand));
+            mSlave.set(pidSlave.calculate(mPeriodicIO.velocitySlave, mPeriodicIO.demand));
             
-            pidMaster.setReference(mPeriodicIO.demand, CANSparkBase.ControlType.kVelocity); //CANSparkMax.ControlType.kVelocity);
-            pidSlave.setReference(mPeriodicIO.demand, CANSparkBase.ControlType.kVelocity); //CANSparkMax.ControlType.kVelocity);
+            //pidMaster.setReference(mPeriodicIO.demand, CANSparkBase.ControlType.kVelocity); //CANSparkMax.ControlType.kVelocity);
+            //pidSlave.setReference(mPeriodicIO.demand, CANSparkBase.ControlType.kVelocity); //CANSparkMax.ControlType.kVelocity);
 
             //mMaster.set(0.99);
             //mSlave.set(0.99);
@@ -259,41 +269,41 @@ public class EndEffectorREV extends Subsystem {
         return mPeriodicIO.beamBreak;
     }
 
-    public void configurePIDF() {
-    int pidSlot = 0;
-    configureSparkFlex(() -> pidMaster.setP(Constants.EndEffectorConstants.kP, pidSlot));
-    configureSparkFlex(() -> pidMaster.setI(Constants.EndEffectorConstants.kI, pidSlot));
-    configureSparkFlex(() -> pidMaster.setD(Constants.EndEffectorConstants.kD, pidSlot));
-    configureSparkFlex(() -> pidMaster.setFF(Constants.EndEffectorConstants.Ff, pidSlot));
-    configureSparkFlex(() -> pidMaster.setIZone(Constants.EndEffectorConstants.Izone, pidSlot));
-    configureSparkFlex(() -> pidMaster.setOutputRange(Constants.EndEffectorConstants.minOut, Constants.EndEffectorConstants.maxOut, pidSlot));
-    //configureSparkFlex(() -> pid.setOpenLoopRampRate) //Constants.EndEffectorConstants.openLoopRamp));
-    //configureSparkFlex(() -> pid.setClosedLoopRampRate(rampRate));
+//     public void configurePIDF() {
+//     int pidSlot = 0;
+//     configureSparkFlex(() -> pidMaster.setP(Constants.EndEffectorConstants.kP, pidSlot));
+//     configureSparkFlex(() -> pidMaster.setI(Constants.EndEffectorConstants.kI, pidSlot));
+//     configureSparkFlex(() -> pidMaster.setD(Constants.EndEffectorConstants.kD, pidSlot));
+//     configureSparkFlex(() -> pidMaster.setFF(Constants.EndEffectorConstants.Ff, pidSlot));
+//     configureSparkFlex(() -> pidMaster.setIZone(Constants.EndEffectorConstants.Izone, pidSlot));
+//     configureSparkFlex(() -> pidMaster.setOutputRange(Constants.EndEffectorConstants.minOut, Constants.EndEffectorConstants.maxOut, pidSlot));
+//     //configureSparkFlex(() -> pid.setOpenLoopRampRate) //Constants.EndEffectorConstants.openLoopRamp));
+//     //configureSparkFlex(() -> pid.setClosedLoopRampRate(rampRate));
     
-    configureSparkFlex(() -> pidSlave.setP(Constants.EndEffectorConstants.kP, pidSlot));
-    configureSparkFlex(() -> pidSlave.setI(Constants.EndEffectorConstants.kI, pidSlot));
-    configureSparkFlex(() -> pidSlave.setD(Constants.EndEffectorConstants.kD, pidSlot));
-    configureSparkFlex(() -> pidSlave.setFF(Constants.EndEffectorConstants.Ff, pidSlot));
-    configureSparkFlex(() -> pidSlave.setIZone(Constants.EndEffectorConstants.Izone, pidSlot));
-    configureSparkFlex(() -> pidSlave.setOutputRange(Constants.EndEffectorConstants.minOut, Constants.EndEffectorConstants.maxOut, pidSlot));
-}
+//     configureSparkFlex(() -> pidSlave.setP(Constants.EndEffectorConstants.kP, pidSlot));
+//     configureSparkFlex(() -> pidSlave.setI(Constants.EndEffectorConstants.kI, pidSlot));
+//     configureSparkFlex(() -> pidSlave.setD(Constants.EndEffectorConstants.kD, pidSlot));
+//     configureSparkFlex(() -> pidSlave.setFF(Constants.EndEffectorConstants.Ff, pidSlot));
+//     configureSparkFlex(() -> pidSlave.setIZone(Constants.EndEffectorConstants.Izone, pidSlot));
+//     configureSparkFlex(() -> pidSlave.setOutputRange(Constants.EndEffectorConstants.minOut, Constants.EndEffectorConstants.maxOut, pidSlot));
+// }
 
-    /**
-   * Run the configuration until it succeeds or times out.
-   *
-   * @param config Lambda supplier returning the error state.
-   */
-  private void configureSparkFlex(Supplier<REVLibError> config)
-  {
-    for (int i = 0; i < 2; i++)
-    {
-      if (config.get() == REVLibError.kOk)
-      {
-        return;
-      }
-    }
-    System.out.println("FAILIURE TO CONFIG PID");
-  }
+//     /**
+//    * Run the configuration until it succeeds or times out.
+//    *
+//    * @param config Lambda supplier returning the error state.
+//    */
+//   private void configureSparkFlex(Supplier<REVLibError> config)
+//   {
+//     for (int i = 0; i < 2; i++)
+//     {
+//       if (config.get() == REVLibError.kOk)
+//       {
+//         return;
+//       }
+//     }
+//     System.out.println("FAILIURE TO CONFIG PID");
+//   }
 
     @Log
     public double getEndEffectorDemand() {
@@ -330,7 +340,8 @@ public class EndEffectorREV extends Subsystem {
         SmartDashboard.putNumber("Intake Demand", mPeriodicIO.demand);
         SmartDashboard.putNumber("Intake Volts", mPeriodicIO.voltage);
         SmartDashboard.putNumber("Intake Current", mPeriodicIO.current);
-        SmartDashboard.putNumber("END EFFECTOR Velocity", mPeriodicIO.velocityMaster);
+        SmartDashboard.putNumber("END EFFECTOR Master Velocity", mPeriodicIO.velocityMaster);
+        SmartDashboard.putNumber("END EFFECTOR SLAVE VELOCITY", mPeriodicIO.velocitySlave);
         SmartDashboard.putString("Intake State", mState.toString());
         SmartDashboard.putBoolean("Has game piece", hasGamePiece);
         SmartDashboard.putBoolean("END EFFECTOR Beam Break", mPeriodicIO.beamBreak);
@@ -341,8 +352,8 @@ public class EndEffectorREV extends Subsystem {
         mPeriodicIO.timestamp = Timer.getFPGATimestamp();
         mPeriodicIO.voltage = mMaster.getBusVoltage();
         mPeriodicIO.current = mMaster.getOutputCurrent();
-        mPeriodicIO.velocityMaster = m_encoderMaster.getVelocity()*-1;
-        mPeriodicIO.velocitySlave = m_encoderSlave.getVelocity()*-1;
+        mPeriodicIO.velocityMaster = m_encoderMaster.getVelocity()*1;
+        mPeriodicIO.velocitySlave = m_encoderSlave.getVelocity()*1;
         mPeriodicIO.beamBreak = !mBeamBreak.get();
     }
 }
