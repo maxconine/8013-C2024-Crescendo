@@ -52,7 +52,7 @@ public class Constants {
     // Disables extra smart dashboard outputs that slow down the robot
     public static final boolean disableExtraTelemetry = false;
 
-    public static final boolean isManualControlMode = true;
+    public static final boolean isManualControlMode = false;
 
     // robot loop time
     public static final double kLooperDt = 0.02;
@@ -449,7 +449,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -79 - 5; // -5 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5; // -5 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -610,7 +610,7 @@ public class Constants {
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
 
-        public static final double kFloorIntakeHeight = 0.270;
+        public static final double kFloorIntakeHeight = 0.28;
         public static final double kSourceIntakeHeight = 0.064;
 
         /* CLIMB */
@@ -680,8 +680,8 @@ public class Constants {
                 { 0.175, 327 + 3, 12 },
                 { 0.2, 335 + 3, 13 },
                 { 0.215, 338 + 3, 13 },
-                { 0.23, 343 + 3, 12 },
-                { 0.25, 350 + 3, 11 },
+                { 0.23, 343 + 3, 11 },
+                { 0.25, 350 + 3, 8 },
                 { 0.26, 359.7 + 3, 7 } // really 0.275, but less so that everything else goes into position
 
         };
@@ -750,7 +750,7 @@ public class Constants {
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
-            config.Slot0.kP = 0.6;
+            config.Slot0.kP = 0.000006;
             config.Slot0.kI = 0.0;
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;

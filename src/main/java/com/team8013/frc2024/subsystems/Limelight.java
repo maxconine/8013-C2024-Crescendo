@@ -24,11 +24,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Subsystem for interacting with the Limelight 2
+ * Subsystem for interacting with the Limelight 3
  */
 public class Limelight extends Subsystem {
     public final static int kDefaultPipeline = 0;
-    public final static int kZoomedInPipeline = 1;
+    //public final static int kZoomedInPipeline = 1;
 
     private static Limelight mInstance;
     private final Drive mSwerve = Drive.getInstance();
@@ -49,13 +49,13 @@ public class Limelight extends Subsystem {
 
     public static class LimelightConstants {
         public String kName = "";
-        public String kTableName = "Limelight";
+        public String kTableName = "Limelight_0";
         public double kHeight = 0.0;
         public Rotation2d kHorizontalPlaneToLens = Rotation2d.identity();
     }
 
     private final NetworkTableInstance instance = NetworkTableInstance.getDefault(); // changed networktable setup
-    NetworkTable mNetworkTable = instance.getTable("limelight-tags"); // changed table name to match limelights name
+    NetworkTable mNetworkTable = instance.getTable("Limelight_0"); // changed table name to match limelights name
 
     private Limelight() {
         mConstants = Constants.VisionConstants.kLimelightConstants;

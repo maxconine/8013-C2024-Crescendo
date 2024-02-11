@@ -82,86 +82,86 @@ public class Robot extends TimedRobot {
 		CrashTracker.logRobotConstruction();
 	}
 
-	/* Credit to Team 2910 for this MAC Address based robot switching */
-	static {
-		List<byte[]> macAddresses;
-		try {
-			macAddresses = getMacAddresses();
-		} catch (IOException e) {
-			System.out.println("Mac Address attempt unsuccessful");
-			System.out.println(e);
-			macAddresses = List.of();
-		}
+	// /* Credit to Team 2910 for this MAC Address based robot switching */
+	// static {
+	// 	List<byte[]> macAddresses;
+	// 	try {
+	// 		macAddresses = getMacAddresses();
+	// 	} catch (IOException e) {
+	// 		System.out.println("Mac Address attempt unsuccessful");
+	// 		System.out.println(e);
+	// 		macAddresses = List.of();
+	// 	}
 
-		for (byte[] macAddress : macAddresses) {
-			// first check if we are comp
-			if (Arrays.compare(Constants.MacAddressConstants.COMP_ADDRESS, macAddress) == 0) {
-				Constants.isComp = true;
-				break;
-			}
-			// next check if we are beta
-			else if (Arrays.compare(Constants.MacAddressConstants.BETA_ADDRESS, macAddress) == 0) {
-				Constants.isBeta = true;
-				break;
-			}
-			// if neither is true
-			else {
-				Constants.isComp = false;
-				Constants.isBeta = false;
-				System.out.println("New Mac Address Discovered!");
-			}
-		}
+	// 	for (byte[] macAddress : macAddresses) {
+	// 		// first check if we are comp
+	// 		if (Arrays.compare(Constants.MacAddressConstants.COMP_ADDRESS, macAddress) == 0) {
+	// 			Constants.isComp = true;
+	// 			break;
+	// 		}
+	// 		// next check if we are beta
+	// 		else if (Arrays.compare(Constants.MacAddressConstants.BETA_ADDRESS, macAddress) == 0) {
+	// 			Constants.isBeta = true;
+	// 			break;
+	// 		}
+	// 		// if neither is true
+	// 		else {
+	// 			Constants.isComp = false;
+	// 			Constants.isBeta = false;
+	// 			System.out.println("New Mac Address Discovered!");
+	// 		}
+	// 	}
 
-		if (!Constants.isComp && !Constants.isBeta) {
-			// array
-			String[] macAddressStrings = macAddresses.stream()
-					.map(Robot::macToString)
-					.toArray(String[]::new);
+	// 	if (!Constants.isComp && !Constants.isBeta) {
+	// 		// array
+	// 		String[] macAddressStrings = macAddresses.stream()
+	// 				.map(Robot::macToString)
+	// 				.toArray(String[]::new);
 
-			SmartDashboard.putStringArray("MAC Addresses", macAddressStrings);
-			// adds MAC addresses to the dashboard
-			SmartDashboard.putString("Comp MAC Address", macToString(Constants.MacAddressConstants.COMP_ADDRESS));
-			SmartDashboard.putString("Beta MAC Address", macToString(Constants.MacAddressConstants.BETA_ADDRESS));
+	// 		SmartDashboard.putStringArray("MAC Addresses", macAddressStrings);
+	// 		// adds MAC addresses to the dashboard
+	// 		SmartDashboard.putString("Comp MAC Address", macToString(Constants.MacAddressConstants.COMP_ADDRESS));
+	// 		SmartDashboard.putString("Beta MAC Address", macToString(Constants.MacAddressConstants.BETA_ADDRESS));
 
-			// if mac address doesn't work at comp
-			Constants.isComp = true;
-		}
+	// 		// if mac address doesn't work at comp
+	// 		Constants.isComp = true;
+	// 	}
 
-		SmartDashboard.putBoolean("Comp Bot", Constants.isComp);
-		SmartDashboard.putBoolean("Beta Bot", Constants.isBeta);
+	// 	SmartDashboard.putBoolean("Comp Bot", Constants.isComp);
+	// 	SmartDashboard.putBoolean("Beta Bot", Constants.isBeta);
 
-	}
+	// }
 
-	private static List<byte[]> getMacAddresses() throws IOException {
-		List<byte[]> macAddresses = new ArrayList<>();
+	// private static List<byte[]> getMacAddresses() throws IOException {
+	// 	List<byte[]> macAddresses = new ArrayList<>();
 
-		Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-		// connect to network
-		NetworkInterface networkInterface;
-		while (networkInterfaces.hasMoreElements()) {
-			networkInterface = networkInterfaces.nextElement();
+	// 	Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+	// 	// connect to network
+	// 	NetworkInterface networkInterface;
+	// 	while (networkInterfaces.hasMoreElements()) {
+	// 		networkInterface = networkInterfaces.nextElement();
 
-			byte[] address = networkInterface.getHardwareAddress();
-			if (address == null) {
-				continue;
-			}
+	// 		byte[] address = networkInterface.getHardwareAddress();
+	// 		if (address == null) {
+	// 			continue;
+	// 		}
 
-			macAddresses.add(address);
-		}
-		return macAddresses;
-	}
+	// 		macAddresses.add(address);
+	// 	}
+	// 	return macAddresses;
+	// }
 
-	private static String macToString(byte[] address) {
-		// changes string characters
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < address.length; i++) {
-			if (i != 0) {
-				builder.append(':');
-			}
-			builder.append(String.format("%02X", address[i]));
-		}
-		return builder.toString();
-	}
+	// private static String macToString(byte[] address) {
+	// 	// changes string characters
+	// 	StringBuilder builder = new StringBuilder();
+	// 	for (int i = 0; i < address.length; i++) {
+	// 		if (i != 0) {
+	// 			builder.append(':');
+	// 		}
+	// 		builder.append(String.format("%02X", address[i]));
+	// 	}
+	// 	return builder.toString();
+	// }
 
 	@Override
 	public void robotInit() {
