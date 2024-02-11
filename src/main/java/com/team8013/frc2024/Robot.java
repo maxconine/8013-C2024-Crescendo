@@ -319,10 +319,12 @@ public class Robot extends TimedRobot {
 				}
 
 				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
-					mSuperstructure.controlClimberHookManually(1);
+					mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
+					//mSuperstructure.controlClimberHookManually(1);
 					// mElevator.setSetpointMotionMagic(0.4);
-				} else if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
-					mSuperstructure.controlClimberHookManually(-1);
+				} 
+				if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
+					mClimberHook.setSetpointMotionMagic(10);
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
 				
@@ -399,8 +401,11 @@ public class Robot extends TimedRobot {
 					} else if (mControlBoard.operator.getButton(Button.START)
 							&& mControlBoard.operator.getButton(Button.BACK)) {
 						mSuperstructure.setClimbMode();
-					} else if (mControlBoard.operator.getButton(Button.RB)) {
+					} else if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
 						mSuperstructure.setSuperstuctureTransferToShooter();
+					}
+					else if (mControlBoard.operator.getButton(Button.RB)){
+						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					}
 
 
@@ -414,7 +419,7 @@ public class Robot extends TimedRobot {
 				}
 
 				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
-				mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
+				//mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 
 				//mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
 			}

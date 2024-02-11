@@ -456,6 +456,7 @@ public class Constants {
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
         public static final double kSourceIntakeAngle = 71;
+        public static final double kSourceLoadShooterAngle = 39.7; //if anything, lower
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
         public static final double kShootAgainstSubwooferAngle = 54;
@@ -584,7 +585,7 @@ public class Constants {
 
     public static final class ElevatorConstants {
         public static final int kMaxVoltage = 12;
-        public static final double kGearRatio = 16;
+        public static final double kGearRatio = 12;
         public static final double kWheelCircumference = Conversions.inchesToMeters(1.625) * Math.PI;
         public static final double kPositionError = Conversions.inchesToMeters(0.5);
 
@@ -605,6 +606,7 @@ public class Constants {
 
         public static final double kFloorIntakeHeight = 0.28;
         public static final double kSourceIntakeHeight = 0.064;
+        public static final double kSourceLoadShooterHeight = 0.24;
 
         /* CLIMB */
         public static final double kClimbInitHeight = 0.43 - Conversions.inchesToMeters(3); // initial height going up
@@ -734,16 +736,16 @@ public class Constants {
         public static final double kHookAngle = 103; //degrees
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
-        public static final double kGearRatio = 16;
+        public static final double kGearRatio = 25;
         
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            config.CurrentLimits.SupplyCurrentLimitEnable = false;
-            config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
-            config.CurrentLimits.SupplyCurrentThreshold = 20;
-            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+            // config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            // config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
+            // config.CurrentLimits.SupplyCurrentThreshold = 20;
+            // config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
-            config.Slot0.kP = 0.006;
+            config.Slot0.kP = 0.6;
             config.Slot0.kI = 0.0;
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;

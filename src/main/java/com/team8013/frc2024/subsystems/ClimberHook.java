@@ -5,7 +5,7 @@ import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.Conversions;
-
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -66,7 +66,11 @@ public class ClimberHook extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
+
             mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
+        }
+        else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
+            mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand));
         }
     }
 
@@ -74,8 +78,22 @@ public class ClimberHook extends Subsystem {
         if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
             mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
+        // if (degrees > Constants.ClimberHookConstants.kMaxAngle){
+        //         degrees = Constants.ClimberHookConstants.kMaxAngle;
+        //     }
+        // else if (degrees<Constants.ClimberHookConstants.kMinAngle){
+        //     degrees = Constants.ClimberHookConstants.kMinAngle;
+        // }
+
         double rotationDemand = Conversions.degreesToRotation(degrees, Constants.ClimberHookConstants.kGearRatio);
         mPeriodicIO.demand = rotationDemand;
+    }
+
+    public void setDemandOpenLoop(double demand) {
+        if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
+            mPeriodicIO.mControlModeState = ControlModeState.OPEN_LOOP;
+        }
+        mPeriodicIO.demand = demand;
     }
 
     public double getAngleDeg(){
@@ -99,7 +117,8 @@ public class ClimberHook extends Subsystem {
     }
 
     private enum ControlModeState {
-        MOTION_MAGIC
+        MOTION_MAGIC,
+        OPEN_LOOP
     }
 
     @Override
