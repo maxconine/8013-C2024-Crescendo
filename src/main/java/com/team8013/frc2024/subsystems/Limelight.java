@@ -6,6 +6,7 @@ import com.team254.lib.vision.TargetInfo;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
+import com.team8013.lib.Conversions;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -323,7 +324,16 @@ public class Limelight extends Subsystem {
 
     /**returns the degrees the robot should snap to */
     public double getTargetSnap(){
-        double degreesToSnap = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
+        double degreesToSnap = 0;
+        if ((mPeriodicIO.botPosey-2.61)<0){
+            degreesToSnap = -90- (Math.atan(mPeriodicIO.botPosex/Math.abs(mPeriodicIO.botPosey-2.61))*(180/Math.PI));
+        }
+        else{
+            degreesToSnap = 90+ (Math.atan(Math.abs(mPeriodicIO.botPosex/mPeriodicIO.botPosey-2.61))*(180/Math.PI));
+        }
+        //  = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
+
+
         SmartDashboard.putNumber("degrees to snap to", degreesToSnap);
         return degreesToSnap;
     }

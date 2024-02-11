@@ -288,7 +288,7 @@ public class Robot extends TimedRobot {
 			}
 
 			if(mControlBoard.snapToTarget()){
-				mDrive.setHeadingControlTarget(90);//mLimelight.getTargetSnap());
+				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
 			}
 
 			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
