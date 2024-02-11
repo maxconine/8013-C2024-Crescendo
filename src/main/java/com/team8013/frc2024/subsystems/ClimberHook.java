@@ -31,11 +31,11 @@ public class ClimberHook extends Subsystem {
         mMotor.getConfigurator().apply(Constants.ClimberHookConstants.climberHookMotorConfig());
 
         setWantNeutralBrake(true);
-        resetToAbsolute();
+        mMotor.setPosition(0);
     }
 
     public void resetToAbsolute() {
-        mMotor.setPosition(0);
+        // mMotor.setPosition(0);
     }
 
     private void setWantNeutralBrake(boolean brake) {
@@ -48,7 +48,7 @@ public class ClimberHook extends Subsystem {
         mEnabledLooper.register(new Loop() {
             @Override
             public void onStart(double timestamp) {
-                resetToAbsolute();
+                // resetToAbsolute();
             }
 
             @Override
@@ -68,8 +68,7 @@ public class ClimberHook extends Subsystem {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
 
             mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
-        }
-        else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP){
+        } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand));
         }
     }
@@ -79,10 +78,10 @@ public class ClimberHook extends Subsystem {
             mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
         // if (degrees > Constants.ClimberHookConstants.kMaxAngle){
-        //         degrees = Constants.ClimberHookConstants.kMaxAngle;
-        //     }
+        // degrees = Constants.ClimberHookConstants.kMaxAngle;
+        // }
         // else if (degrees<Constants.ClimberHookConstants.kMinAngle){
-        //     degrees = Constants.ClimberHookConstants.kMinAngle;
+        // degrees = Constants.ClimberHookConstants.kMinAngle;
         // }
 
         double rotationDemand = Conversions.degreesToRotation(degrees, Constants.ClimberHookConstants.kGearRatio);
@@ -96,10 +95,9 @@ public class ClimberHook extends Subsystem {
         mPeriodicIO.demand = demand;
     }
 
-    public double getAngleDeg(){
+    public double getAngleDeg() {
         return mPeriodicIO.position_degrees;
     }
-
 
     public static class mPeriodicIO {
         // Inputs

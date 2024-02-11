@@ -174,10 +174,10 @@ public class Shooter extends Subsystem {
     }
 
     // public boolean hasGamePiece() {
-    //     return hasGamePiece;
+    // return hasGamePiece;
     // }
 
-    public boolean getBeamBreak(){
+    public boolean getBeamBreak() {
         return mPeriodicIO.beamBreak;
     }
 

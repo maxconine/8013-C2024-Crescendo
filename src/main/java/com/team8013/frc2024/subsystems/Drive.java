@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Drive extends Subsystem {
 
     public enum DriveControlState {
@@ -57,6 +56,7 @@ public class Drive extends Subsystem {
     private KinematicLimits mKinematicLimits = SwerveConstants.kUncappedLimits;
 
     private static Drive mInstance;
+
     public static Drive getInstance() {
         if (mInstance == null) {
             mInstance = new Drive();
@@ -66,10 +66,10 @@ public class Drive extends Subsystem {
 
     private Drive() {
         mModules = new SwerveModule[] {
-            new SwerveModule(0, Mod0.SwerveModuleConstants()),
-            new SwerveModule(1, Mod1.SwerveModuleConstants()),
-            new SwerveModule(2, Mod2.SwerveModuleConstants()),
-            new SwerveModule(3, Mod3.SwerveModuleConstants())
+                new SwerveModule(0, Mod0.SwerveModuleConstants()),
+                new SwerveModule(1, Mod1.SwerveModuleConstants()),
+                new SwerveModule(2, Mod2.SwerveModuleConstants()),
+                new SwerveModule(3, Mod3.SwerveModuleConstants())
         };
 
         mOdometry = new SwerveDriveOdometry(SwerveConstants.kKinematics, getModuleStates());
@@ -88,10 +88,10 @@ public class Drive extends Subsystem {
     }
 
     public void feedTeleopSetpoint(ChassisSpeeds speeds) {
-    if (mControlState != DriveControlState.OPEN_LOOP && mControlState != DriveControlState.HEADING_CONTROL) {
+        if (mControlState != DriveControlState.OPEN_LOOP && mControlState != DriveControlState.HEADING_CONTROL) {
             mControlState = DriveControlState.OPEN_LOOP;
         }
-        
+
         if (mControlState == DriveControlState.HEADING_CONTROL) {
             if (Math.abs(speeds.omegaRadiansPerSecond) > 1.0) {
                 mControlState = DriveControlState.OPEN_LOOP;
@@ -99,7 +99,7 @@ public class Drive extends Subsystem {
                 double x = speeds.vxMetersPerSecond;
                 double y = speeds.vyMetersPerSecond;
                 double omega = mMotionPlanner.calculateRotationalAdjustment(mPeriodicIO.heading_setpoint.getRadians(),
-                        -mPeriodicIO.heading.getRadians()); //I put a neg sign here fyi
+                        -mPeriodicIO.heading.getRadians()); // I put a neg sign here fyi
                 mPeriodicIO.des_chassis_speeds = new ChassisSpeeds(x, y, omega);
                 return;
             }
@@ -120,7 +120,7 @@ public class Drive extends Subsystem {
             mControlState = DriveControlState.OPEN_LOOP;
         }
     }
-    
+
     public void setVelocity(ChassisSpeeds speeds) {
         mPeriodicIO.des_chassis_speeds = speeds;
         if (mControlState != DriveControlState.VELOCITY) {
@@ -168,7 +168,7 @@ public class Drive extends Subsystem {
 
             @Override
             public void onLoop(double timestamp) {
-                synchronized(Drive.this) {
+                synchronized (Drive.this) {
                     switch (mControlState) {
                         case PATH_FOLLOWING:
                             updatePathFollower();
@@ -188,7 +188,7 @@ public class Drive extends Subsystem {
                     mOdometry.update(mPeriodicIO.heading, getModuleStates());
                 }
             }
-            
+
             @Override
             public void onStop(double timestamp) {
                 mPeriodicIO.des_chassis_speeds = new ChassisSpeeds();
@@ -204,7 +204,7 @@ public class Drive extends Subsystem {
         for (SwerveModule swerveModule : mModules) {
             swerveModule.readPeriodicInputs();
         }
-        
+
         mPeriodicIO.timestamp = Timer.getFPGATimestamp();
         mPeriodicIO.meas_module_states = getModuleStates();
         mPeriodicIO.meas_chassis_speeds = SwerveConstants.kKinematics.toChassisSpeeds(mPeriodicIO.meas_module_states);
@@ -223,16 +223,18 @@ public class Drive extends Subsystem {
         }
     }
 
-    private void updateSetpoint() {        
-        if (mControlState == DriveControlState.FORCE_ORIENT) return;
+    private void updateSetpoint() {
+        if (mControlState == DriveControlState.FORCE_ORIENT)
+            return;
 
         Pose2d robot_pose_vel = new Pose2d(mPeriodicIO.des_chassis_speeds.vxMetersPerSecond * Constants.kLooperDt,
                 mPeriodicIO.des_chassis_speeds.vyMetersPerSecond * Constants.kLooperDt,
                 Rotation2d.fromRadians(mPeriodicIO.des_chassis_speeds.omegaRadiansPerSecond * Constants.kLooperDt));
         Twist2d twist_vel = new Pose2d().log(robot_pose_vel);
         ChassisSpeeds wanted_speeds = new ChassisSpeeds(
-                twist_vel.dx / Constants.kLooperDt, twist_vel.dy / Constants.kLooperDt, twist_vel.dtheta / Constants.kLooperDt);
-    
+                twist_vel.dx / Constants.kLooperDt, twist_vel.dy / Constants.kLooperDt,
+                twist_vel.dtheta / Constants.kLooperDt);
+
         if (mControlState == DriveControlState.PATH_FOLLOWING) {
             ModuleState[] real_module_setpoints = SwerveConstants.kKinematics.toModuleStates(wanted_speeds);
             mPeriodicIO.des_module_states = real_module_setpoints;
@@ -240,18 +242,23 @@ public class Drive extends Subsystem {
         }
 
         // Limit rotational velocity
-        wanted_speeds.omegaRadiansPerSecond = Math.signum(wanted_speeds.omegaRadiansPerSecond) * Math.min(mKinematicLimits.kMaxAngularVelocity, Math.abs(wanted_speeds.omegaRadiansPerSecond));
+        wanted_speeds.omegaRadiansPerSecond = Math.signum(wanted_speeds.omegaRadiansPerSecond)
+                * Math.min(mKinematicLimits.kMaxAngularVelocity, Math.abs(wanted_speeds.omegaRadiansPerSecond));
 
         // Limit translational velocity
-        double velocity_magnitude = Math.hypot(mPeriodicIO.des_chassis_speeds.vxMetersPerSecond, mPeriodicIO.des_chassis_speeds.vyMetersPerSecond);
+        double velocity_magnitude = Math.hypot(mPeriodicIO.des_chassis_speeds.vxMetersPerSecond,
+                mPeriodicIO.des_chassis_speeds.vyMetersPerSecond);
         if (velocity_magnitude > mKinematicLimits.kMaxDriveVelocity) {
-            wanted_speeds.vxMetersPerSecond = (wanted_speeds.vxMetersPerSecond / velocity_magnitude) * mKinematicLimits.kMaxDriveVelocity;
-            wanted_speeds.vyMetersPerSecond = (wanted_speeds.vyMetersPerSecond / velocity_magnitude) * mKinematicLimits.kMaxDriveVelocity;
+            wanted_speeds.vxMetersPerSecond = (wanted_speeds.vxMetersPerSecond / velocity_magnitude)
+                    * mKinematicLimits.kMaxDriveVelocity;
+            wanted_speeds.vyMetersPerSecond = (wanted_speeds.vyMetersPerSecond / velocity_magnitude)
+                    * mKinematicLimits.kMaxDriveVelocity;
         }
-        
-        ModuleState[] prev_module_states = mPeriodicIO.des_module_states.clone(); // Get last setpoint to get differentials
+
+        ModuleState[] prev_module_states = mPeriodicIO.des_module_states.clone(); // Get last setpoint to get
+                                                                                  // differentials
         ChassisSpeeds prev_chassis_speeds = SwerveConstants.kKinematics.toChassisSpeeds(prev_module_states);
-        ModuleState[] target_module_states = SwerveConstants.kKinematics.toModuleStates(wanted_speeds);        
+        ModuleState[] target_module_states = SwerveConstants.kKinematics.toModuleStates(wanted_speeds);
 
         if (wanted_speeds.epsilonEquals(new ChassisSpeeds(), Util.kEpsilon)) {
             for (int i = 0; i < target_module_states.length; i++) {
@@ -292,10 +299,9 @@ public class Drive extends Subsystem {
         SmartDashboard.putNumber("Accel", min_translational_scalar);
 
         wanted_speeds = new ChassisSpeeds(
-            prev_chassis_speeds.vxMetersPerSecond + dx * min_translational_scalar, 
-            prev_chassis_speeds.vyMetersPerSecond + dy * min_translational_scalar, 
-            prev_chassis_speeds.omegaRadiansPerSecond + domega * min_omega_scalar
-        );
+                prev_chassis_speeds.vxMetersPerSecond + dx * min_translational_scalar,
+                prev_chassis_speeds.vyMetersPerSecond + dy * min_translational_scalar,
+                prev_chassis_speeds.omegaRadiansPerSecond + domega * min_omega_scalar);
 
         ModuleState[] real_module_setpoints = SwerveConstants.kKinematics.toModuleStates(wanted_speeds);
         mPeriodicIO.des_module_states = real_module_setpoints;
@@ -308,11 +314,11 @@ public class Drive extends Subsystem {
         }
     }
 
-    public void zeroGyro(){
+    public void zeroGyro() {
         zeroGyro(0.0);
     }
 
-    public void zeroGyro(double reset){
+    public void zeroGyro(double reset) {
         mPigeon.setYaw(reset);
         mPigeon.setPitch(0.0);
     }
@@ -328,10 +334,12 @@ public class Drive extends Subsystem {
         for (int i = 0; i < mModules.length; i++) {
             if (mControlState == DriveControlState.OPEN_LOOP || mControlState == DriveControlState.HEADING_CONTROL) {
                 mModules[i].setDesiredState(mPeriodicIO.des_module_states[i], true);
-            } else if (mControlState == DriveControlState.PATH_FOLLOWING || mControlState == DriveControlState.VELOCITY || 
-                mControlState == DriveControlState.AUTO_BALANCE || mControlState == DriveControlState.FORCE_ORIENT) {
+            } else if (mControlState == DriveControlState.PATH_FOLLOWING || mControlState == DriveControlState.VELOCITY
+                    ||
+                    mControlState == DriveControlState.AUTO_BALANCE
+                    || mControlState == DriveControlState.FORCE_ORIENT) {
                 mModules[i].setDesiredState(mPeriodicIO.des_module_states[i], false);
-            } 
+            }
         }
 
         for (SwerveModule swerveModule : mModules) {
@@ -341,7 +349,7 @@ public class Drive extends Subsystem {
 
     public ModuleState[] getModuleStates() {
         ModuleState[] states = new ModuleState[4];
-        for(SwerveModule mod : mModules){
+        for (SwerveModule mod : mModules) {
             states[mod.moduleNumber()] = mod.getState();
         }
         return states;
@@ -391,20 +399,20 @@ public class Drive extends Subsystem {
         ChassisSpeeds des_chassis_speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
         ChassisSpeeds meas_chassis_speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
         ModuleState[] meas_module_states = new ModuleState[] {
-            new ModuleState(),
-            new ModuleState(),
-            new ModuleState(),
-            new ModuleState()
+                new ModuleState(),
+                new ModuleState(),
+                new ModuleState(),
+                new ModuleState()
         };
         Rotation2d heading = new Rotation2d();
         Rotation2d pitch = new Rotation2d();
 
         // Outputs
         ModuleState[] des_module_states = new ModuleState[] {
-            new ModuleState(),
-            new ModuleState(),
-            new ModuleState(),
-            new ModuleState()
+                new ModuleState(),
+                new ModuleState(),
+                new ModuleState(),
+                new ModuleState()
         };
         Pose2d path_setpoint = new Pose2d();
         Rotation2d heading_setpoint = new Rotation2d();
@@ -419,7 +427,8 @@ public class Drive extends Subsystem {
             module.outputTelemetry();
         }
         SmartDashboard.putNumber("Pitch", mPeriodicIO.pitch.getDegrees());
-        // SmartDashboard.putNumber("Delta Pitch", smoothed_pitch_velocity.getAverage());
+        // SmartDashboard.putNumber("Delta Pitch",
+        // smoothed_pitch_velocity.getAverage());
         SmartDashboard.putString("drive control state", mControlState.toString());
         SmartDashboard.putNumber("Drive X Velocity", getMeasuredXVelocity());
     }
@@ -463,7 +472,7 @@ public class Drive extends Subsystem {
     public double getTrajectoryY() {
         return mMotionPlanner.getYError(0.0, Timer.getFPGATimestamp());
     }
-    
+
     @Log
     public double getTrajectoryHeading() {
         return mMotionPlanner.getRotationalTarget();
@@ -528,7 +537,7 @@ public class Drive extends Subsystem {
 
     @Override
     public void stop() {
-        
+
     }
 
     @Override
@@ -541,7 +550,7 @@ public class Drive extends Subsystem {
         public double kMaxAccel = Double.MAX_VALUE; // m/s^2
         public double kMaxAngularVelocity = Constants.SwerveConstants.maxAngularVelocity; // rad/s
         public double kMaxAngularAccel = Double.MAX_VALUE; // rad/s^2
-    } 
+    }
 
     // Auto engage controls
 
@@ -554,15 +563,16 @@ public class Drive extends Subsystem {
 
     public SequentialRequest autoBalanceRequest() {
         return new SequentialRequest(
-            driveOntoFlapRequest(),
-            driveOntoPlatformRequest(),
-            balanceOnPlatformRequest(),
-            maintainBalanceRequest()
-        );
+                driveOntoFlapRequest(),
+                driveOntoPlatformRequest(),
+                balanceOnPlatformRequest(),
+                maintainBalanceRequest());
     }
 
-    /* Applies to when the robot first drives up the ramp flaps to the balance, 
-     and the platform doesn't tilt due to static resistance in the hinges */
+    /*
+     * Applies to when the robot first drives up the ramp flaps to the balance,
+     * and the platform doesn't tilt due to static resistance in the hinges
+     */
     private Request driveOntoFlapRequest() {
         return new Request() {
 
@@ -582,13 +592,16 @@ public class Drive extends Subsystem {
 
             @Override
             public boolean isFinished() {
-                return mPeriodicIO.pitch.getDegrees() < flap_trigger_angle || Timer.getFPGATimestamp() - state_enter_timestamp > timeout;
+                return mPeriodicIO.pitch.getDegrees() < flap_trigger_angle
+                        || Timer.getFPGATimestamp() - state_enter_timestamp > timeout;
             }
 
         };
     }
 
-    /* The robot drives onto the Charging Station (Ramp is pushed into tilted state) */
+    /*
+     * The robot drives onto the Charging Station (Ramp is pushed into tilted state)
+     */
     private Request driveOntoPlatformRequest() {
         return new Request() {
 
@@ -610,7 +623,8 @@ public class Drive extends Subsystem {
 
             @Override
             public boolean isFinished() {
-                boolean maybe_on_platform = Util.epsilonEquals(platform_trigger_angle, getPitch(), 3.0) && smoothed_pitch_velocity.getAverage() < (balance_trigger_velocity * 0.85);
+                boolean maybe_on_platform = Util.epsilonEquals(platform_trigger_angle, getPitch(), 3.0)
+                        && smoothed_pitch_velocity.getAverage() < (balance_trigger_velocity * 0.85);
                 return on_platform.update(Timer.getFPGATimestamp(), maybe_on_platform) || Timer.getFPGATimestamp()
                         - state_enter_timestamp > timeout;
             }
@@ -638,13 +652,13 @@ public class Drive extends Subsystem {
 
             @Override
             public boolean isFinished() {
-                if (smoothed_pitch_velocity.getAverage() > balance_trigger_velocity || Timer.getFPGATimestamp() - state_enter_timestamp > timeout) {
+                if (smoothed_pitch_velocity.getAverage() > balance_trigger_velocity
+                        || Timer.getFPGATimestamp() - state_enter_timestamp > timeout) {
                     orientModules(List.of(
-						Rotation2d.fromDegrees(45),
-						Rotation2d.fromDegrees(-45),
-						Rotation2d.fromDegrees(-45),
-						Rotation2d.fromDegrees(45)
-                    ));
+                            Rotation2d.fromDegrees(45),
+                            Rotation2d.fromDegrees(-45),
+                            Rotation2d.fromDegrees(-45),
+                            Rotation2d.fromDegrees(45)));
                     return true;
                 }
                 return false;
@@ -653,8 +667,10 @@ public class Drive extends Subsystem {
         };
     }
 
-    /* Once the robot hits the engage position for the first time, 
-    use PID to maintain pitch within the allowed tolerance */
+    /*
+     * Once the robot hits the engage position for the first time,
+     * use PID to maintain pitch within the allowed tolerance
+     */
     private Request maintainBalanceRequest() {
         return new Request() {
 
@@ -662,7 +678,7 @@ public class Drive extends Subsystem {
             private DelayedBoolean on_platform = new DelayedBoolean(Timer.getFPGATimestamp(), 0.4);
 
             @Override
-            public void act () {
+            public void act() {
                 System.out.println(mPeriodicIO.timestamp + " Started Balance Stage 4");
                 balance_step = 3;
                 if (mControlState != DriveControlState.AUTO_BALANCE) {
@@ -679,17 +695,17 @@ public class Drive extends Subsystem {
 
                 if (Math.abs(getPitch()) > 3.0) {
                     mControlState = DriveControlState.AUTO_BALANCE;
-                    mPeriodicIO.des_chassis_speeds = new ChassisSpeeds(Math.abs(pitch_correction) * Math.signum(getPitch()), 0, 0);
+                    mPeriodicIO.des_chassis_speeds = new ChassisSpeeds(
+                            Math.abs(pitch_correction) * Math.signum(getPitch()), 0, 0);
                 } else {
                     mPeriodicIO.des_chassis_speeds = new ChassisSpeeds(0.0, 0.0, 0.0);
                     orientModules(List.of(
                             Rotation2d.fromDegrees(45),
                             Rotation2d.fromDegrees(-45),
                             Rotation2d.fromDegrees(-45),
-                            Rotation2d.fromDegrees(45)
-                    ));
+                            Rotation2d.fromDegrees(45)));
                 }
-                
+
                 if (on_platform.update(Timer.getFPGATimestamp(), level_pid.atSetpoint())) {
                     return true;
                 }

@@ -21,7 +21,8 @@ public class SubsystemManager implements ILooper {
 
     private LoggingSystem ls = LoggingSystem.getInstance();
 
-    private SubsystemManager() {}
+    private SubsystemManager() {
+    }
 
     public static SubsystemManager getInstance() {
         if (mInstance == null) {
@@ -85,7 +86,8 @@ public class SubsystemManager implements ILooper {
 
     private class DisabledLoop implements Loop {
         @Override
-        public void onStart(double timestamp) {}
+        public void onStart(double timestamp) {
+        }
 
         @Override
         public void onLoop(double timestamp) {
@@ -93,7 +95,8 @@ public class SubsystemManager implements ILooper {
         }
 
         @Override
-        public void onStop(double timestamp) {}
+        public void onStop(double timestamp) {
+        }
     }
 
     public void registerEnabledLoops(Looper enabledLooper) {

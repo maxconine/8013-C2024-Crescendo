@@ -84,83 +84,88 @@ public class Robot extends TimedRobot {
 
 	// /* Credit to Team 2910 for this MAC Address based robot switching */
 	// static {
-	// 	List<byte[]> macAddresses;
-	// 	try {
-	// 		macAddresses = getMacAddresses();
-	// 	} catch (IOException e) {
-	// 		System.out.println("Mac Address attempt unsuccessful");
-	// 		System.out.println(e);
-	// 		macAddresses = List.of();
-	// 	}
+	// List<byte[]> macAddresses;
+	// try {
+	// macAddresses = getMacAddresses();
+	// } catch (IOException e) {
+	// System.out.println("Mac Address attempt unsuccessful");
+	// System.out.println(e);
+	// macAddresses = List.of();
+	// }
 
-	// 	for (byte[] macAddress : macAddresses) {
-	// 		// first check if we are comp
-	// 		if (Arrays.compare(Constants.MacAddressConstants.COMP_ADDRESS, macAddress) == 0) {
-	// 			Constants.isComp = true;
-	// 			break;
-	// 		}
-	// 		// next check if we are beta
-	// 		else if (Arrays.compare(Constants.MacAddressConstants.BETA_ADDRESS, macAddress) == 0) {
-	// 			Constants.isBeta = true;
-	// 			break;
-	// 		}
-	// 		// if neither is true
-	// 		else {
-	// 			Constants.isComp = false;
-	// 			Constants.isBeta = false;
-	// 			System.out.println("New Mac Address Discovered!");
-	// 		}
-	// 	}
+	// for (byte[] macAddress : macAddresses) {
+	// // first check if we are comp
+	// if (Arrays.compare(Constants.MacAddressConstants.COMP_ADDRESS, macAddress) ==
+	// 0) {
+	// Constants.isComp = true;
+	// break;
+	// }
+	// // next check if we are beta
+	// else if (Arrays.compare(Constants.MacAddressConstants.BETA_ADDRESS,
+	// macAddress) == 0) {
+	// Constants.isBeta = true;
+	// break;
+	// }
+	// // if neither is true
+	// else {
+	// Constants.isComp = false;
+	// Constants.isBeta = false;
+	// System.out.println("New Mac Address Discovered!");
+	// }
+	// }
 
-	// 	if (!Constants.isComp && !Constants.isBeta) {
-	// 		// array
-	// 		String[] macAddressStrings = macAddresses.stream()
-	// 				.map(Robot::macToString)
-	// 				.toArray(String[]::new);
+	// if (!Constants.isComp && !Constants.isBeta) {
+	// // array
+	// String[] macAddressStrings = macAddresses.stream()
+	// .map(Robot::macToString)
+	// .toArray(String[]::new);
 
-	// 		SmartDashboard.putStringArray("MAC Addresses", macAddressStrings);
-	// 		// adds MAC addresses to the dashboard
-	// 		SmartDashboard.putString("Comp MAC Address", macToString(Constants.MacAddressConstants.COMP_ADDRESS));
-	// 		SmartDashboard.putString("Beta MAC Address", macToString(Constants.MacAddressConstants.BETA_ADDRESS));
+	// SmartDashboard.putStringArray("MAC Addresses", macAddressStrings);
+	// // adds MAC addresses to the dashboard
+	// SmartDashboard.putString("Comp MAC Address",
+	// macToString(Constants.MacAddressConstants.COMP_ADDRESS));
+	// SmartDashboard.putString("Beta MAC Address",
+	// macToString(Constants.MacAddressConstants.BETA_ADDRESS));
 
-	// 		// if mac address doesn't work at comp
-	// 		Constants.isComp = true;
-	// 	}
+	// // if mac address doesn't work at comp
+	// Constants.isComp = true;
+	// }
 
-	// 	SmartDashboard.putBoolean("Comp Bot", Constants.isComp);
-	// 	SmartDashboard.putBoolean("Beta Bot", Constants.isBeta);
+	// SmartDashboard.putBoolean("Comp Bot", Constants.isComp);
+	// SmartDashboard.putBoolean("Beta Bot", Constants.isBeta);
 
 	// }
 
 	// private static List<byte[]> getMacAddresses() throws IOException {
-	// 	List<byte[]> macAddresses = new ArrayList<>();
+	// List<byte[]> macAddresses = new ArrayList<>();
 
-	// 	Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-	// 	// connect to network
-	// 	NetworkInterface networkInterface;
-	// 	while (networkInterfaces.hasMoreElements()) {
-	// 		networkInterface = networkInterfaces.nextElement();
+	// Enumeration<NetworkInterface> networkInterfaces =
+	// NetworkInterface.getNetworkInterfaces();
+	// // connect to network
+	// NetworkInterface networkInterface;
+	// while (networkInterfaces.hasMoreElements()) {
+	// networkInterface = networkInterfaces.nextElement();
 
-	// 		byte[] address = networkInterface.getHardwareAddress();
-	// 		if (address == null) {
-	// 			continue;
-	// 		}
+	// byte[] address = networkInterface.getHardwareAddress();
+	// if (address == null) {
+	// continue;
+	// }
 
-	// 		macAddresses.add(address);
-	// 	}
-	// 	return macAddresses;
+	// macAddresses.add(address);
+	// }
+	// return macAddresses;
 	// }
 
 	// private static String macToString(byte[] address) {
-	// 	// changes string characters
-	// 	StringBuilder builder = new StringBuilder();
-	// 	for (int i = 0; i < address.length; i++) {
-	// 		if (i != 0) {
-	// 			builder.append(':');
-	// 		}
-	// 		builder.append(String.format("%02X", address[i]));
-	// 	}
-	// 	return builder.toString();
+	// // changes string characters
+	// StringBuilder builder = new StringBuilder();
+	// for (int i = 0; i < address.length; i++) {
+	// if (i != 0) {
+	// builder.append(':');
+	// }
+	// builder.append(String.format("%02X", address[i]));
+	// }
+	// return builder.toString();
 	// }
 
 	@Override
@@ -287,7 +292,7 @@ public class Robot extends TimedRobot {
 				mElevator.setWantHome(true);
 			}
 
-			if(mControlBoard.snapToTarget()){
+			if (mControlBoard.snapToTarget()) {
 				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
 			}
 
@@ -320,17 +325,15 @@ public class Robot extends TimedRobot {
 
 				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
 					mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
-					//mSuperstructure.controlClimberHookManually(1);
+					//mClimberHook.setDemandOpenLoop(0.2);
+					// mSuperstructure.controlClimberHookManually(1);
 					// mElevator.setSetpointMotionMagic(0.4);
-				} 
+				}
 				if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
-					mClimberHook.setSetpointMotionMagic(10);
+					//mClimberHook.setDemandOpenLoop(0.0);
+					mClimberHook.setSetpointMotionMagic(25);
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
-				
-
-
-
 
 				/* WRIST */
 
@@ -348,10 +351,10 @@ public class Robot extends TimedRobot {
 				/* END EFFECTOR */
 
 				// if (mControlBoard.operator.getController().getPOV() == kDpadUp){
-				// 	mEndEffector.setEndEffectorVelocity(2000);
+				// mEndEffector.setEndEffectorVelocity(2000);
 				// }
 				// else if(mControlBoard.operator.getController().getPOV() == kDpadDown){
-				// 	mEndEffector.setEndEffectorVelocity(0);
+				// mEndEffector.setEndEffectorVelocity(0);
 				// }
 
 				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
@@ -403,11 +406,9 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setClimbMode();
 					} else if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
 						mSuperstructure.setSuperstuctureTransferToShooter();
-					}
-					else if (mControlBoard.operator.getButton(Button.RB)){
+					} else if (mControlBoard.operator.getButton(Button.RB)) {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					}
-
 
 				} else {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
@@ -419,9 +420,9 @@ public class Robot extends TimedRobot {
 				}
 
 				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
-				//mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
+				// mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 
-				//mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
+				// mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
 			}
 
 			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
@@ -505,7 +506,6 @@ public class Robot extends TimedRobot {
 			// (mControlBoard.driver.getController().getRightStickButtonReleased()) {
 			// mDrive.setKinematicLimits(Constants.SwerveConstants.kUncappedLimits);
 			// }
-			
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);

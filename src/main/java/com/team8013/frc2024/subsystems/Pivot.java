@@ -94,7 +94,7 @@ public class Pivot extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
-            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0,0,false,false,false));
+            mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
                 mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?

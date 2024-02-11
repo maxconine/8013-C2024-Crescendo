@@ -11,19 +11,7 @@ public class AutoModeSelector {
     public enum DesiredMode {
         DO_NOTHING, 
         TEST_PATH_AUTO,
-        ONE_BALANCE,
-        TWO_PICKUP_BALANCE,
-        TWO_BALANCE,
-        CC_ONE_PICKUP_BALANCE,
-        CC_TWO_PICKUP_BALANCE,
-        TWO_PICKUP,
-        ONE_PIECE,
-        CC_ONE_PIECE,
-        MIDDLE_BALANCE,
-        THREE_PIECE,
-        CC_THREE_PIECE,
-        TWO_MIDDLE_BALANCE
-        //THREEBACKANDFORTH
+        THREEBACKANDFORTH
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -35,14 +23,15 @@ public class AutoModeSelector {
     public AutoModeSelector() {
         mModeChooser.addOption("Test Path", DesiredMode.TEST_PATH_AUTO);
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
+        mModeChooser.setDefaultOption("Three Back & Forth", DesiredMode.THREEBACKANDFORTH);
         //mModeChooser.setDefaultOption("One Balance", DesiredMode.ONE_BALANCE);
         //mModeChooser.setDefaultOption("Two Pickup Balance", DesiredMode.TWO_PICKUP_BALANCE);
         //mModeChooser.setDefaultOption("Two Balance", DesiredMode.TWO_BALANCE);
-        mModeChooser.setDefaultOption("Two No Balance", DesiredMode.TWO_PICKUP);
+        // mModeChooser.setDefaultOption("Two No Balance", DesiredMode.TWO_PICKUP);
        // mModeChooser.setDefaultOption("Cable Chain One Pickup", DesiredMode.CC_ONE_PIECE);
        // mModeChooser.setDefaultOption("Cable Chain One Pickup Balance", DesiredMode.CC_ONE_PICKUP_BALANCE);
         //mModeChooser.setDefaultOption("Cable Chain Two Pickup Balance", DesiredMode.CC_TWO_PICKUP_BALANCE);
-        mModeChooser.setDefaultOption("One No Balance", DesiredMode.ONE_PIECE);
+        // mModeChooser.setDefaultOption("One No Balance", DesiredMode.ONE_PIECE);
        // mModeChooser.setDefaultOption("Middle Balance", DesiredMode.MIDDLE_BALANCE);
        // mModeChooser.setDefaultOption("Three Piece", DesiredMode.THREE_PIECE);
        // mModeChooser.setDefaultOption("Cable Chain Three", DesiredMode.CC_THREE_PIECE);
@@ -70,11 +59,8 @@ public class AutoModeSelector {
         case TEST_PATH_AUTO:
             return Optional.of(new TestPathMode());
     
-        // case TWO_PICKUP:
-        //     return Optional.of(new TwoPickup());
-
-        // case ONE_PIECE:
-        //     return Optional.of(new OnePiece());
+        case THREEBACKANDFORTH:
+            return Optional.of(new ThreeMetersBackAndForth());
 
         default:
             System.out.println("ERROR: unexpected auto mode: " + mode);

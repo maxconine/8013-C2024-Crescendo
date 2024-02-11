@@ -317,7 +317,7 @@ public class Constants {
         public static final double kD = 0.2;
         public static final double snapTimeout = 0.25;
         public static final double snapEpsilon = 1.0;
-    
+
     }
 
     public static final class AutoConstants {
@@ -394,7 +394,6 @@ public class Constants {
 
     }
 
-
     public static final class MacAddressConstants {
         public static final byte[] COMP_ADDRESS = new byte[] {
                 // values are for comp -> 00:80:2f:35:b8:ca
@@ -408,34 +407,35 @@ public class Constants {
     }
 
     // public static final class VisionConstants {
-    //     public static final LimelightConstants kLimelightConstants = new LimelightConstants();
-    //     static {
-    //         kLimelightConstants.kName = "Limelight";
-    //         kLimelightConstants.kTableName = "limelight";
-    //         kLimelightConstants.kHeight = 0.79; // meters
-    //         kLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(0.0);
-    //     }
+    // public static final LimelightConstants kLimelightConstants = new
+    // LimelightConstants();
+    // static {
+    // kLimelightConstants.kName = "Limelight";
+    // kLimelightConstants.kTableName = "limelight";
+    // kLimelightConstants.kHeight = 0.79; // meters
+    // kLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(0.0);
+    // }
 
-    //     public static final double kHorizontalFOV = 59.6; // degrees
-    //     public static final double kVerticalFOV = 49.7; // degrees
-    //     public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
+    // public static final double kHorizontalFOV = 59.6; // degrees
+    // public static final double kVerticalFOV = 49.7; // degrees
+    // public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
 
-    //     // lookahead time
-    //     public static final double kLookaheadTime = 0.0; // 1.10 as latest
+    // // lookahead time
+    // public static final double kLookaheadTime = 0.0; // 1.10 as latest
 
-    //     /* Goal Tracker Constants */
-    //     public static final double kMaxTrackerDistance = 8.0;
-    //     public static final double kMaxGoalTrackAge = 10.0;
-    //     public static final double kMaxGoalTrackSmoothingTime = 1.5;
-    //     public static final double kCameraFrameRate = 90.0;
+    // /* Goal Tracker Constants */
+    // public static final double kMaxTrackerDistance = 8.0;
+    // public static final double kMaxGoalTrackAge = 10.0;
+    // public static final double kMaxGoalTrackSmoothingTime = 1.5;
+    // public static final double kCameraFrameRate = 90.0;
 
-    //     public static final double kTrackStabilityWeight = 0.0;
-    //     public static final double kTrackAgeWeight = 10.0;
-    //     public static final double kTrackSwitchingWeight = 100.0;
+    // public static final double kTrackStabilityWeight = 0.0;
+    // public static final double kTrackAgeWeight = 10.0;
+    // public static final double kTrackSwitchingWeight = 100.0;
 
-    //     public static final int kDefaultPipeline = 0;
-    //     public static final double kGoalHeight = 2.63; // meters
-    //     public static final double kGoalRadius = Units.inchesToMeters(.5); // meters
+    // public static final int kDefaultPipeline = 0;
+    // public static final double kGoalHeight = 2.63; // meters
+    // public static final double kGoalRadius = Units.inchesToMeters(.5); // meters
     // }
 
     /*** SUBSYSTEM CONSTANTS ***/
@@ -456,7 +456,7 @@ public class Constants {
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
         public static final double kSourceIntakeAngle = 71;
-        public static final double kSourceLoadShooterAngle = 39.7; //if anything, lower
+        public static final double kSourceLoadShooterAngle = 39.7; // if anything, lower
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
         public static final double kShootAgainstSubwooferAngle = 54;
@@ -464,7 +464,7 @@ public class Constants {
         public static final double kShootLoadAngle = 65;
 
         /* CLIMB CONSTANTS */
-        public static final double kClimbInitAngle = 76; // deg
+        public static final double kClimbInitAngle = 78; // deg
         public static final double kPullOntoChainAngle1 = 45;
         public static final double kPullOntoChainAngle2 = 5; // once elevator is down, goto this angle
         public static final double kExtendOffChainAngle1 = 18; // Once chain hooked go up to this angle and wait for
@@ -596,7 +596,7 @@ public class Constants {
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
-        public static final double kloadShooterInitialHeight = 0.32 - Conversions.inchesToMeters(2);
+        public static final double kloadShooterInitialHeight = 0.32; // Conversions.inchesToMeters(2);
         public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(2);
         public static final double kShootHeight = 0.26;
 
@@ -609,8 +609,8 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.24;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.43 - Conversions.inchesToMeters(3); // initial height going up
-                                                                                            // to chain
+        public static final double kClimbInitHeight = 0.32; // initial height going up
+                                                            // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
         public static final double kExtendOffChain1 = 0.18;
@@ -684,7 +684,7 @@ public class Constants {
 
     public static final class EndEffectorConstants {
         public static final double kShootRPM = 6000;
-        
+
         public static final double kP = 0.0000000006;
         public static final double kI = 0;
         public static final double kD = 0;
@@ -694,7 +694,6 @@ public class Constants {
         public static final double maxOut = 1;
         public static final double openLoopRamp = 0;
         public static final double closedLoopRamp = 0;
-
 
         public static TalonFXConfiguration endEffectorMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -732,16 +731,16 @@ public class Constants {
         }
     }
 
-    public static final class ClimberHookConstants{
-        public static final double kHookAngle = 103; //degrees
+    public static final class ClimberHookConstants {
+        public static final double kHookAngle = 108; // degrees
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
-        public static final double kGearRatio = 25;
-        
+        public static final double kGearRatio = 75;
+
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            // config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
+            // config.CurrentLimits.SupplyCurrentLimit = 5; // start off pretty low
             // config.CurrentLimits.SupplyCurrentThreshold = 20;
             // config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -750,9 +749,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 50;
-            config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 120;
+            config.MotionMagic.MotionMagicCruiseVelocity = 10;
+            config.MotionMagic.MotionMagicExpo_kA = 0.3;
+            config.MotionMagic.MotionMagicAcceleration = 20;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

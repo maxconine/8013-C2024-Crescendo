@@ -44,8 +44,8 @@ public class Superstructure extends Subsystem {
     private boolean hasNewRequest = false;
     private boolean allRequestsComplete = false;
 
-    private double pivotManualPosition = mPivot.getPivotAngleDeg();
-    private double elevatorManualPosition = mElevator.getElevatorUnits();
+    private double pivotManualPosition = mPivot.getPivotAngleDeg() + 4;
+    private double elevatorManualPosition = mElevator.getElevatorUnits() + 0.02;
     private double wristManualPosition = mWrist.getWristAngleDeg();
     private double climberHookManualPosition = mClimberHook.getAngleDeg();
     private SuperstructureState mSuperstructureState;
@@ -56,6 +56,7 @@ public class Superstructure extends Subsystem {
     private boolean outtakingTimerStarted = false;
     private int climbingTracker = -1;
     private int transfterToShooterTracker = -1;
+    private int shootingTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
     private double manualControClimbHeight = Constants.ElevatorConstants.kClimbInitHeight;
@@ -419,10 +420,9 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
 
-            if (!mShooter.getBeamBreak()){
-            transfterToShooterTracker = -1;
-            }
-            else{
+            if (!mShooter.getBeamBreak()) {
+                transfterToShooterTracker = -1;
+            } else {
                 transfterToShooterTracker = 1;
             }
             mWantsToShoot = false;
@@ -516,13 +516,13 @@ public class Superstructure extends Subsystem {
                 // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
 
             } else if (mSuperstructureState == SuperstructureState.SHOOT) {
-                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
-                mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
-                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle); // in the future
-                                                                                                     // this will adjust
-                                                                                                     // based on
-                                                                                                     // position from
-                                                                                                     // goal
+                if (shootingTracker == -1) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
+
+                }
+
             } else if (mSuperstructureState == SuperstructureState.TRANSFER_TO_SHOOTER) {
 
                 /*
@@ -602,7 +602,7 @@ public class Superstructure extends Subsystem {
 
             } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
 
-                if (mWrist.getWristAngleDeg() > 225) { //greater angle, furthur down
+                if (mWrist.getWristAngleDeg() > 225) { // greater angle, furthur down
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
 
                     mWrist.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[0]);
@@ -747,7 +747,7 @@ public class Superstructure extends Subsystem {
 
             if (mSuperstructureState != SuperstructureState.INTAKING_GROUND &&
                     mSuperstructureState != SuperstructureState.INTAKING_SOURCE
-                    && mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER 
+                    && mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER
                     && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE) {
                 if (outtake) {
                     mEndEffector.setState(State.OUTTAKING);
@@ -808,6 +808,12 @@ public class Superstructure extends Subsystem {
         }
         return new double[] { Constants.ElevatorConstants.groundIntakeWristPositions[index][1] - 10,
                 Constants.ElevatorConstants.groundIntakeWristPositions[index][2] + 1 };
+    }
+
+    public void firstAutoShot() {
+        if (mSuperstructureState != SuperstructureState.SHOOT) {
+            mSuperstructureState = SuperstructureState.SHOOT;
+        }
     }
 
     // public void updateLEDs() {

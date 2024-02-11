@@ -43,31 +43,29 @@ public class Limelight extends Subsystem {
     // distance to target
     public Optional<Double> mDistanceToTarget = Optional.empty();
 
-    //private final NetworkTableInstance instance;// = NetworkTableInstance.getDefault(); // changed networktable setup
-    //NetworkTable mNetworkTable;// = instance.getTable("Limelight_0"); // changed table name to match limelights name
+    // private final NetworkTableInstance instance;// =
+    // NetworkTableInstance.getDefault(); // changed networktable setup
+    // NetworkTable mNetworkTable;// = instance.getTable("Limelight_0"); // changed
+    // table name to match limelights name
 
     NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean mOutputsHaveChanged = true;
-    //private final NetworkTableEntry tCameraPose = mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
+    // private final NetworkTableEntry tCameraPose =
+    // mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
     private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
     private final NetworkTableEntry tTargetID = mNetworkTable.getEntry("tid");
 
-
     private Limelight() {
-
-
-
-
 
         // mNetworkTable.getEntry("tv");
 
         // mNetworkTable.getEntry("ledMode").setNumber(3);
 
         /* Aril Tag Chase */
-        //initializeAprilTagChase();
+        // initializeAprilTagChase();
     }
 
     public static Limelight getInstance() {
@@ -91,16 +89,16 @@ public class Limelight extends Subsystem {
                 final double start = Timer.getFPGATimestamp();
 
                 // synchronized (Limelight.this) {
-                //     List<TargetInfo> targetInfo = getTarget();
-                //     if (mPeriodicIO.sees_target && targetInfo != null) {
-                //         // RobotState.getInstance().addVisionUpdate(timestamp - getLatency(),
-                //         // getTarget(), Limelight.this);
-                //         updateDistanceToTarget();
-                //     }
+                // List<TargetInfo> targetInfo = getTarget();
+                // if (mPeriodicIO.sees_target && targetInfo != null) {
+                // // RobotState.getInstance().addVisionUpdate(timestamp - getLatency(),
+                // // getTarget(), Limelight.this);
+                // updateDistanceToTarget();
+                // }
                 // }
 
                 // if (mPeriodicIO.wantsChaseMode) {
-                //     aprilTagChasePeriodic();
+                // aprilTagChasePeriodic();
                 // }
 
                 // send log data
@@ -163,8 +161,6 @@ public class Limelight extends Subsystem {
         public double latencyTimestamp;
     }
 
-
-
     public synchronized List<TargetInfo> getTarget() {
         List<TargetInfo> targets = new ArrayList<TargetInfo>(); // getRawTargetInfos();
         targets.add(new TargetInfo(Math.tan(Math.toRadians(-mPeriodicIO.xOffset)),
@@ -186,8 +182,6 @@ public class Limelight extends Subsystem {
         yController.setTolerance(0.2);
         omegaController.setTolerance(Units.degreesToRadians(0.2));
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        
 
         // lastTarget = null;
         robotPose = new Pose3d(
@@ -276,13 +270,13 @@ public class Limelight extends Subsystem {
     }
 
     // public void updatePoseWithLimelight() {
-    //     if (mPeriodicIO.sees_target) {
-    //         mSwerve.addVisionMeasurement(
-    //                 new Pose2d(new Translation2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey),
-    //                         edu.wpi.first.math.geometry.Rotation2d.fromDegrees(mPeriodicIO.botPoseYaw)),
-    //                 mPeriodicIO.latencyTimestamp);
+    // if (mPeriodicIO.sees_target) {
+    // mSwerve.addVisionMeasurement(
+    // new Pose2d(new Translation2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey),
+    // edu.wpi.first.math.geometry.Rotation2d.fromDegrees(mPeriodicIO.botPoseYaw)),
+    // mPeriodicIO.latencyTimestamp);
 
-    //     }
+    // }
     // }
 
     public Pose2d robotPose2dInField() {
@@ -295,44 +289,44 @@ public class Limelight extends Subsystem {
     }
 
     // public double getLensHeight() {
-    //     return mConstants.kHeight;
+    // return mConstants.kHeight;
     // }
 
     // public Rotation2d getHorizontalPlaneToLens() {
-    //     return mConstants.kHorizontalPlaneToLens;
+    // return mConstants.kHorizontalPlaneToLens;
     // }
 
     public Optional<Double> getLimelightDistanceToTarget() {
         return mDistanceToTarget;
     }
 
-    public double getPivotShootingAngle(){
-        
-        double pivAngle = Math.pow((-0.105*(mPeriodicIO.tanLineToSpeaker))+2.404,4.87);
-        //double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker + 0.95*Math.pow(mPeriodicIO.tanLineToSpeaker, 2);
+    public double getPivotShootingAngle() {
+
+        double pivAngle = Math.pow((-0.105 * (mPeriodicIO.tanLineToSpeaker)) + 2.404, 4.87);
+        // double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker +
+        // 0.95*Math.pow(mPeriodicIO.tanLineToSpeaker, 2);
         SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
 
-        if (pivAngle>Constants.PivotConstants.kMaxAngle){
+        if (pivAngle > Constants.PivotConstants.kMaxAngle) {
             pivAngle = Constants.PivotConstants.kMaxAngle;
-        }
-        else if (pivAngle<Constants.PivotConstants.kMinAngle){
+        } else if (pivAngle < Constants.PivotConstants.kMinAngle) {
             pivAngle = Constants.PivotConstants.kMinAngle;
         }
 
         return pivAngle + 3;
     }
 
-    /**returns the degrees the robot should snap to */
-    public double getTargetSnap(){
+    /** returns the degrees the robot should snap to */
+    public double getTargetSnap() {
         double degreesToSnap = 0;
-        if ((mPeriodicIO.botPosey-2.61)<0){
-            degreesToSnap = -90- (Math.atan(mPeriodicIO.botPosex/Math.abs(mPeriodicIO.botPosey-2.61))*(180/Math.PI));
+        if ((mPeriodicIO.botPosey - 2.61) < 0) {
+            degreesToSnap = -90
+                    - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
+        } else {
+            degreesToSnap = 90
+                    + (Math.atan(Math.abs(mPeriodicIO.botPosex / mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
         }
-        else{
-            degreesToSnap = 90+ (Math.atan(Math.abs(mPeriodicIO.botPosex/mPeriodicIO.botPosey-2.61))*(180/Math.PI));
-        }
-        //  = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
-
+        // = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
 
         SmartDashboard.putNumber("degrees to snap to", degreesToSnap);
         return degreesToSnap;
@@ -347,7 +341,6 @@ public class Limelight extends Subsystem {
                         .getEntry("tl").getDouble(0) / 1000.0);
         mPeriodicIO.givenLedMode = (int) mNetworkTable.getEntry("ledMode").getDouble(1.0);
         mPeriodicIO.givenPipeline = (int) mNetworkTable.getEntry("pipeline").getDouble(0);
-
 
         if (latency == mPeriodicIO.latency) {
             mLatencyCounter++;
@@ -394,7 +387,8 @@ public class Limelight extends Subsystem {
 
         // double[] robotPose3d = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-        mPeriodicIO.tanLineToSpeaker = Math.sqrt(mPeriodicIO.botPosex*mPeriodicIO.botPosex+Math.pow(mPeriodicIO.botPosey-2.61, 2));
+        mPeriodicIO.tanLineToSpeaker = Math
+                .sqrt(mPeriodicIO.botPosex * mPeriodicIO.botPosex + Math.pow(mPeriodicIO.botPosey - 2.61, 2));
     }
 
     @Override
@@ -414,7 +408,7 @@ public class Limelight extends Subsystem {
         }
 
     }
-    
+
     @Override
     public void outputTelemetry() {
         SmartDashboard.putBoolean("Limelight Ok (Has Comms)", mPeriodicIO.has_comms);
@@ -422,7 +416,7 @@ public class Limelight extends Subsystem {
         SmartDashboard.putNumber("Limelight dt", mPeriodicIO.dt);
 
         SmartDashboard.putBoolean("Limelight Has Target", mPeriodicIO.sees_target);
-         SmartDashboard.putNumber("Limelight tag ID In view", mPeriodicIO.tagInView);
+        SmartDashboard.putNumber("Limelight tag ID In view", mPeriodicIO.tagInView);
         // SmartDashboard.putNumber("Limelight Tx: ", mPeriodicIO.xOffset);
         // SmartDashboard.putNumber("Limelight Ty: ", mPeriodicIO.yOffset);
 
@@ -455,7 +449,6 @@ public class Limelight extends Subsystem {
         return true;
     }
 
-
     public enum LedMode {
         PIPELINE, OFF, BLINK, ON
     }
@@ -468,12 +461,12 @@ public class Limelight extends Subsystem {
     }
 
     // public synchronized void setPipeline(int mode) {
-    //     if (mode != mPeriodicIO.pipeline) {
-    //         mPeriodicIO.pipeline = mode;
+    // if (mode != mPeriodicIO.pipeline) {
+    // mPeriodicIO.pipeline = mode;
 
-    //         System.out.println(mPeriodicIO.pipeline + ", " + mode);
-    //         mOutputsHaveChanged = true;
-    //     }
+    // System.out.println(mPeriodicIO.pipeline + ", " + mode);
+    // mOutputsHaveChanged = true;
+    // }
     // }
 
     public synchronized void triggerOutputs() {
@@ -519,6 +512,5 @@ public class Limelight extends Subsystem {
     public double[] getOffset() {
         return new double[] { mPeriodicIO.xOffset, mPeriodicIO.yOffset };
     }
-
 
 }
