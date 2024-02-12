@@ -189,7 +189,7 @@ public class Elevator extends Subsystem {
         if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position < 0) {
             mHoming = false;
             zeroSensors();
-            setSetpointMotionMagic(0.05);
+            setSetpointMotionMagic(0.01);
         }
 
         if (mHoming) { // sets it moving backward until velocity slows down
@@ -198,7 +198,7 @@ public class Elevator extends Subsystem {
                     Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { // is this motor velocity or elevator
                                                                            // velocity
                 zeroSensors();
-                setSetpointMotionMagic(0.05);
+                setSetpointMotionMagic(0.01);
                 mHoming = false;
             }
         } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {

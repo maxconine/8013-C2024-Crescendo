@@ -301,8 +301,14 @@ public class Limelight extends Subsystem {
     }
 
     public double getPivotShootingAngle() {
+        //Right now we can use this to decide if we are shooting at the subwoofer or podium
+        double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
-        double pivAngle = Math.pow((-0.105 * (mPeriodicIO.tanLineToSpeaker)) + 2.404, 4.87);
+        if (mPeriodicIO.tanLineToSpeaker>1.8){
+            pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
+        }
+
+        //double pivAngle = Math.pow((-0.105 * (mPeriodicIO.tanLineToSpeaker)) + 2.404, 4.87);
         // double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker +
         // 0.95*Math.pow(mPeriodicIO.tanLineToSpeaker, 2);
         SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
@@ -313,21 +319,28 @@ public class Limelight extends Subsystem {
             pivAngle = Constants.PivotConstants.kMinAngle;
         }
 
-        return pivAngle + 3;
+        return pivAngle;
     }
 
     /** returns the degrees the robot should snap to */
     public double getTargetSnap() {
-        double degreesToSnap = 0;
-        if ((mPeriodicIO.botPosey - 2.61) < 0) {
-            degreesToSnap = -90
-                    - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
-        } else {
-            degreesToSnap = 90
-                    + (Math.atan(Math.abs(mPeriodicIO.botPosex / mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
+        double degreesToSnap = 180;
+        if (mPeriodicIO.sees_target){
+                    if (mPeriodicIO.tanLineToSpeaker>1.8){
+            degreesToSnap = 158;
         }
+
+        // if ((mPeriodicIO.botPosey - 2.61) < 0) {
+        //     degreesToSnap = -90
+        //             - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
+        // } else {
+        //     degreesToSnap = 90
+        //             + (Math.atan(Math.abs(mPeriodicIO.botPosex / mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
+        // }
         // = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
 
+        //-162
+    }
         SmartDashboard.putNumber("degrees to snap to", degreesToSnap);
         return degreesToSnap;
     }

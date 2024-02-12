@@ -442,7 +442,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5; // -5 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5 - 0.72; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -459,18 +459,27 @@ public class Constants {
         public static final double kSourceLoadShooterAngle = 39.7; // if anything, lower
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
+
         public static final double kShootAgainstSubwooferAngle = 54;
+        public static final double kShootAgainstPodiumAngle = 38.5;
 
         public static final double kShootLoadAngle = 65;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle = 78; // deg
-        public static final double kPullOntoChainAngle1 = 45;
-        public static final double kPullOntoChainAngle2 = 5; // once elevator is down, goto this angle
-        public static final double kExtendOffChainAngle1 = 18; // Once chain hooked go up to this angle and wait for
-                                                               // release
-        public static final double kExtendOffChainAngle2 = 24; // Angle before abrupt flip over to trap
-        public static final double kExtendToScoreTrapAngle = 100; // angle when pressed up against trap wall
+        public static final double kPullOntoChainAngle1 = 20;
+        public static final double kPullOntoChainAngle2 = 8.5; // once elevator is down, goto this angle
+        public static final double kExtendOffChainAngle1 = 16.8; // Once chain hooked go up to this angle and wait for
+                                                                 // release
+        public static final double kExtendOffChainAngle2 = 32; // Angle before abrupt flip over to trap
+        public static final double kExtendToScoreTrapAngle1 = 67; // angle when pressed up against trap wall
+        public static final double kExtendToScoreTrapAngle2 = 97; // angle when pressed up against trap wall
+
+        /* CLIMB DOWN CONSTANTS */
+        public static final double kDeclimbAngle1 = 50.7;
+        public static final double kDeclimbAngle2 = 31.7;
+        public static final double kDeclimbAngle3 = 8.5;
+        public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
         public static final double kIntakeAcceleration = 80;
@@ -495,9 +504,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 70;
+            config.MotionMagic.MotionMagicCruiseVelocity = 150;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 100;
+            config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -523,6 +532,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 40;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
             return config;
         }
@@ -545,8 +555,8 @@ public class Constants {
         public static final double kShootAngle = 118.8;
 
         public static final double kClimbAngle1 = 140;
-        public static final double kClimbAngle2 = 190;
-        public static final double kClimbAngle3 = 185;
+        public static final double kClimbAngle2 = 165;
+        // public static final double kClimbAngle3 = 165;
         public static final double kClimbScoreInTrapAngle = 155; // ~200?
 
         public static final double kIntakeCruiseVelocity = 50;
@@ -613,10 +623,16 @@ public class Constants {
                                                             // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
-        public static final double kExtendOffChain1 = 0.18;
-        public static final double kExtendOffChain2 = 0.24;
-        public static final double kExtendOffChain3 = 0.43;
-        public static final double kExtendToScoreTrapHeight = 0.43; // height of the elvator when scoring in the trap
+        public static final double kExtendOffChain1 = 0.054;
+        public static final double kExtendOffChain2 = 0.126;
+        public static final double kExtendOffChain3 = 0.26;
+        public static final double kExtendToScoreTrapHeight = 0.447; // height of the elvator when scoring in the trap
+
+        /* De Climb */
+        public static final double kDeclimbHeight1 = 0.267;
+        public static final double kDeclimbHeight2 = 0.01;
+        public static final double kDeclimbHeight3 = 0.01;
+        public static final double kDeclimbHeight4 = 0.32;
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -630,9 +646,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 180;
+            config.MotionMagic.MotionMagicCruiseVelocity = 140;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 200;
+            config.MotionMagic.MotionMagicAcceleration = 250;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -733,25 +749,26 @@ public class Constants {
 
     public static final class ClimberHookConstants {
         public static final double kHookAngle = 108; // degrees
+        public static final double kUnhookAngle = 25;
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
         public static final double kGearRatio = 75;
 
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            // config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            // config.CurrentLimits.SupplyCurrentLimit = 5; // start off pretty low
-            // config.CurrentLimits.SupplyCurrentThreshold = 20;
-            // config.CurrentLimits.SupplyTimeThreshold = 0.1;
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 10; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
             config.Slot0.kP = 0.6;
             config.Slot0.kI = 0.0;
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 10;
+            config.MotionMagic.MotionMagicCruiseVelocity = 80;
             config.MotionMagic.MotionMagicExpo_kA = 0.3;
-            config.MotionMagic.MotionMagicAcceleration = 20;
+            config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

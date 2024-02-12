@@ -325,12 +325,12 @@ public class Robot extends TimedRobot {
 
 				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
 					mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
-					//mClimberHook.setDemandOpenLoop(0.2);
+					// mClimberHook.setDemandOpenLoop(0.2);
 					// mSuperstructure.controlClimberHookManually(1);
 					// mElevator.setSetpointMotionMagic(0.4);
 				}
 				if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
-					//mClimberHook.setDemandOpenLoop(0.0);
+					// mClimberHook.setDemandOpenLoop(0.0);
 					mClimberHook.setSetpointMotionMagic(25);
 					// mElevator.setSetpointMotionMagic(0.00);
 				}
@@ -391,7 +391,7 @@ public class Robot extends TimedRobot {
 				 * Do more climbing tests
 				 * 
 				 */
-				if (!mSuperstructure.inClimbMode()) {
+				if ((!mSuperstructure.inClimbMode()) && (!mSuperstructure.isDeclimbing())) {
 					if (mControlBoard.operator.getTrigger(Side.LEFT)) {
 						mSuperstructure.setSuperstuctureScoreAmp();
 					} else if (mControlBoard.operator.getController().getPOV() == kDpadDown) {
@@ -410,12 +410,26 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					}
 
-				} else {
+				}
+				if (mSuperstructure.inClimbMode()) {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
 						mSuperstructure.setClimbModeStage2();
 					}
 					if (mControlBoard.operator.getButton(Button.A)) {
 						mSuperstructure.setClimbModeStage3();
+					}
+					if (mSuperstructure.climbFinished() && mControlBoard.operator.getButton(Button.START)
+							&& mControlBoard.operator.getButton(Button.BACK)) {
+						mSuperstructure.setSuperstuctureDeclimb();
+					}
+				}
+
+				if (mSuperstructure.isDeclimbing()) {
+					if (mControlBoard.operator.getButton(Button.X)) {
+						mSuperstructure.setDeClimbUnhook();
+					}
+					if (mControlBoard.operator.getButton(Button.Y)) {
+						mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
 					}
 				}
 
