@@ -601,7 +601,7 @@ public class Superstructure extends Subsystem {
                 if (mShooter.getBeamBreak() && transfterToShooterTracker == 1) {
                     mShooter.setOpenLoopDemand(-0.005);
                     //mEndEffector.setOpenLoopDemand(0.95); //HERE DO RPM
-                    mEndEffector.setEndEffectorVelocity(2000);
+                    mEndEffector.setEndEffectorVelocity(6000);
 
                     transfterToShooterTracker = 2;
                 }
