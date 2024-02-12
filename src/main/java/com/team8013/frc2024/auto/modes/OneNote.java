@@ -7,6 +7,7 @@ import com.team8013.frc2024.auto.AutoModeEndedException;
 import com.team8013.frc2024.auto.AutoTrajectoryReader;
 import com.team8013.frc2024.auto.actions.LambdaAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
+import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.WaitForSuperstructureAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
@@ -29,7 +30,7 @@ public class OneNote extends AutoModeBase {
 
     public OneNote() {
         mSuperstructure = Superstructure.getInstance();
-        
+
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
                 Constants.AutoConstants.createConfig(2.0, 10.0, 0.0, 0.0));
@@ -43,13 +44,14 @@ public class OneNote extends AutoModeBase {
 
         System.out.println("Running 1 note auto");
         mSuperstructure.firstAutoShot();
+        runAction(new WaitAction(1.5));
+        runAction(driveToFirstNote);
+        mSuperstructure.setSuperstuctureIntakingGround();
 
         // mSuperstructure.stowState();
         // runAction(new WaitForSuperstructureAction());
         // System.out.println("Finished waiting for stow");
         // mSuperstructure.scoreL3State();
-
-        runAction(driveToFirstNote);
 
     }
 

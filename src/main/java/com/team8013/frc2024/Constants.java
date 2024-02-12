@@ -456,7 +456,7 @@ public class Constants {
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
         public static final double kSourceIntakeAngle = 71;
-        public static final double kSourceLoadShooterAngle = 39.7; // if anything, lower
+        public static final double kSourceLoadShooterAngle = 40; // if anything, lower
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
@@ -616,7 +616,7 @@ public class Constants {
 
         public static final double kFloorIntakeHeight = 0.28;
         public static final double kSourceIntakeHeight = 0.064;
-        public static final double kSourceLoadShooterHeight = 0.24;
+        public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
         public static final double kClimbInitHeight = 0.32; // initial height going up
@@ -699,9 +699,9 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        public static final double kShootRPM = 6000;
+        //public static final double kShootRPM = 2000;
 
-        public static final double kP = 0.0000000006;
+        public static final double kP = 0.1;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double Ff = 0;
@@ -748,7 +748,8 @@ public class Constants {
     }
 
     public static final class ClimberHookConstants {
-        public static final double kHookAngle = 108; // degrees
+        public static final double kHookAngle = 90; // degrees
+        public static final double kDeclimb1Angle = 90;
         public static final double kUnhookAngle = 25;
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;

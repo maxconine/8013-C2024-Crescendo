@@ -142,6 +142,10 @@ public class ControlBoard {
         return m_driver.getRawAxis(4)<-0.25;//m_driver.getRawButton(1);
     }
 
+    public boolean allignWithHumanPlayer(){
+        return (m_driver.getRawAxis(6)<-0.3);
+    }
+
     public double pivotPercentOutput(){
         return operator.getAxis(Side.LEFT, Axis.Y);
     }

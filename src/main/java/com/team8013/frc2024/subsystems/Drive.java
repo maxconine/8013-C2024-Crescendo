@@ -431,6 +431,7 @@ public class Drive extends Subsystem {
         // smoothed_pitch_velocity.getAverage());
         SmartDashboard.putString("drive control state", mControlState.toString());
         SmartDashboard.putNumber("Drive X Velocity", getMeasuredXVelocity());
+        SmartDashboard.putNumber("ROBOT HEADING", getHeading().getDegrees());
     }
 
     @Log

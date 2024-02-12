@@ -14,7 +14,6 @@ public abstract class AutoModeBase {
     protected double m_update_rate = 1.0 / 50.0;
     protected boolean m_active = false;
 
-
     protected double startTime = 0.0;
 
     protected double currentTime() {
