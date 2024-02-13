@@ -412,6 +412,9 @@ public class Robot extends TimedRobot {
 					} else if (mControlBoard.operator.getButton(Button.RB)) {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					}
+					
+					mSuperstructure.setSuperstuctureShoot(mControlBoard.operator.getButton(Button.B));
+					
 
 				}
 				if (mSuperstructure.inClimbMode()) {

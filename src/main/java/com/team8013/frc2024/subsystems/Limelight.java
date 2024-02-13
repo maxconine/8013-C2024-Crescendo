@@ -304,7 +304,7 @@ public class Limelight extends Subsystem {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
-        if (mPeriodicIO.tanLineToSpeaker>1.8){
+        if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
             pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
         }
 
@@ -322,12 +322,20 @@ public class Limelight extends Subsystem {
         return pivAngle;
     }
 
+    public double getEndEffectorVelocity(){
+        double kShootVelocity = 6600;
+        if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
+            kShootVelocity = 6500;
+        }
+        return kShootVelocity;
+    }
+
     /** returns the degrees the robot should snap to */
     public double getTargetSnap() {
         double degreesToSnap = 180;
         if (mPeriodicIO.sees_target){
                     if (mPeriodicIO.tanLineToSpeaker>1.8){
-            degreesToSnap = 158;
+            degreesToSnap = 163;
         }
 
         // if ((mPeriodicIO.botPosey - 2.61) < 0) {

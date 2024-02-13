@@ -10,7 +10,8 @@ import com.team8013.frc2024.auto.modes.*;
 public class AutoModeSelector {
     public enum DesiredMode {
         DO_NOTHING,
-        ONE_NOTE
+        ONE_NOTE,
+        TWO_LEFT
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -22,6 +23,7 @@ public class AutoModeSelector {
     public AutoModeSelector() {
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
         mModeChooser.setDefaultOption("One Note", DesiredMode.ONE_NOTE);
+        mModeChooser.setDefaultOption("Two Left", DesiredMode.TWO_LEFT);
         SmartDashboard.putData("Auto Mode", mModeChooser);
     }
 
@@ -43,6 +45,8 @@ public class AutoModeSelector {
                 return Optional.of(new DoNothingMode());
             case ONE_NOTE:
                 return Optional.of(new OneNote());
+            case TWO_LEFT:
+                return Optional.of(new TwoLeft());
 
             default:
                 System.out.println("ERROR: unexpected auto mode: " + mode);

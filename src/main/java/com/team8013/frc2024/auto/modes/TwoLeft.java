@@ -12,7 +12,6 @@ import com.team8013.frc2024.auto.actions.ParallelAction;
 import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
-import com.team8013.frc2024.auto.actions.WaitForSuperstructureAction;
 import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
@@ -22,23 +21,23 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class OneNote extends AutoModeBase {
+public class TwoLeft extends AutoModeBase {
 
     private Superstructure mSuperstructure;
 
     // required PathWeaver trajectory paths
-    String path = "paths/2024Paths/driveToFirstNote.path";
+    String path = "paths/2024Paths/DriveToStageNote.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;
     final Trajectory drive_to_first_note_path;
 
-    public OneNote() {
+    public TwoLeft() {
         mSuperstructure = Superstructure.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
-                Constants.AutoConstants.createConfig(1.5, 4.0, 0.0, 0.0));
+                Constants.AutoConstants.createConfig(0.5, 2.0, 0.0, 0.0));
         driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(170.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }
@@ -50,17 +49,12 @@ public class OneNote extends AutoModeBase {
         System.out.println("Running 1 note auto");
         mSuperstructure.firstAutoShot();
         runAction(new WaitAction(1.5));
-        runAction(driveToFirstNote);
+        // runAction(driveToFirstNote);
 
-        // runAction(new ParallelAction(List.of(
-        //         driveToFirstNote,
-        //         new SeriesAction(List.of(
-        //                 new WaitToPassXCoordinateAction(4.0),
-        //                 new LambdaAction(() -> Drive.getInstance()
-        //                         .setAutoHeading(Rotation2d.fromDegrees(0.0))))),
-        //         new SeriesAction(List.of(
-        //                 new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
-        //                 new WaitToPassXCoordinateAction(4.0))))));
+        runAction(new ParallelAction(List.of(
+                driveToFirstNote,
+                new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(-170))))));
 
         // mSuperstructure.setSuperstuctureIntakingGround();
 

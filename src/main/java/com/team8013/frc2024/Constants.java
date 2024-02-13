@@ -210,8 +210,8 @@ public class Constants {
         /*** MODULE SPECIFIC CONSTANTS ***/
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final double betaAngleOffset = 40.95;
-            public static final double compAngleOffset = 40.95;
+            public static final double betaAngleOffset = 40.2;
+            public static final double compAngleOffset = 40.2;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
@@ -221,8 +221,8 @@ public class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final double betaAngleOffset = 170.59;
-            public static final double compAngleOffset = 170.59;
+            public static final double betaAngleOffset = 170.94;
+            public static final double compAngleOffset = 170.94;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
@@ -232,8 +232,8 @@ public class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final double betaAngleOffset = 182.02;
-            public static final double compAngleOffset = 182.02;
+            public static final double betaAngleOffset = 182.28;
+            public static final double compAngleOffset = 182.28;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
@@ -312,9 +312,9 @@ public class Constants {
     }
 
     public static final class SnapConstants {
-        public static final double kP = 6.0;
-        public static final double kI = 0.5;
-        public static final double kD = 0.2;
+        public static final double kP = 6.0; //was 6
+        public static final double kI = 0.5; //was .5
+        public static final double kD = 0.2; //was .2
         public static final double snapTimeout = 0.25;
         public static final double snapEpsilon = 1.0;
 
@@ -328,7 +328,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 2.0;
+        public static final double kPThetaController = 2; //was 2
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;
@@ -442,7 +442,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5 - 0.72; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -607,7 +607,7 @@ public class Constants {
 
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32; // Conversions.inchesToMeters(2);
-        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(2);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5);
         public static final double kShootHeight = 0.26;
 
         /* INTAKING */
@@ -701,10 +701,10 @@ public class Constants {
     public static final class EndEffectorConstants {
         //public static final double kShootRPM = 2000;
 
-        public static final double kP = .0001;
-        public static final double kPSlave = 0.00010175;
+        public static final double kP = .0000985;
+        public static final double kPSlave = 0.000100;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.0000;
         public static final double Ff = 0;
         public static final double Izone = 0.01;
         public static final double minOut = -1;
