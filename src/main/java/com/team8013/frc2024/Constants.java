@@ -1,6 +1,7 @@
 package com.team8013.frc2024;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -84,7 +85,7 @@ public class Constants {
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = 5.3; // TODO: This needs to be done // 6.525 * 8.215 / 8; // 6.55
+        public static final double driveGearRatio = ((5.3 / 1.07)/1.04); // TODO: This needs to be done // 6.525 * 8.215 / 8; // 6.55
         public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
 
         // 43.75 - number to divide driven distance by
@@ -251,6 +252,11 @@ public class Constants {
                         isComp ? compAngleOffset : betaAngleOffset);
             }
         }
+
+        // public static Pigeon2Configuration pigeonConfig(){
+        //     Pigeon2Configuration config = new Pigeon2Configuration();
+            
+        // }
 
         public static TalonFXConfiguration swerveDriveFXConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -606,8 +612,8 @@ public class Constants {
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
-        public static final double kloadShooterInitialHeight = 0.32; // Conversions.inchesToMeters(2);
-        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5);
+        public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(6);
         public static final double kShootHeight = 0.26;
 
         /* INTAKING */
@@ -647,8 +653,8 @@ public class Constants {
             config.Slot0.kV = 0.0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 140;
-            config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 250;
+            config.MotionMagic.MotionMagicExpo_kA = 0.3;
+            config.MotionMagic.MotionMagicAcceleration = 300;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

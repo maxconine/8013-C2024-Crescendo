@@ -37,7 +37,7 @@ public class SwerveDriveOdometry {
 	 * @param initialPose     The starting position of the robot on the field.
 	 */
 	public SwerveDriveOdometry(
-		SwerveDriveKinematics kinematics, SwerveModulePosition[] modulePositions, Pose2d initialPose) {
+			SwerveDriveKinematics kinematics, SwerveModulePosition[] modulePositions, Pose2d initialPose) {
 		m_kinematics = kinematics;
 		m_poseMeters = initialPose;
 		m_previousAngle = initialPose.getRotation();
@@ -86,8 +86,9 @@ public class SwerveDriveOdometry {
 	 *
 	 * @return The pose of the robot (x and y are in meters).
 	 */
-	public Pose2d getPoseMeters() {
-		return m_poseMeters;
+	public Pose2d getPoseMeters() { // I CHANGED THIS
+		Pose2d newPose = new Pose2d(m_poseMeters.getTranslation(), Rotation2d.fromDegrees(m_poseMeters.getRotation().getDegrees()));
+		return newPose;
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class SwerveDriveOdometry {
 		var newPose = m_poseMeters.exp(twist);
 
 		m_previousAngle = gyroAngle;
-		m_poseMeters = new Pose2d(newPose.getTranslation(), gyroAngle);
+		m_poseMeters = new Pose2d(newPose.getTranslation(), gyroAngle.unaryMinus()); //I CHANGED THIS
 
 		return m_poseMeters;
 	}

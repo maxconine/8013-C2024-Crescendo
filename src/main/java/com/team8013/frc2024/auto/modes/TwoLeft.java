@@ -38,7 +38,7 @@ public class TwoLeft extends AutoModeBase {
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
                 Constants.AutoConstants.createConfig(0.5, 2.0, 0.0, 0.0));
-        driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(170.0));
+        driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }
 
@@ -49,12 +49,14 @@ public class TwoLeft extends AutoModeBase {
         System.out.println("Running 1 note auto");
         mSuperstructure.firstAutoShot();
         runAction(new WaitAction(1.5));
-        // runAction(driveToFirstNote);
-
-        runAction(new ParallelAction(List.of(
-                driveToFirstNote,
-                new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(-170))))));
+        runAction(driveToFirstNote);
+        runAction(new WaitAction(1));
+        runAction(new LambdaAction(() -> Drive.getInstance().setAutoHeading(Rotation2d.fromDegrees(0))));
+        mSuperstructure.setSuperstuctureIntakingGround();
+        // runAction(new ParallelAction(List.of(
+        //         driveToFirstNote,
+        //         new LambdaAction(() -> Drive.getInstance()
+        //                         .setAutoHeading(Rotation2d.fromDegrees(0))))));
 
         // mSuperstructure.setSuperstuctureIntakingGround();
 

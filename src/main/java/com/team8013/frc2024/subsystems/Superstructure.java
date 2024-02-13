@@ -330,6 +330,10 @@ public class Superstructure extends Subsystem {
             return false;
     }
 
+    public void resetForAuto(){
+        firstAutoShotTracker = -1;
+    }
+
     public void controlPivotManually(double demand) {
         // double position = mPivot.getPivotAngleDeg();
         if (demand > 0.3) {
@@ -569,19 +573,19 @@ public class Superstructure extends Subsystem {
                  */
 
                 if (transfterToShooterTracker == -1) {
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 2);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle+2);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle-15);
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
                     transfterToShooterTracker = 0;
                 }
 
                 if ((transfterToShooterTracker == 0)
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
-                                - Constants.ElevatorConstants.kPositionError)
-                        && mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 10) {
+                                - Constants.ElevatorConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle+0.5);
+                    //mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
 
                     transfterToShooterTracker = 1;
                 }
@@ -679,9 +683,9 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setOpenLoopDemand(0.26);
+                    mEndEffector.setEndEffectorVelocity(3018);
                 } else if (mEndEffector.hasGamePiece()) {
-                    mEndEffector.setOpenLoopDemand(0);
+                    mEndEffector.setEndEffectorVelocity(0);;
                     // Once game piece aquired, then stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }

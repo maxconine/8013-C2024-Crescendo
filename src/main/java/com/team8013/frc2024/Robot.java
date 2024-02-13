@@ -221,6 +221,7 @@ public class Robot extends TimedRobot {
 			// mLoggingLooper.start();
 
 			mDrive.setNeutralBrake(true);
+			mSuperstructure.resetForAuto();
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);

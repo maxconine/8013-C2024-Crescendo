@@ -1,11 +1,11 @@
 package com.team8013.lib.drivers;
 
-import javax.sound.sampled.Port;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
+import com.team8013.lib.Util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -39,7 +39,7 @@ public class Pigeon {
         if (inverted) {
             return angle.unaryMinus();
         }
-        return angle;
+        return Rotation2d.fromDegrees(Util.placeIn0To360Scope(angle.getDegrees()));
     }
 
     public Rotation2d getRoll() {
@@ -68,25 +68,15 @@ public class Pigeon {
         rollAdjustmentAngle = getUnadjustedRoll().rotateBy(Rotation2d.fromDegrees(angleDeg).unaryMinus());
     }
 
-        /**
-     * Sets the yaw register to read the specified value.
+    /**
+     * Sets the roll register to read the specified value.
      *
      * @param angleDeg New yaw in degrees
      */
+
     public void setPitch(double angleDeg) {
         pitchAdjustmentAngle = getUnadjustedPitch().rotateBy(Rotation2d.fromDegrees(angleDeg).unaryMinus());
     }
-
-    // /**
-    //  * Sets the roll register to read the specified value.
-    //  *
-    //  * @param angleDeg New yaw in degrees
-    //  */
-    // public void setPitch(double angleDeg) {
-    //     mGyro.getYawPitchRoll(new double[]{mGyro.getYaw(), mGyro.getPitch(), angleDeg});
-    //     pitchAdjustmentAngle = getUnadjustedPitch().rotateBy(Rotation2d.fromDegrees(angleDeg).unaryMinus());
-    //     System.out.println("Reset gyro to " + getPitch().getDegrees());
-    // }
 
     public Rotation2d getUnadjustedYaw() {
         return Rotation2d.fromDegrees(mGyro.getYaw().getValue());
