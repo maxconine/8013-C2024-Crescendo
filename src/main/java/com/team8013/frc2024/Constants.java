@@ -448,7 +448,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5+0.5; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -467,7 +467,7 @@ public class Constants {
         public static final double kAmpScoreAngle = 88;
 
         public static final double kShootAgainstSubwooferAngle = 54;
-        public static final double kShootAgainstPodiumAngle = 38.5;
+        public static final double kShootAgainstPodiumAngle = 40;
 
         public static final double kShootLoadAngle = 65;
 
@@ -546,7 +546,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 86.3 + 4; // +4 so it never gets there
+        public static final double CANCODER_OFFSET = 86.3+58+4; // +4 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
