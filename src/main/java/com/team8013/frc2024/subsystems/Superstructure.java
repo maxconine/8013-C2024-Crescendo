@@ -58,7 +58,7 @@ public class Superstructure extends Subsystem {
     private int transfterToShooterTracker = -1;
     private int shootingTracker = -1;
     private int deClimbTracker = -1;
-    private int firstAutoShotTracker = -1;
+    private int autoShotTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
     private boolean climbFinished = false;
@@ -66,6 +66,7 @@ public class Superstructure extends Subsystem {
     private boolean decClimbWantsElevatorDown = false;
     private double manualControClimbHeight = Constants.ElevatorConstants.kClimbInitHeight;
     private boolean mWantsToShoot = false;
+    private boolean autoShot = false;
     private boolean bringElevatorIntoLoad = false;
     private Timer shootingTimer = new Timer();
     private Timer autoShootingTimer = new Timer();
@@ -331,7 +332,7 @@ public class Superstructure extends Subsystem {
     }
 
     public void resetForAuto(){
-        firstAutoShotTracker = -1;
+        autoShotTracker = -1;
     }
 
     public void controlPivotManually(double demand) {
@@ -920,6 +921,19 @@ public class Superstructure extends Subsystem {
         // SmartDashboard.putString("Superstructure State",
         // mSuperstructureState.toString());
 
+        if (autoShot && autoShotTracker == -1){
+            setSuperstuctureTransferToShooter();
+            autoShotTracker = 0;
+        }
+
+        if (mEndEffector.getVelocity() > 4500 && autoShotTracker == 0){
+                setSuperstuctureShoot(true);
+                autoShotTracker = 1;
+                autoShot = false;
+        }
+
+        
+
     }
 
     private double[] getPositionsGroundIntakeOut(double elevatorPosition) {
@@ -961,19 +975,9 @@ public class Superstructure extends Subsystem {
                 Constants.ElevatorConstants.groundIntakeWristPositions[index][2] + 1 };
     }
 
-    public void firstAutoShot() {
-        if (firstAutoShotTracker == -1){
-        setSuperstuctureTransferToShooter();
-        setSuperstuctureShoot(true);
-        firstAutoShotTracker = 0;
-        }
-
-        if (mEndEffector.getVelocity() < -4500){
-                // && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kShootAgainstSubwooferAngle - 3
-                // && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
-                //         - Constants.ElevatorConstants.kPositionError) {
-            
-        }
+    public void autoShot() {
+        autoShot = true;
+        autoShotTracker = -1;
     }
 
         // if (firstAutoShotTracker == -1) {

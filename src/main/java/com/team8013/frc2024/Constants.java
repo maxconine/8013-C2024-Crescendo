@@ -90,12 +90,20 @@ public class Constants {
 
         // 43.75 - number to divide driven distance by
 
+        // public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
+        //         new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+        //         new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+        //         new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
+        //         new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+        // };
+        
         public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
-                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+                new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
                 new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-                new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+                new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0)
         };
+        
 
         public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(swerveModuleLocations);
 
@@ -158,7 +166,7 @@ public class Constants {
 
         /* Controller Invert */
         public static final boolean invertYAxis = false;
-        public static final boolean invertRAxis = true;
+        public static final boolean invertRAxis = false;
         public static final boolean invertXAxis = true;
 
         public static final KinematicLimits kUncappedLimits = new KinematicLimits();
@@ -334,7 +342,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 2; //was 2
+        public static final double kPThetaController = 4; //was 2
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;

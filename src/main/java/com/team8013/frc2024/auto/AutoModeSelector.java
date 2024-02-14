@@ -11,7 +11,8 @@ public class AutoModeSelector {
     public enum DesiredMode {
         DO_NOTHING,
         ONE_NOTE,
-        TWO_LEFT
+        TWO_LEFT,
+        MIDDLE_AROUND
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -24,6 +25,7 @@ public class AutoModeSelector {
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
         mModeChooser.setDefaultOption("One Note", DesiredMode.ONE_NOTE);
         mModeChooser.setDefaultOption("Two Left", DesiredMode.TWO_LEFT);
+        mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         SmartDashboard.putData("Auto Mode", mModeChooser);
     }
 
@@ -47,6 +49,8 @@ public class AutoModeSelector {
                 return Optional.of(new OneNote());
             case TWO_LEFT:
                 return Optional.of(new TwoLeft());
+            case MIDDLE_AROUND:
+                return Optional.of(new TwoAround());
 
             default:
                 System.out.println("ERROR: unexpected auto mode: " + mode);

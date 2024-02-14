@@ -48,7 +48,7 @@ public class OneNote extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
         System.out.println("Running 1 note auto");
-        mSuperstructure.firstAutoShot();
+        mSuperstructure.autoShot();
         runAction(new WaitAction(1.5));
         runAction(driveToFirstNote);
 

@@ -132,7 +132,7 @@ public class SwerveDriveOdometry {
 		var newPose = m_poseMeters.exp(twist);
 
 		m_previousAngle = gyroAngle;
-		m_poseMeters = new Pose2d(newPose.getTranslation(), gyroAngle.unaryMinus()); //I CHANGED THIS
+		m_poseMeters = new Pose2d(newPose.getTranslation(), gyroAngle); //CHANGE THIS TODO:
 
 		return m_poseMeters;
 	}
