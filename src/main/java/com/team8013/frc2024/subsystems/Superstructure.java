@@ -928,7 +928,7 @@ public class Superstructure extends Subsystem {
             autoShotTracker = 0;
         }
 
-        if (mEndEffector.getVelocity() > 4500 && autoShotTracker == 0){
+        if (mEndEffector.getVelocity() > 5000 && autoShotTracker == 0 && mPivot.getPivotAngleDeg()>mLimelight.getPivotShootingAngle()-2){
                 setSuperstuctureShoot(true);
                 autoShotTracker = 1;
                 autoShot = false;

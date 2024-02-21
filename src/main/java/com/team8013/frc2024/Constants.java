@@ -474,7 +474,7 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 54;
+        public static final double kShootAgainstSubwooferAngle = 56;
         public static final double kShootAgainstPodiumAngle = 40;
 
         public static final double kShootLoadAngle = 65;

@@ -80,10 +80,10 @@ public class CWFourPiece extends AutoModeBase {
         runAction(new ParallelAction(List.of(
                 driveToFirstNote,
                 new SeriesAction(List.of(
-                        new WaitToPassXCoordinateAction(15.6),
+                        new WaitToPassXCoordinateAction(15.8),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
                         new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+                                .setAutoHeading(Rotation2d.fromDegrees(0.0))) )))));
 
         runAction(new ParallelAction(List.of(
                 driveToShootFirstNote,
@@ -132,7 +132,7 @@ public class CWFourPiece extends AutoModeBase {
     public Pose2d getStartingPose() {
         Rotation2d startingRotation = Rotation2d.fromDegrees(240-180);//TODO: NO IDEA IF THIS IS RIGHT
         if (Robot.is_red_alliance) {
-            startingRotation = Rotation2d.fromDegrees(240);
+                startingRotation = Rotation2d.fromDegrees(-120);
         }
         return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
     }

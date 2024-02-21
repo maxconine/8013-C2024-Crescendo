@@ -39,7 +39,7 @@ public class Pigeon {
         if (inverted) {
             return angle.unaryMinus();
         }
-        return Rotation2d.fromDegrees(Util.placeIn0To360Scope(angle.getDegrees()));
+        return Rotation2d.fromDegrees(angle.getDegrees()); //not 0-360?
     }
 
     public Rotation2d getRoll() {

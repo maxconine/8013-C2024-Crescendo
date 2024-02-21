@@ -50,22 +50,22 @@ public class ThreePieceMiddleStart extends AutoModeBase {
 
         // read trajectories from PathWeaver and generate trajectory actions
         drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(0.7, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.85, 1.5, 0.0, 0));
         driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
         drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(1.6, 1.5, 0.0, 0));
         driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
         drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                Constants.AutoConstants.createConfig(0.65, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.5, 1.5, 0.0, 0));
         driveToPickupSecondNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
         drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0));
         driveToShootSecondNote = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
     }
@@ -93,20 +93,21 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                         // new WaitToPassXCoordinateAction(3.2),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                        new WaitToPassXCoordinateAction(15.45),
+                        new WaitToPassXCoordinateAction(14.7),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter()),
                         new WaitToPassXCoordinateAction(15.6),
                         new LambdaAction(() -> mSuperstructure.autoShot()))))));
 
-                runAction(new WaitAction(1));
+                runAction(new WaitAction(0.3));
+                mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(
                 driveToPickupSecondNote,
                 new SeriesAction(List.of(
                         new WaitToPassXCoordinateAction(15.57),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
                         new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+                                .setAutoHeading(Rotation2d.fromDegrees(0.0))) )))));
 
         runAction(new ParallelAction(List.of(
                 driveToShootSecondNote,
