@@ -13,6 +13,7 @@ import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
+import com.team8013.frc2024.auto.actions.WaitToPassYCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Superstructure;
@@ -21,15 +22,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class CWFourPiece extends AutoModeBase {
+public class ThreePieceMiddleStart extends AutoModeBase {
 
     private Superstructure mSuperstructure;
 
     // required PathWeaver trajectory paths
-    String path_A = "paths/2024Paths/4PieceCWRed_A.path";
-    String path_B = "paths/2024Paths/4PieceCWRed_B.path";
-    String path_C = "paths/2024Paths/4PieceCWRed_C.path";
-    String path_D = "paths/2024Paths/4PieceCWRed_D.path";
+    String path_A = "paths/2024Paths/3PieceMiddleStart_C.path";
+    String path_B = "paths/2024Paths/3PieceMiddleStart_D.path";
+    String path_C = "paths/2024Paths/3PieceMiddleStart_A.path";
+    String path_D = "paths/2024Paths/3PieceMiddleStart_B.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;
@@ -44,12 +45,12 @@ public class CWFourPiece extends AutoModeBase {
     SwerveTrajectoryAction driveToShootSecondNote;
     final Trajectory drivePath_D;
 
-    public CWFourPiece() {
+    public ThreePieceMiddleStart() {
         mSuperstructure = Superstructure.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.7, 1.5, 0.0, 0));
         driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
@@ -59,7 +60,7 @@ public class CWFourPiece extends AutoModeBase {
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
         drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.65, 1.5, 0.0, 0));
         driveToPickupSecondNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -80,9 +81,10 @@ public class CWFourPiece extends AutoModeBase {
         runAction(new ParallelAction(List.of(
                 driveToFirstNote,
                 new SeriesAction(List.of(
-                        new WaitToPassXCoordinateAction(15.6),
+                        new WaitToPassYCoordinateAction(5.25),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))),
+                        new WaitAction(0.1),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
 
         runAction(new ParallelAction(List.of(
@@ -91,14 +93,17 @@ public class CWFourPiece extends AutoModeBase {
                         // new WaitToPassXCoordinateAction(3.2),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
+                        new WaitToPassXCoordinateAction(15.45),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter()),
                         new WaitToPassXCoordinateAction(15.6),
                         new LambdaAction(() -> mSuperstructure.autoShot()))))));
 
+                runAction(new WaitAction(1));
+
         runAction(new ParallelAction(List.of(
                 driveToPickupSecondNote,
                 new SeriesAction(List.of(
-                        new WaitToPassXCoordinateAction(15.6),
+                        new WaitToPassXCoordinateAction(15.57),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
@@ -109,6 +114,7 @@ public class CWFourPiece extends AutoModeBase {
                         // new WaitToPassXCoordinateAction(3.2),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
+                        new WaitToPassXCoordinateAction(15.45),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter()),
                         new WaitToPassXCoordinateAction(15.6),
                         new LambdaAction(() -> mSuperstructure.autoShot()))))));
@@ -130,9 +136,9 @@ public class CWFourPiece extends AutoModeBase {
 
     @Override
     public Pose2d getStartingPose() {
-        Rotation2d startingRotation = Rotation2d.fromDegrees(240-180);//TODO: NO IDEA IF THIS IS RIGHT
+        Rotation2d startingRotation = Rotation2d.fromDegrees(180);//TODO: NO IDEA IF THIS IS RIGHT
         if (Robot.is_red_alliance) {
-            startingRotation = Rotation2d.fromDegrees(240);
+            startingRotation = Rotation2d.fromDegrees(0);
         }
         return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
     }

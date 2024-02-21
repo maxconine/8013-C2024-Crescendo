@@ -13,7 +13,8 @@ public class AutoModeSelector {
         ONE_NOTE,
         TWO_LEFT,
         MIDDLE_AROUND,
-        CW_FOUR_PIECE
+        CW_FOUR_PIECE,
+        MID_START_3_PIECE
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -28,6 +29,7 @@ public class AutoModeSelector {
         mModeChooser.setDefaultOption("Two Left", DesiredMode.TWO_LEFT);
         mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
+        mModeChooser.setDefaultOption("Middle Start 3 Piece", DesiredMode.MID_START_3_PIECE);
         SmartDashboard.putData("Auto Mode", mModeChooser);
     }
 
@@ -55,6 +57,8 @@ public class AutoModeSelector {
                 return Optional.of(new TwoAround());
             case CW_FOUR_PIECE:
                 return Optional.of(new CWFourPiece());
+            case MID_START_3_PIECE:
+                return Optional.of(new ThreePieceMiddleStart());
 
             default:
                 System.out.println("ERROR: unexpected auto mode: " + mode);

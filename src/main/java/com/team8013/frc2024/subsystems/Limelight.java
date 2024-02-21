@@ -323,10 +323,10 @@ public class Limelight extends Subsystem {
     }
 
     public double getEndEffectorVelocity(){
-        double kShootVelocity = 6600;
-        if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
-            kShootVelocity = 6500;
-        }
+        double kShootVelocity = 6000;
+        // if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
+        //     kShootVelocity = 6500;
+        // }
         return kShootVelocity;
     }
 
@@ -334,18 +334,19 @@ public class Limelight extends Subsystem {
     public double getTargetSnap() {
         double degreesToSnap = 180;
         if (mPeriodicIO.sees_target){
-                    if (mPeriodicIO.tanLineToSpeaker>1.8){
-            degreesToSnap = 163;
-        }
-
-        // if ((mPeriodicIO.botPosey - 2.61) < 0) {
-        //     degreesToSnap = -90
-        //             - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
-        // } else {
-        //     degreesToSnap = 90
-        //             + (Math.atan(Math.abs(mPeriodicIO.botPosex / mPeriodicIO.botPosey - 2.61)) * (180 / Math.PI));
+        //             if (mPeriodicIO.tanLineToSpeaker>1.8){
+        //     degreesToSnap = 163;
         // }
-        // = Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
+
+        if ((mPeriodicIO.botPosey - 2.58) < 0) {
+            degreesToSnap = 90
+                    + (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
+        } else {
+            degreesToSnap = -90
+                    - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
+        }
+        
+        //= Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
 
         //-162
     }

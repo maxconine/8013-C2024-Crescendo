@@ -99,7 +99,7 @@ public class Drive extends Subsystem {
                 double x = speeds.vxMetersPerSecond;
                 double y = speeds.vyMetersPerSecond;
                 double omega = mMotionPlanner.calculateRotationalAdjustment(mPeriodicIO.heading_setpoint.getRadians(),
-                        mPeriodicIO.heading.unaryMinus().getRadians()); // I put a neg sign here fyi
+                        mPeriodicIO.heading.getRadians()); // I put a neg sign here fyi
                 mPeriodicIO.des_chassis_speeds = new ChassisSpeeds(x, y, omega);
                 return;
             }

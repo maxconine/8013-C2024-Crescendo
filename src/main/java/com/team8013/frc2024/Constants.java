@@ -715,10 +715,10 @@ public class Constants {
     public static final class EndEffectorConstants {
         //public static final double kShootRPM = 2000;
 
-        public static final double kP = .0000985;
-        public static final double kPSlave = 0.000100;
+        public static final double kP = .000094;
+        public static final double kPSlave = 0.000098;
         public static final double kI = 0;
-        public static final double kD = 0.0000;
+        public static final double kD = 0.000012;
         public static final double Ff = 0;
         public static final double Izone = 0.01;
         public static final double minOut = -1;

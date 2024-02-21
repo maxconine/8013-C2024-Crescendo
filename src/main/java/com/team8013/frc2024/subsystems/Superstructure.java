@@ -615,17 +615,19 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == 2
                         && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterFinalHeight
                                 - Constants.ElevatorConstants.kPositionError) {
+                    //mEndEffector.setOpenLoopDemand(0.99);
                     mEndEffector.setEndEffectorVelocity(mLimelight.getEndEffectorVelocity());
                 }
 
                 if (transfterToShooterTracker == 2) {
                     /* Manual control here */
-                    // if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                    // manualControlPivotShootMode += 0.1;
-                    // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                    // manualControlPivotShootMode -= 0.1;
-                    // }
-                    mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
+                    if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                    manualControlPivotShootMode += 0.1;
+                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                    manualControlPivotShootMode -= 0.1;
+                    }
+                    mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
+                    //mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
                 }
 
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
