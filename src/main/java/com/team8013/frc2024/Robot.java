@@ -12,6 +12,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -214,14 +216,14 @@ public class Robot extends TimedRobot {
 			Optional<AutoModeBase> autoMode = mAutoModeSelector.getAutoMode();
 			if (autoMode.isPresent()) {
 				mDrive.resetOdometry(autoMode.get().getStartingPose());
+				System.out.println("ODOMETRY RESET FOR AUTO");
 			}
 
 			mEnabledLooper.start();
 			mAutoModeExecutor.start();
-			// mLoggingLooper.start();
+			//mLoggingLooper.start();
 
 			mDrive.setNeutralBrake(true);
-			mSuperstructure.resetForAuto();
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -247,10 +249,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		try {
-			if (is_red_alliance) {
-				mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
-				flip_trajectories = false;
-			}
+			// if (is_red_alliance) { //TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
+			// 	mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
+			// 	flip_trajectories = false;
+			// }
 			mDisabledLooper.stop();
 			mEnabledLooper.start();
 			// mLoggingLooper.start();
@@ -593,8 +595,9 @@ public class Robot extends TimedRobot {
 			} else {
 				alliance_changed = true;
 			}
-			flip_trajectories = is_red_alliance;
+			//flip_trajectories = is_red_alliance; //TODO: THIS MIGHT MESS EVERYTHING UP
 
+			SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);
 			Optional<AutoModeBase> autoMode = mAutoModeSelector.getAutoMode();
 			mLimelight.isRedAlliance(is_red_alliance);

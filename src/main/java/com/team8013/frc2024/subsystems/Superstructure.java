@@ -408,7 +408,7 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.INTAKING_GROUND) {
             mSuperstructureState = SuperstructureState.INTAKING_GROUND;
 
-            mWrist.setSetpointMotionMagic(265);
+            mWrist.setSetpointMotionMagic(280);
             // flips the wrist down immediatly, then elevator waits for it to get into
             // position before extending
 
@@ -449,7 +449,7 @@ public class Superstructure extends Subsystem {
     public void setSuperstuctureStow() {
         if (mSuperstructureState != SuperstructureState.STOW) {
             mSuperstructureState = SuperstructureState.STOW;
-            mPivot.setSetpointMotionMagic(12);
+            mPivot.setSetpointMotionMagic(14);
         }
     }
 
@@ -662,7 +662,7 @@ public class Superstructure extends Subsystem {
 
             } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
 
-                if (mWrist.getWristAngleDeg() > 225) { // greater angle, furthur down
+                if (mWrist.getWristAngleDeg() > 160) { // greater angle, furthur down 225
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
 
                     mWrist.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[0]);
@@ -898,21 +898,21 @@ public class Superstructure extends Subsystem {
                 }
             }
 
-            if (mSuperstructureState != SuperstructureState.INTAKING_GROUND &&
-                    mSuperstructureState != SuperstructureState.INTAKING_SOURCE
-                    && mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER
-                    && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE) {
-                if (outtake) {
-                    mEndEffector.setState(State.OUTTAKING);
-
-                } else if (wantsManualIntake) {
-
-                    mEndEffector.setState(State.INTAKING);
-                } else {
-                    // mEndEffector.setEndEffectorVelocity(2000);
-                    mEndEffector.setState(State.IDLE);
-                }
+            if ((mSuperstructureState == SuperstructureState.CLIMB || mSuperstructureState == SuperstructureState.SCORE_AMP || mSuperstructureState == SuperstructureState.STOW)&&(outtake)) {
+                    mEndEffector.setOpenLoopDemand(-0.4);
             }
+            else if (mSuperstructureState == SuperstructureState.CLIMB || mSuperstructureState == SuperstructureState.SCORE_AMP || mSuperstructureState == SuperstructureState.STOW){
+                    mEndEffector.setOpenLoopDemand(0);
+            }
+                    
+            //     } else if (wantsManualIntake) {
+
+            //         mEndEffector.setOpenLoopDemand(0.55);
+            //     } else {
+            //         // mEndEffector.setEndEffectorVelocity(2000);
+            //         mEndEffector.setState(State.IDLE);
+            //     }
+            // }
 
             if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER
                     && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE) {
@@ -956,25 +956,25 @@ public class Superstructure extends Subsystem {
          * 
          */
         int index = 0;
-        for (int i = 0; i < Constants.ElevatorConstants.groundIntakeWristPositions.length; i++) {
-            if (Constants.ElevatorConstants.groundIntakeWristPositions[i][0] < elevatorPosition) {
+        for (int i = 0; i < Constants.ElevatorConstants.groundIntakeWristPositionsOut.length; i++) {
+            if (Constants.ElevatorConstants.groundIntakeWristPositionsOut[i][0] < elevatorPosition) {
                 index = i;
             }
         }
-        return new double[] { Constants.ElevatorConstants.groundIntakeWristPositions[index][1],
-                Constants.ElevatorConstants.groundIntakeWristPositions[index][2] };
+        return new double[] { Constants.ElevatorConstants.groundIntakeWristPositionsOut[index][1],
+                Constants.ElevatorConstants.groundIntakeWristPositionsOut[index][2] };
     }
 
     private double[] getPositionsGroundIntakeIn(double elevatorPosition) {
 
         int index = 0;
-        for (int i = Constants.ElevatorConstants.groundIntakeWristPositions.length - 1; i >= 0; i--) {
-            if (Constants.ElevatorConstants.groundIntakeWristPositions[i][0] > elevatorPosition) {
+        for (int i = Constants.ElevatorConstants.groundIntakeWristPositionsIn.length - 1; i >= 0; i--) {
+            if (Constants.ElevatorConstants.groundIntakeWristPositionsIn[i][0] > elevatorPosition) {
                 index = i;
             }
         }
-        return new double[] { Constants.ElevatorConstants.groundIntakeWristPositions[index][1] - 10,
-                Constants.ElevatorConstants.groundIntakeWristPositions[index][2] + 1 };
+        return new double[] { Constants.ElevatorConstants.groundIntakeWristPositionsIn[index][1] - 10,
+                Constants.ElevatorConstants.groundIntakeWristPositionsIn[index][2] + 1 };
     }
 
     public void autoShot() {

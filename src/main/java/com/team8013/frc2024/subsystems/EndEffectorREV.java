@@ -170,7 +170,7 @@ public class EndEffectorREV extends Subsystem {
                         mPeriodicIO.demand = mState.voltage;
                         break;
                     case INTAKING:
-                        mPeriodicIO.demand = 0.4;
+                        mPeriodicIO.demand = 0.6;
                         break;
                     case OUTTAKING:
                         mPeriodicIO.demand = -0.4; // mState.voltage;

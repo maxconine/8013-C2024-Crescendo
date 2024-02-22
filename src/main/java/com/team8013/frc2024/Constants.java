@@ -456,7 +456,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5+0.5; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5+0.3; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -628,7 +628,7 @@ public class Constants {
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
 
-        public static final double kFloorIntakeHeight = 0.28;
+        public static final double kFloorIntakeHeight = 0.295;
         public static final double kSourceIntakeHeight = 0.064;
         public static final double kSourceLoadShooterHeight = 0.22;
 
@@ -691,23 +691,43 @@ public class Constants {
             return config;
         }
 
-        public static final double[][] groundIntakeWristPositions = {
+        public static final double[][] groundIntakeWristPositionsOut = {
                 // @0 --> position of elevator (in meters)
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
-                { 0.004, 280 + 3, 5 },
-                { 0.03, 288 + 3, 6 },
-                { 0.052, 293 + 3, 8 },
-                { 0.075, 300 + 3, 9 },
-                { 0.1, 306 + 3, 12 },
-                { 0.125, 313 + 3, 12 },
-                { 0.15, 321 + 3, 12 },
-                { 0.175, 327 + 3, 12 },
-                { 0.2, 335 + 3, 13 },
-                { 0.215, 338 + 3, 13 },
-                { 0.23, 343 + 3, 11 },
-                { 0.25, 350 + 3, 8 },
-                { 0.26, 359.7 + 3, 7 } // really 0.275, but less so that everything else goes into position
+                { 0.004, 335, 5 },
+                { 0.03, 337, 6 },
+                { 0.052, 340, 8 },
+                { 0.075, 341, 8 },
+                { 0.1, 343, 8 },
+                { 0.125, 345, 8 },
+                { 0.15, 348, 7 },
+                { 0.175, 352, 7 },
+                { 0.2, 353, 7 },
+                { 0.215, 354, 7 },
+                { 0.23, 359.7 + 1, 6.75 },
+                { 0.235, 359.7 + 2, 6.5 },
+                { 0.24, 362 + 3, 6 } // really 0.275, but less so that everything else goes into position
+
+        };
+
+            public static final double[][] groundIntakeWristPositionsIn = {
+                // @0 --> position of elevator (in meters)
+                // @1 --> position of wrist (in degrees)
+                // @2 --> position of the pivot(in degrees)
+                { 0.004, 190, 5 },
+                { 0.03, 200, 6 },
+                { 0.052, 210, 6 },
+                { 0.075, 215, 6 },
+                { 0.1, 235, 7 },
+                { 0.125, 290, 7 },
+                { 0.15, 300, 7.5 },
+                { 0.175, 328, 7 },
+                { 0.2, 330, 7 },
+                { 0.215, 333, 7 },
+                { 0.23, 335, 7 },
+                { 0.235, 340, 7 },
+                { 0.24, 345, 7 } // really 0.275, but less so that everything else goes into position
 
         };
     }
