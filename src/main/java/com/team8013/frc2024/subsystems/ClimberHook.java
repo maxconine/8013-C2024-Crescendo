@@ -38,7 +38,7 @@ public class ClimberHook extends Subsystem {
         // mMotor.setPosition(0);
     }
 
-    private void setWantNeutralBrake(boolean brake) {
+    public void setWantNeutralBrake(boolean brake) {
         NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         mMotor.setNeutralMode(mode);
     }
@@ -53,6 +53,9 @@ public class ClimberHook extends Subsystem {
 
             @Override
             public void onLoop(double timestamp) {
+                if (mPeriodicIO.position_degrees<0){
+                    mMotor.setPosition(0);
+                }
 
             }
 

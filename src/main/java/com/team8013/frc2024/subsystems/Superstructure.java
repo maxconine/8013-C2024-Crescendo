@@ -14,6 +14,7 @@ import com.team8013.frc2024.loops.Loop;
 import com.team8013.frc2024.subsystems.EndEffectorREV.State;
 //import com.team8013.frc2024.subsystems.EndEffectorREV.State;
 import com.team8013.frc2024.subsystems.Shooter.ControlState;
+import com.team8013.lib.Conversions;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.requests.SequentialRequest;
@@ -704,6 +705,7 @@ public class Superstructure extends Subsystem {
 
             } else if (mSuperstructureState == SuperstructureState.CLIMB) {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "CLIMB");
+                
 
                 /* CLIMB STATE YAY */
                 // setup climb in init state change
@@ -719,7 +721,9 @@ public class Superstructure extends Subsystem {
                  * 5:
                  */
 
-                // mEndEffector.setOpenLoopDemand(manualInput);
+                if (climbingTracker<1 && mControlBoard.operator.getController().getPOV()==270){//if want stow go back to stow
+                    mSuperstructureState = SuperstructureState.STOW;
+                }
 
                 // Stage 1: set up climb
                 if (climbingTracker == -1) { // and bot is in position
@@ -728,14 +732,15 @@ public class Superstructure extends Subsystem {
                     // height using
                     // joystick
                     mElevator.setSetpointMotionMagic(0.001);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle1);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle1);
 
                 }
 
-                if (climbingTracker == -1 && mPivot.getPivotAngleDeg() > 70
+                if (climbingTracker == -1 && mPivot.getPivotAngleDeg() > 55
                         && mControlBoard.operator.getButton(Button.X)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle2);
                     climbingTracker = 0;
                 }
 
@@ -745,10 +750,11 @@ public class Superstructure extends Subsystem {
                 // && (mElevator.getElevatorUnits() >=
                 // Constants.ElevatorConstants.kClimbInitHeight
                 // - Constants.ElevatorConstants.kPositionError) //take out check for elevator
-                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle
+                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle2
                                 - Constants.PivotConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
+                    mWrist.setSetpointMotionMagic(200);
                     climbingTracker = 1;
                 } else if (climbingTracker == 0) { // manual control height
                     if (mControlBoard.operator.getController().getRightY() > 0.2) {
@@ -768,13 +774,15 @@ public class Superstructure extends Subsystem {
 
                 if (climbingTracker == 2 && mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
                         + 1) {
-                    mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
+                    mClimberHook.setSetpointMotionMagic(80);
+                    
                     climbingTracker = 3;
                 }
 
                 if (climbingTracker == 3 && climbModeStage3) {
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain1);
+                    mClimberHook.setSetpointMotionMagic(80);
                     climbingTracker = 4;
                 }
 
@@ -784,7 +792,8 @@ public class Superstructure extends Subsystem {
                                 - Constants.PivotConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain2);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle2);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle2);
+
+                    
                     climbingTracker = 5;
                 }
 
@@ -794,6 +803,7 @@ public class Superstructure extends Subsystem {
                         && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendOffChainAngle2
                                 - Constants.PivotConstants.kPositionError) {
                     climbingTracker = 6;
+                    mWrist.setSetpointMotionMagic(225);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle1); // fast
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
                     // mWrist.setSetpointMotionMagic(Constants.WristConstants.);
@@ -805,15 +815,26 @@ public class Superstructure extends Subsystem {
                         &&
                         (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendOffChain3
                                 - Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
+
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle2);
                     // mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
 
-                    climbingTracker = 7;
+                    
 
                     // on the trap wall pressed against it, maybe shake the pivot to wedge the end
                     // effector in
                 }
+                if ((climbingTracker == 6)&&mPivot.getPivotAngleDeg()>Constants.PivotConstants.kExtendToScoreTrapAngle2-3){
+                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
+                climbingTracker = 7;
+                }
+                if ((climbingTracker == 7)&&
+                        (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendToScoreTrapHeight
+                                - Conversions.inchesToMeters(7.7))) {
+                mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                }
+
+
                 if ((climbingTracker == 7)
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle2
                                 - Constants.PivotConstants.kPositionError)

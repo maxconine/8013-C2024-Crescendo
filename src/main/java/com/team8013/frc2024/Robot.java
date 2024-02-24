@@ -260,6 +260,7 @@ public class Robot extends TimedRobot {
 			mSuperstructure.stop();
 
 			mDrive.setNeutralBrake(true);
+			mClimberHook.setWantNeutralBrake(true);
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -545,6 +546,7 @@ public class Robot extends TimedRobot {
 			mEnabledLooper.stop();
 			// mLoggingLooper.stop();
 			mDisabledLooper.start();
+			mClimberHook.setWantNeutralBrake(false);
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);

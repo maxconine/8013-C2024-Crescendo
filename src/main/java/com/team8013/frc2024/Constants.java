@@ -484,9 +484,10 @@ public class Constants {
         public static final double kShootLoadAngle = 65;
 
         /* CLIMB CONSTANTS */
-        public static final double kClimbInitAngle = 78; // deg
+        public static final double kClimbInitAngle1 = 65; // deg
+        public static final double kClimbInitAngle2 = 70; // deg
         public static final double kPullOntoChainAngle1 = 20;
-        public static final double kPullOntoChainAngle2 = 8.5; // once elevator is down, goto this angle
+        public static final double kPullOntoChainAngle2 = 8; // once elevator is down, goto this angle
         public static final double kExtendOffChainAngle1 = 16.8; // Once chain hooked go up to this angle and wait for
                                                                  // release
         public static final double kExtendOffChainAngle2 = 32; // Angle before abrupt flip over to trap
@@ -496,7 +497,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 8.5;
+        public static final double kDeclimbAngle3 = 8;
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -545,9 +546,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 20;
+            config.MotionMagic.MotionMagicCruiseVelocity = 50;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 40;
+            config.MotionMagic.MotionMagicAcceleration = 50;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -575,7 +576,7 @@ public class Constants {
         public static final double kClimbAngle1 = 140;
         public static final double kClimbAngle2 = 165;
         // public static final double kClimbAngle3 = 165;
-        public static final double kClimbScoreInTrapAngle = 155; // ~200?
+        public static final double kClimbScoreInTrapAngle = 160; // ~200?
 
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
@@ -620,7 +621,7 @@ public class Constants {
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
 
-        public static final double kStowHeight = 0.02;
+        public static final double kStowHeight = 0.005;
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
@@ -632,12 +633,12 @@ public class Constants {
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
 
-        public static final double kFloorIntakeHeight = 0.295;
+        public static final double kFloorIntakeHeight = 0.290;
         public static final double kSourceIntakeHeight = 0.064;
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32; // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(3); // initial height going up
                                                             // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
@@ -648,8 +649,8 @@ public class Constants {
 
         /* De Climb */
         public static final double kDeclimbHeight1 = 0.267;
-        public static final double kDeclimbHeight2 = 0.01;
-        public static final double kDeclimbHeight3 = 0.01;
+        public static final double kDeclimbHeight2 = 0.03;
+        public static final double kDeclimbHeight3 = 0.015;
         public static final double kDeclimbHeight4 = 0.32;
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
@@ -686,7 +687,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 40;
+            config.MotionMagic.MotionMagicCruiseVelocity = 50;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 60;
 
@@ -709,8 +710,8 @@ public class Constants {
                 { 0.175, 352, 7 },
                 { 0.2, 353, 7 },
                 { 0.215, 354, 7 },
-                { 0.23, 359.7 + 1, 6.75 },
-                { 0.235, 359.7 + 2, 6.5 },
+                { 0.23, 359.7 + 1, 7 },
+                { 0.235, 359.7 + 2, 7 },
                 { 0.24, 362 + 3, 6 } // really 0.275, but less so that everything else goes into position
 
         };
@@ -720,18 +721,18 @@ public class Constants {
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
                 { 0.004, 190, 5 },
-                { 0.03, 200, 6 },
-                { 0.052, 210, 6 },
-                { 0.075, 215, 6 },
-                { 0.1, 235, 7 },
-                { 0.125, 290, 7 },
-                { 0.15, 300, 7.5 },
-                { 0.175, 328, 7 },
-                { 0.2, 330, 7 },
-                { 0.215, 333, 7 },
-                { 0.23, 335, 7 },
-                { 0.235, 340, 7 },
-                { 0.24, 345, 7 } // really 0.275, but less so that everything else goes into position
+                { 0.03, 200, 6.5 },
+                { 0.052, 210, 6.5 },
+                { 0.075, 215, 7 },
+                { 0.1, 235, 8 },
+                { 0.125, 290, 8 },
+                { 0.15, 300, 9 },
+                { 0.175, 328, 9 },
+                { 0.2, 330, 10 },
+                { 0.215, 333, 11 },
+                { 0.23, 335, 11 },
+                { 0.235, 340, 11 },
+                { 0.24, 345, 10 } // really 0.275, but less so that everything else goes into position
 
         };
     }
@@ -787,8 +788,8 @@ public class Constants {
     }
 
     public static final class ClimberHookConstants {
-        public static final double kHookAngle = 90; // degrees
-        public static final double kDeclimb1Angle = 90;
+        public static final double kHookAngle = 80; // degrees
+        public static final double kDeclimb1Angle = 80;
         public static final double kUnhookAngle = 25;
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
