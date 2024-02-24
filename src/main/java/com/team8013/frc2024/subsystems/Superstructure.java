@@ -376,21 +376,21 @@ public class Superstructure extends Subsystem {
         mClimberHook.setSetpointMotionMagic(climberHookManualPosition);
     }
 
-    public void intake(boolean intake) {
-        if (intake) {
-            mEndEffector.setState(State.INTAKING);
-        } else {
-            mEndEffector.setState(State.IDLE);
-        }
-    }
+    // public void intakeManualControl(boolean intake) {
+    //     if (intake) {
+    //         mEndEffector.setState(State.INTAKING);
+    //     } else {
+    //         mEndEffector.setState(State.IDLE);
+    //     }
+    // }
 
-    public void outtake(boolean outtake) {
-        if (outtake) {
-            mEndEffector.setState(State.OUTTAKING);
-        } else {
-            mEndEffector.setState(State.IDLE);
-        }
-    }
+    // public void outtakeManualControl(boolean outtake) {
+    //     if (outtake) {
+    //         mEndEffector.setState(State.OUTTAKING);
+    //     } else {
+    //         mEndEffector.setState(State.IDLE);
+    //     }
+    // }
 
     public enum SuperstructureState {
         INTAKING_GROUND,
@@ -616,7 +616,7 @@ public class Superstructure extends Subsystem {
                         && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterFinalHeight
                                 - Constants.ElevatorConstants.kPositionError) {
                     //mEndEffector.setOpenLoopDemand(0.99);
-                    mEndEffector.setEndEffectorVelocity(mLimelight.getEndEffectorVelocity());
+                    mEndEffector.setEndEffectorClosedLoop(mLimelight.getEndEffectorVelocity(),mLimelight.getEndEffectorVelocity());
                 }
 
                 if (transfterToShooterTracker == 2) {
@@ -686,9 +686,9 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setEndEffectorVelocity(3018);
+                    mEndEffector.setEndEffectorClosedLoop(3018,3018);
                 } else if (mEndEffector.hasGamePiece()) {
-                    mEndEffector.setEndEffectorVelocity(0);;
+                    mEndEffector.setEndEffectorClosedLoop(0,0);
                     // Once game piece aquired, then stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }
@@ -718,12 +718,13 @@ public class Superstructure extends Subsystem {
                     // manual control of
                     // height using
                     // joystick
+                    mElevator.setSetpointMotionMagic(0.001);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle1);
 
                 }
 
-                if ((climbingTracker == -1) && mPivot.getPivotAngleDeg() > 70) {
+                if (climbingTracker == -1 && mPivot.getPivotAngleDeg() > 70 && mControlBoard.operator.getButton(Button.X)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
                     climbingTracker = 0;
                 }
@@ -731,8 +732,8 @@ public class Superstructure extends Subsystem {
                 // Stage 2: once climb set up, wait for user to press button to pull down to
                 // chain
                 if ((climbModeStage2) && (climbingTracker == 0)
-                        && (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbInitHeight
-                                - Constants.ElevatorConstants.kPositionError)
+                        // && (mElevator.getElevatorUnits() >= Constants.ElevatorConstants.kClimbInitHeight
+                        //         - Constants.ElevatorConstants.kPositionError) //take out check for elevator
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle
                                 - Constants.PivotConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
