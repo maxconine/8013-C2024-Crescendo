@@ -195,10 +195,10 @@ public class SwerveModule extends Subsystem {
 
     @Override
     public void outputTelemetry() {
-        SmartDashboard.putNumber("Module" + kModuleNumber + " Angle Position", mPeriodicIO.rotationPosition);
-        SmartDashboard.putNumber("Module" + kModuleNumber + " CANCODER Position", getCanCoder());
-        SmartDashboard.putNumber("Module" + kModuleNumber + " Drive Position", mPeriodicIO.drivePosition);
-        SmartDashboard.putNumber("Module" + kModuleNumber + " Velocity", mPeriodicIO.velocity);
+        //SmartDashboard.putNumber("Module" + kModuleNumber + " Angle Position", mPeriodicIO.rotationPosition);
+        //SmartDashboard.putNumber("Module" + kModuleNumber + " CANCODER Position", getCanCoder());
+        //SmartDashboard.putNumber("Module" + kModuleNumber + " Drive Position", mPeriodicIO.drivePosition);
+        //SmartDashboard.putNumber("Module" + kModuleNumber + " Velocity", mPeriodicIO.velocity);
     }
 
     @Log

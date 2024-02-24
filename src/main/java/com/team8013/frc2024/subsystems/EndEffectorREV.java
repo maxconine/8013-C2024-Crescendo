@@ -5,7 +5,6 @@ import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 
-import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkFlex;
@@ -15,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class EndEffectorREV extends Subsystem {
+    private static EndEffectorREV mInstance;
     public State mState = State.IDLE;
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private DigitalInput mBeamBreak;
@@ -22,22 +22,22 @@ public class EndEffectorREV extends Subsystem {
     private RelativeEncoder m_encoderMaster;
     private RelativeEncoder m_encoderSlave;
 
-    private final CANSparkFlex mMaster;
-    private final CANSparkFlex mSlave;
+    private CANSparkFlex mMaster;
+    private CANSparkFlex mSlave;
 
     private PIDController pidMaster;
     private PIDController pidSlave;
 
     private EndEffectorREV() {
-        mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless);
-        mSlave = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless);
+        mMaster = new CANSparkFlex(42, MotorType.kBrushless);
+        mSlave = new CANSparkFlex(43, MotorType.kBrushless);
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
-        mMaster.setInverted(false);
-        mSlave.setInverted(false);
+        mMaster.clearFaults();
+        mSlave.clearFaults();
 
-        mMaster.setIdleMode(IdleMode.kBrake);
-        mSlave.setIdleMode(IdleMode.kBrake);
+        // mMaster.setInverted(false);
+        // mSlave.setInverted(false);
 
         // Customize these configs from constants in the future
 
@@ -50,8 +50,6 @@ public class EndEffectorREV extends Subsystem {
         m_encoderSlave = mSlave.getEncoder();
 
     }
-
-    public static EndEffectorREV mInstance;
 
     public static EndEffectorREV getInstance() {
         if (mInstance == null) {
@@ -81,8 +79,6 @@ public class EndEffectorREV extends Subsystem {
 
     public void stop() {
         mState = State.IDLE;
-        mPeriodicIO.demandMaster = 0;
-        mPeriodicIO.demandSlave = 0;
     }
 
     @Override
@@ -112,49 +108,58 @@ public class EndEffectorREV extends Subsystem {
         mPeriodicIO.demandSlave = demand;
     }
 
+    public void setOpenLoopDemand(double demandMaster, double demandSlave) {
+        if (mState != State.OPEN_LOOP) {
+            mState = State.OPEN_LOOP;
+        }
+        mPeriodicIO.demandMaster = demandMaster;
+        mPeriodicIO.demandSlave = demandSlave;
+    }
+
     @Override
-    public void registerEnabledLoops(ILooper enabledLooper) {
-        enabledLooper.register(new Loop() {
+    public void registerEnabledLoops(ILooper mEnabledLooper) {
+        mEnabledLooper.register(new Loop() {
             @Override
             public void onStart(double timestamp) {
-                stop();
             }
 
             @Override
             public void onLoop(double timestamp) {
-                switch (mState) {
-                    case IDLE:
-                        mPeriodicIO.demandMaster = 0;
-                        mPeriodicIO.demandSlave = 0;
-                        break;
-                    case CLOSED_LOOP:
-                        mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
-                                mPeriodicIO.demandMaster);
-                        mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
-                                mPeriodicIO.demandSlave);
-                        break;
-                    case OPEN_LOOP:
-                        break;
-                    case INTAKING:
-                        mPeriodicIO.demandMaster = 0.35;
-                        mPeriodicIO.demandSlave = 0.35;
-                        break;
-                    case OUTTAKING:
-                        mPeriodicIO.demandMaster = -0.3;
-                        mPeriodicIO.demandSlave = -0.3;
-                        break;
-                }
+
             }
 
             @Override
             public void onStop(double timestamp) {
-                stop();
             }
         });
     }
 
     @Override
     public void writePeriodicOutputs() {
+
+        if (mState == State.IDLE) {
+            mPeriodicIO.demandMaster = 0;
+            mPeriodicIO.demandSlave = 0;
+            SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
+        }
+        if (mState == State.CLOSED_LOOP) {
+            mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
+                    mPeriodicIO.demandMaster);
+            mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
+                    mPeriodicIO.demandSlave);
+            SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
+        } else if (mState == State.INTAKING) {
+            mPeriodicIO.demandMaster = 0.4;
+            mPeriodicIO.demandSlave = 0.4;
+            SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
+        } else if (mState == State.OUTTAKING) {
+            mPeriodicIO.demandMaster = -0.3;
+            mPeriodicIO.demandSlave = -0.3;
+            SmartDashboard.putString("END EFFECTOR STATE", "OUTTAKING");
+        } else if (mState == State.OPEN_LOOP) {
+            SmartDashboard.putString("END EFFECTOR STATE", "OPEN LOOP");
+        }
+
         mMaster.set(mPeriodicIO.demandMaster);
         mSlave.set(mPeriodicIO.demandSlave);
     }
@@ -200,7 +205,6 @@ public class EndEffectorREV extends Subsystem {
         SmartDashboard.putNumber("Intake Current", mPeriodicIO.current);
         SmartDashboard.putNumber("END EFFECTOR Master Velocity", mPeriodicIO.velocityMaster);
         SmartDashboard.putNumber("END EFFECTOR SLAVE VELOCITY", mPeriodicIO.velocitySlave);
-        SmartDashboard.putString("Intake State", mState.toString());
         SmartDashboard.putBoolean("END EFFECTOR Beam Break", mPeriodicIO.beamBreak);
     }
 

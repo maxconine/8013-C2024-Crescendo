@@ -7,7 +7,6 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.revrobotics.SparkPIDController;
 // import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 // import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -85,25 +84,30 @@ public class Constants {
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = ((5.3 / 1.07)/1.04); // TODO: This needs to be done // 6.525 * 8.215 / 8; // 6.55
+        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); // TODO: This needs to be done // 6.525 *
+                                                                           // 8.215 / 8; // 6.55
         public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
 
         // 43.75 - number to divide driven distance by
 
-        // public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
-        //         new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-        //         new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-        //         new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-        //         new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+        // public static final edu.wpi.first.math.geometry.Translation2d[]
+        // swerveModuleLocations = {
+        // new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth /
+        // 2.0),
+        // new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth /
+        // 2.0),
+        // new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth /
+        // 2.0),
+        // new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth /
+        // 2.0)
         // };
-        
+
         public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
                 new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
                 new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
                 new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
                 new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0)
         };
-        
 
         public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(swerveModuleLocations);
 
@@ -262,8 +266,8 @@ public class Constants {
         }
 
         // public static Pigeon2Configuration pigeonConfig(){
-        //     Pigeon2Configuration config = new Pigeon2Configuration();
-            
+        // Pigeon2Configuration config = new Pigeon2Configuration();
+
         // }
 
         public static TalonFXConfiguration swerveDriveFXConfig() {
@@ -326,9 +330,9 @@ public class Constants {
     }
 
     public static final class SnapConstants {
-        public static final double kP = 6.0; //was 6
-        public static final double kI = 0.5; //was .5
-        public static final double kD = 0.2; //was .2
+        public static final double kP = 6.0; // was 6
+        public static final double kI = 0.5; // was .5
+        public static final double kD = 0.2; // was .2
         public static final double snapTimeout = 0.25;
         public static final double snapEpsilon = 1.0;
 
@@ -342,7 +346,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 4; //was 2
+        public static final double kPThetaController = 4; // was 2
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;
@@ -456,7 +460,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5+0.3; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5 + 0.3; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -554,7 +558,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 86.3+58+4; // +4 so it never gets there
+        public static final double CANCODER_OFFSET = 86.3 + 58 + 4; // +4 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -563,7 +567,7 @@ public class Constants {
 
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 155;
-        public static final double kAmpScoreAngle = 165;
+        public static final double kAmpScoreAngle = 172;
         public static final double kloadShooterAngle = 118.8;
 
         public static final double kShootAngle = 118.8;
@@ -711,7 +715,7 @@ public class Constants {
 
         };
 
-            public static final double[][] groundIntakeWristPositionsIn = {
+        public static final double[][] groundIntakeWristPositionsIn = {
                 // @0 --> position of elevator (in meters)
                 // @1 --> position of wrist (in degrees)
                 // @2 --> position of the pivot(in degrees)
@@ -733,7 +737,7 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        //public static final double kShootRPM = 2000;
+        // public static final double kShootRPM = 2000;
 
         public static final double kP = .000094;
         public static final double kPSlave = 0.000098;

@@ -34,12 +34,13 @@ import com.team8013.frc2024.subsystems.ClimberHook;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Elevator;
 import com.team8013.frc2024.subsystems.EndEffectorREV;
+//import com.team8013.frc2024.subsystems.EndEffectorREV;
 import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Pivot;
 import com.team8013.frc2024.subsystems.Shooter;
 import com.team8013.frc2024.subsystems.Superstructure;
 import com.team8013.frc2024.subsystems.Wrist;
-import com.team8013.frc2024.subsystems.EndEffectorREV.State;
+//import com.team8013.frc2024.subsystems.EndEffectorREV.State;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 public class Robot extends TimedRobot {
@@ -363,13 +364,13 @@ public class Robot extends TimedRobot {
 				// mEndEffector.setEndEffectorVelocity(0);
 				// }
 
-				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
-					mEndEffector.setState(State.INTAKING);
-				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
-					mEndEffector.setState(State.OUTTAKING);
-				} else {
-					mEndEffector.setState(State.IDLE);
-				}
+				// if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
+				// 	mEndEffector.setState(State.INTAKING);
+				// } else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
+				// 	mEndEffector.setState(State.OUTTAKING);
+				// } else {
+				// 	mEndEffector.setState(State.IDLE);
+				// }
 
 			} else {
 				/*
@@ -442,7 +443,7 @@ public class Robot extends TimedRobot {
 					}
 				}
 
-				mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
+				//mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
 				// mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 
 				// mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());

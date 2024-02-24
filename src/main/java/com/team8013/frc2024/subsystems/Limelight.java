@@ -323,9 +323,9 @@ public class Limelight extends Subsystem {
     }
 
     public double getEndEffectorVelocity(){
-        double kShootVelocity = 6000;
+        double kShootVelocity = -6000;
         // if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
-        //     kShootVelocity = 6500;
+        //     kShootVelocity = -6500;
         // }
         return kShootVelocity;
     }
