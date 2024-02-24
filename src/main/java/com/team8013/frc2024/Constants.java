@@ -473,15 +473,15 @@ public class Constants {
 
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
-        public static final double kSourceIntakeAngle = 71;
-        public static final double kSourceLoadShooterAngle = 40; // if anything, lower
+        public static final double kSourceIntakeAngle = 68;
+        public static final double kSourceLoadShooterAngle = 41; // if anything, lower
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
         public static final double kShootAgainstSubwooferAngle = 56;
         public static final double kShootAgainstPodiumAngle = 40;
 
-        public static final double kShootLoadAngle = 65;
+        public static final double kShootLoadAngle = 35;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle1 = 65; // deg
@@ -497,7 +497,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 8;
+        public static final double kDeclimbAngle3 = 8.2;
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -639,18 +639,18 @@ public class Constants {
 
         /* CLIMB */
         public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(3); // initial height going up
-                                                            // to chain
+        // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
         public static final double kExtendOffChain1 = 0.054;
         public static final double kExtendOffChain2 = 0.126;
-        public static final double kExtendOffChain3 = 0.26;
+        public static final double kExtendOffChain3 = 0.26-Conversions.inchesToMeters(1); //to go within height limits
         public static final double kExtendToScoreTrapHeight = 0.447; // height of the elvator when scoring in the trap
 
         /* De Climb */
         public static final double kDeclimbHeight1 = 0.267;
-        public static final double kDeclimbHeight2 = 0.03;
-        public static final double kDeclimbHeight3 = 0.015;
+        public static final double kDeclimbHeight2 = 0.06;
+        public static final double kDeclimbHeight3 = 0.02;
         public static final double kDeclimbHeight4 = 0.32;
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {

@@ -426,7 +426,7 @@ public class Robot extends TimedRobot {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
 						mSuperstructure.setClimbModeStage2();
 					}
-					if (mControlBoard.operator.getButton(Button.A)) {
+					if (mControlBoard.operator.getTrigger(Side.LEFT)&&mControlBoard.operator.getTrigger(Side.RIGHT)) {
 						mSuperstructure.setClimbModeStage3();
 					}
 					if (mSuperstructure.climbFinished() && mControlBoard.operator.getButton(Button.START)
@@ -598,7 +598,7 @@ public class Robot extends TimedRobot {
 			} else {
 				alliance_changed = true;
 			}
-			//flip_trajectories = is_red_alliance; //TODO: THIS MIGHT MESS EVERYTHING UP
+			flip_trajectories = is_red_alliance; //TODO: THIS MIGHT MESS EVERYTHING UP?
 
 			SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);

@@ -300,6 +300,10 @@ public class Limelight extends Subsystem {
         return mDistanceToTarget;
     }
 
+    public double getTanLineToSpeaker(){
+        return mPeriodicIO.tanLineToSpeaker;
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
@@ -307,6 +311,7 @@ public class Limelight extends Subsystem {
         if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
             pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
         }
+
 
         //double pivAngle = Math.pow((-0.105 * (mPeriodicIO.tanLineToSpeaker)) + 2.404, 4.87);
         // double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker +

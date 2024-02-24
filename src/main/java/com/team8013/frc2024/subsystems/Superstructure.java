@@ -583,7 +583,7 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == -1) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 2);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle - 15);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
                     transfterToShooterTracker = 0;
                 }
@@ -628,13 +628,13 @@ public class Superstructure extends Subsystem {
 
                 if (transfterToShooterTracker == 2) {
                     /* Manual control here */
-                    if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                        manualControlPivotShootMode += 0.1;
-                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                        manualControlPivotShootMode -= 0.1;
-                    }
-                    mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
-                    // mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
+                    // if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                    //     manualControlPivotShootMode += 0.1;
+                    // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                    //     manualControlPivotShootMode -= 0.1;
+                    // }
+                    // mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
+                    mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
                 }
 
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
@@ -696,16 +696,17 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setEndEffectorClosedLoop(3018, 3018);
+                    mEndEffector.setOpenLoopDemand(0.48);
+                    // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece()) {
-                    mEndEffector.setEndEffectorClosedLoop(0, 0);
+                    mEndEffector.setOpenLoopDemand(0.0);
+                    // mEndEffector.setEndEffectorClosedLoop(0, 0);
                     // Once game piece aquired, then stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }
 
             } else if (mSuperstructureState == SuperstructureState.CLIMB) {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "CLIMB");
-                
 
                 /* CLIMB STATE YAY */
                 // setup climb in init state change
@@ -721,7 +722,8 @@ public class Superstructure extends Subsystem {
                  * 5:
                  */
 
-                if (climbingTracker<1 && mControlBoard.operator.getController().getPOV()==270){//if want stow go back to stow
+                if (climbingTracker < 1 && mControlBoard.operator.getController().getPOV() == 270) {// if want stow go
+                                                                                                    // back to stow
                     mSuperstructureState = SuperstructureState.STOW;
                 }
 
@@ -775,7 +777,7 @@ public class Superstructure extends Subsystem {
                 if (climbingTracker == 2 && mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
                         + 1) {
                     mClimberHook.setSetpointMotionMagic(80);
-                    
+
                     climbingTracker = 3;
                 }
 
@@ -793,7 +795,6 @@ public class Superstructure extends Subsystem {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain2);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle2);
 
-                    
                     climbingTracker = 5;
                 }
 
@@ -819,21 +820,19 @@ public class Superstructure extends Subsystem {
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle2);
                     // mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
 
-                    
-
                     // on the trap wall pressed against it, maybe shake the pivot to wedge the end
                     // effector in
                 }
-                if ((climbingTracker == 6)&&mPivot.getPivotAngleDeg()>Constants.PivotConstants.kExtendToScoreTrapAngle2-3){
-                mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
-                climbingTracker = 7;
+                if ((climbingTracker == 6)
+                        && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle2 - 3) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendToScoreTrapHeight);
+                    climbingTracker = 7;
                 }
-                if ((climbingTracker == 7)&&
+                if ((climbingTracker == 7) &&
                         (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendToScoreTrapHeight
                                 - Conversions.inchesToMeters(7.7))) {
-                mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbScoreInTrapAngle);
                 }
-
 
                 if ((climbingTracker == 7)
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle2
@@ -859,8 +858,8 @@ public class Superstructure extends Subsystem {
                         &&
                         (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight1
                                 + Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight2);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle2);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight2);
                     deClimbTracker = 1;
                 }
 
@@ -869,10 +868,16 @@ public class Superstructure extends Subsystem {
                         &&
                         (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight2
                                 + Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight3);
+
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle3);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
                     mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kDeclimb1Angle);
+
+                }
+
+                if ((deClimbTracker == 1)
+                        && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle3 + 1.5)) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight3);
                     deClimbTracker = 2;
                 }
 
@@ -915,22 +920,22 @@ public class Superstructure extends Subsystem {
 
             } else if (mSuperstructureState == SuperstructureState.INTAKING_SHOOTER_SOURCE) {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "INTAKING SHOOTER SOURCE");
-                mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceLoadShooterAngle);
+                // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kSourceLoadShooterAngle);
 
-                mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
+                // mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
 
-                if (mPivot.getPivotAngleDeg() > 25) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceLoadShooterHeight);
-                }
+                // if (mPivot.getPivotAngleDeg() > 25) {
+                //     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kSourceLoadShooterHeight);
+                // }
 
-                if (!mShooter.getBeamBreak()) {
-                    mShooter.setOpenLoopDemand(-0.3);
-                    // mEndEffector.setOpenLoopDemand(-0.35);
-                } else if (mShooter.getBeamBreak()) {
-                    mShooter.setOpenLoopDemand(0);
-                    // mEndEffector.setOpenLoopDemand(0);
-                    mSuperstructureState = SuperstructureState.STOW;
-                }
+                // if (!mShooter.getBeamBreak()) {
+                //     mShooter.setOpenLoopDemand(-0.3);
+                //      mEndEffector.setOpenLoopDemand(-0.48);
+                // } else if (mShooter.getBeamBreak()) {
+                //     mShooter.setOpenLoopDemand(0);
+                //     mEndEffector.setOpenLoopDemand(0);
+                //     mSuperstructureState = SuperstructureState.STOW;
+                // }
             }
 
             if ((mSuperstructureState == SuperstructureState.CLIMB
@@ -972,12 +977,12 @@ public class Superstructure extends Subsystem {
             autoShotTracker = 0;
         }
 
-        // if (mEndEffector.getVelocity() > 5000 && autoShotTracker == 0 &&
-        // mPivot.getPivotAngleDeg()>mLimelight.getPivotShootingAngle()-2){
-        // setSuperstuctureShoot(true);
-        // autoShotTracker = 1;
-        // autoShot = false;
-        // }
+        if (mEndEffector.getVelocity() > 5000 && autoShotTracker == 0 &&
+                mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle() - 2) {
+            setSuperstuctureShoot(true);
+            autoShotTracker = 1;
+            autoShot = false;
+        }
 
     }
 

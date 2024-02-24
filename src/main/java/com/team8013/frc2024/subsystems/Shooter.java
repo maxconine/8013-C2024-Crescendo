@@ -213,9 +213,9 @@ public class Shooter extends Subsystem {
 
     @Override
     public void outputTelemetry() {
-        SmartDashboard.putNumber("Intake Demand", mPeriodicIO.demand);
-        SmartDashboard.putNumber("Intake Volts", mPeriodicIO.voltage);
-        SmartDashboard.putNumber("Intake Current", mPeriodicIO.current);
+        SmartDashboard.putNumber("Shooter Demand", mPeriodicIO.demand);
+        SmartDashboard.putNumber("Shooter Volts", mPeriodicIO.voltage);
+        SmartDashboard.putNumber("Shooter Current", mPeriodicIO.current);
         SmartDashboard.putBoolean("Has game piece", hasGamePiece);
         SmartDashboard.putBoolean("Shooter Beam Break", mPeriodicIO.beamBreak);
     }
