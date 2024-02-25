@@ -11,7 +11,8 @@ public class AutoModeSelector {
     public enum DesiredMode {
         DO_NOTHING,
         ONE_NOTE,
-        TWO_LEFT,
+        TWO_RIGHT_RED,
+        TWO_MIDDLE,
         MIDDLE_AROUND,
         CW_FOUR_PIECE,
         MID_START_3_PIECE
@@ -26,7 +27,8 @@ public class AutoModeSelector {
     public AutoModeSelector() {
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
         mModeChooser.setDefaultOption("One Note", DesiredMode.ONE_NOTE);
-        mModeChooser.setDefaultOption("Two Left", DesiredMode.TWO_LEFT);
+        mModeChooser.setDefaultOption("Two Right RED", DesiredMode.TWO_RIGHT_RED);
+        mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece", DesiredMode.MID_START_3_PIECE);
@@ -51,8 +53,10 @@ public class AutoModeSelector {
                 return Optional.of(new DoNothingMode());
             case ONE_NOTE:
                 return Optional.of(new OneNote());
-            case TWO_LEFT:
-                return Optional.of(new TwoLeft());
+            case TWO_RIGHT_RED:
+                return Optional.of(new TwoRightRed());
+            case TWO_MIDDLE:
+                return Optional.of(new TwoMiddle());
             case MIDDLE_AROUND:
                 return Optional.of(new TwoAround());
             case CW_FOUR_PIECE:

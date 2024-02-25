@@ -481,7 +481,7 @@ public class Constants {
         public static final double kShootAgainstSubwooferAngle = 56;
         public static final double kShootAgainstPodiumAngle = 40;
 
-        public static final double kShootLoadAngle = 35;
+        public static final double kShootLoadAngle = 54;
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle1 = 65; // deg

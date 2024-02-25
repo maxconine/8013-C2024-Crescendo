@@ -250,10 +250,10 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		try {
-			// if (is_red_alliance) { //TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
-			// 	mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
-			// 	flip_trajectories = false;
-			// }
+			if (is_red_alliance) { //TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
+				mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
+				flip_trajectories = false;
+			}
 			mDisabledLooper.stop();
 			mEnabledLooper.start();
 			// mLoggingLooper.start();

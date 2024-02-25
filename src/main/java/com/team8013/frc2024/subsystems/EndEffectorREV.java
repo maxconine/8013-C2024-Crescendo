@@ -7,6 +7,7 @@ import com.team8013.frc2024.loops.Loop;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -35,6 +36,8 @@ public class EndEffectorREV extends Subsystem {
 
         mMaster.clearFaults();
         mSlave.clearFaults();
+
+        mSlave.setIdleMode(IdleMode.kCoast);
 
         // mMaster.setInverted(false);
         // mSlave.setInverted(false);
@@ -149,8 +152,8 @@ public class EndEffectorREV extends Subsystem {
                     mPeriodicIO.demandSlave);
             SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
         } else if (mState == State.INTAKING) {
-            mPeriodicIO.demandMaster = 0.605;
-            mPeriodicIO.demandSlave = 0.615;
+            mPeriodicIO.demandMaster = 0.605; //0.605
+            mPeriodicIO.demandSlave = 0.615; //0.615
             SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
         } else if (mState == State.OUTTAKING) {
             mPeriodicIO.demandMaster = -0.30;

@@ -21,7 +21,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class TwoLeft extends AutoModeBase {
+public class TwoMiddle extends AutoModeBase {
 
     private Superstructure mSuperstructure;
 
@@ -40,7 +40,7 @@ public class TwoLeft extends AutoModeBase {
     SwerveTrajectoryAction driveToFirstNote_C;
     final Trajectory drive_to_first_note_path_C;
 
-    public TwoLeft() {
+    public TwoMiddle() {
         mSuperstructure = Superstructure.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
