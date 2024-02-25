@@ -641,7 +641,7 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
-                                - Constants.ElevatorConstants.kPositionError)) {
+                                - Constants.ElevatorConstants.kPositionError)&&mPivot.getPivotAngleDeg()>mLimelight.getPivotShootingAngle()-Constants.PivotConstants.kPositionError) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
@@ -698,7 +698,7 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setOpenLoopDemand(0.48);
+                    mEndEffector.setOpenLoopDemand(0.41); ///.48 seemed to work
                     // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece()) {
                     mEndEffector.setOpenLoopDemand(0.0);
@@ -783,7 +783,7 @@ public class Superstructure extends Subsystem {
                     climbingTracker = 3;
                 }
 
-                if (climbingTracker == 3 && climbModeStage3) {
+                if (climbingTracker == 3 && climbModeStage3 && mClimberHook.getAngleDeg()>78) {
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain1);
                     mClimberHook.setSetpointMotionMagic(80);

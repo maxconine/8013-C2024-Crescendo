@@ -292,16 +292,16 @@ public class Robot extends TimedRobot {
 						mDrive.getHeading()));
 			}
 
-			if (mControlBoard.operator.getController().getRawButton(9)
-					&& mControlBoard.operator.getController().getRawButton(10)) {
-				mElevator.setWantHome(true);
-			}
+			// if (mControlBoard.operator.getController().getRawButton(9)
+			// 		&& mControlBoard.operator.getController().getRawButton(10)) {
+			// 	mElevator.setWantHome(true);
+			// }
 
 			if (mControlBoard.snapToTarget()) {
-				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
+				mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
 			}
 			if (mControlBoard.allignWithHumanPlayer()){
-				mDrive.setHeadingControlTarget(-45);
+				mDrive.setHeadingControlTarget(45);
 			}
 
 			mSuperstructure.setManualControlMode(Constants.isManualControlMode);

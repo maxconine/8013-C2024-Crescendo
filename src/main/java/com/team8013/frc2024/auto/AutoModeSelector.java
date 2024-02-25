@@ -11,7 +11,8 @@ public class AutoModeSelector {
     public enum DesiredMode {
         DO_NOTHING,
         ONE_NOTE,
-        TWO_RIGHT_BLUE,
+        TWO_AMP_SIDE,
+        TWO_STAGE_SIDE,
         TWO_MIDDLE,
         MIDDLE_AROUND,
         CW_FOUR_PIECE,
@@ -27,7 +28,8 @@ public class AutoModeSelector {
     public AutoModeSelector() {
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
         mModeChooser.setDefaultOption("One Note", DesiredMode.ONE_NOTE);
-        mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_RIGHT_BLUE);
+        mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_AMP_SIDE);
+        mModeChooser.setDefaultOption("Two Stage Side", DesiredMode.TWO_STAGE_SIDE);
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
@@ -53,8 +55,10 @@ public class AutoModeSelector {
                 return Optional.of(new DoNothingMode());
             case ONE_NOTE:
                 return Optional.of(new OneNote());
-            case TWO_RIGHT_BLUE:
+            case TWO_AMP_SIDE:
                 return Optional.of(new TwoAmpSide());
+            case TWO_STAGE_SIDE:
+                return Optional.of(new TwoStageSide());
             case TWO_MIDDLE:
                 return Optional.of(new TwoMiddle());
             case MIDDLE_AROUND:

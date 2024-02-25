@@ -55,17 +55,17 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
         drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                Constants.AutoConstants.createConfig(1.6, 1.5, 0.0, 0));
-        driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
+                Constants.AutoConstants.createConfig(1.1, 1.5, 0.0, 0));
+        driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
         drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                Constants.AutoConstants.createConfig(0.5, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0));
         driveToPickupSecondNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
         drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(1.5, 1.5, 0.0, 0));
         driveToShootSecondNote = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
     }
@@ -75,8 +75,10 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
         System.out.println("Running 3 note auto");
+         mSuperstructure.setSuperstuctureTransferToShooter();
+        runAction(new WaitAction(0.2));
         mSuperstructure.autoShot();
-        runAction(new WaitAction(1.2));
+        runAction(new WaitAction(0.8));
 
         runAction(new ParallelAction(List.of(
                 driveToFirstNote,
@@ -90,7 +92,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         runAction(new ParallelAction(List.of(
                 driveToShootFirstNote,
                 new SeriesAction(List.of(
-                        // new WaitToPassXCoordinateAction(3.2),
+                        new WaitAction(0.3),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
                         new WaitToPassXCoordinateAction(14.7),
@@ -115,7 +117,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                         // new WaitToPassXCoordinateAction(3.2),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                        new WaitToPassXCoordinateAction(15.45),
+                        new WaitToPassXCoordinateAction(15.4),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter()),
                         new WaitToPassXCoordinateAction(15.6),
                         new LambdaAction(() -> mSuperstructure.autoShot()))))));

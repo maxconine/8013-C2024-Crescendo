@@ -49,7 +49,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = false;
+    public static final boolean disableExtraTelemetry = true;
 
     public static final boolean isManualControlMode = false;
 
@@ -223,8 +223,8 @@ public class Constants {
         /*** MODULE SPECIFIC CONSTANTS ***/
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final double betaAngleOffset = 40.2;
-            public static final double compAngleOffset = 40.2;
+            public static final double betaAngleOffset = 40.07;
+            public static final double compAngleOffset = 40.07;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
@@ -234,8 +234,8 @@ public class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final double betaAngleOffset = 170.94;
-            public static final double compAngleOffset = 170.94;
+            public static final double betaAngleOffset = 171.21;
+            public static final double compAngleOffset = 171.21;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
@@ -245,8 +245,8 @@ public class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final double betaAngleOffset = 182.28;
-            public static final double compAngleOffset = 182.28;
+            public static final double betaAngleOffset = 182.46;
+            public static final double compAngleOffset = 182.46;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
@@ -256,8 +256,8 @@ public class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final double betaAngleOffset = 278.17;
-            public static final double compAngleOffset = 278.17;
+            public static final double betaAngleOffset = 277.82;
+            public static final double compAngleOffset = 277.82;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
@@ -346,7 +346,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 4; // was 2
+        public static final double kPThetaController = 2; // was 2, changed to 4
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;
@@ -460,7 +460,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5 + 0.3; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5 + 0.3-0.6; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -478,7 +478,7 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56;
+        public static final double kShootAgainstSubwooferAngle = 55.5;
         public static final double kShootAgainstPodiumAngle = 40;
 
         public static final double kShootLoadAngle = 54;
@@ -568,7 +568,7 @@ public class Constants {
 
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 155;
-        public static final double kAmpScoreAngle = 172;
+        public static final double kAmpScoreAngle = 169;
         public static final double kloadShooterAngle = 118.8;
 
         public static final double kShootAngle = 118.8;

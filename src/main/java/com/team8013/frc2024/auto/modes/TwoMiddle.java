@@ -26,9 +26,9 @@ public class TwoMiddle extends AutoModeBase {
     private Superstructure mSuperstructure;
 
     // required PathWeaver trajectory paths
-    String path_A = "paths/2024Paths/DriveToStageNote_A.path";
-    String path_B = "paths/2024Paths/DriveToStageNote_B.path";
-    String path_C = "paths/2024Paths/DriveToStageNote_C.path";
+    String path_A = "paths/2024Paths/TwoMiddle_A.path";
+    String path_B = "paths/2024Paths/TwoMiddle_B.path";
+    String path_C = "paths/2024Paths/TwoMiddle_C.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote_A;
@@ -40,24 +40,26 @@ public class TwoMiddle extends AutoModeBase {
     SwerveTrajectoryAction driveToFirstNote_C;
     final Trajectory drive_to_first_note_path_C;
 
+
     public TwoMiddle() {
         mSuperstructure = Superstructure.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.4, 1.2, 0.0, 0));
         driveToFirstNote_A = new SwerveTrajectoryAction(drive_to_first_note_path_A, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_A);
 
         drive_to_first_note_path_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-        Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
-        driveToFirstNote_B = new SwerveTrajectoryAction(drive_to_first_note_path_B, Rotation2d.fromDegrees(-30));
+        Constants.AutoConstants.createConfig(0.6, 1.2, 0.0, 0));
+        driveToFirstNote_B = new SwerveTrajectoryAction(drive_to_first_note_path_B, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_B);
 
         drive_to_first_note_path_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-        Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
+        Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
         driveToFirstNote_C = new SwerveTrajectoryAction(drive_to_first_note_path_C, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_C);
+
     }
 
     @Override
@@ -67,13 +69,43 @@ public class TwoMiddle extends AutoModeBase {
         System.out.println("Running 2 note auto");
         mSuperstructure.autoShot();
         runAction(new WaitAction(1.2));
-        runAction(driveToFirstNote_A);
-        mSuperstructure.setSuperstuctureIntakingGround();
-        runAction(driveToFirstNote_B);
-        runAction(new WaitAction(0.1));
-        runAction(driveToFirstNote_C);
-        mSuperstructure.setSuperstuctureTransferToShooter();
-        mSuperstructure.setSuperstuctureShoot(true);
+
+        runAction(new ParallelAction(List.of(
+                driveToFirstNote_A,
+                new SeriesAction(List.of(
+                        //new WaitToPassXCoordinateAction(15.62),
+                        new WaitAction(0.05),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(-2))),
+                        // new WaitForHeadingAction(160,200),
+                        new WaitAction(0.4),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+
+        runAction(new ParallelAction(List.of(
+                driveToFirstNote_B,
+                new SeriesAction(List.of(
+                        new WaitAction(0.05),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(180))),
+                        new WaitAction(0.5),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter())
+                )))));
+        mSuperstructure.autoShot();
+        runAction(new WaitAction(0.4));
+        mSuperstructure.setSuperstuctureStow();
+
+        runAction(new ParallelAction(List.of(
+                driveToFirstNote_C,
+                new SeriesAction(List.of(
+                        new WaitAction(0.3),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(0))),
+                        // new WaitToPassXCoordinateAction(11.3),
+                        new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(-40)))
+                        //new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))
+         )))));
 
         // runAction(new ParallelAction(List.of(
         //         driveToFirstNote,
@@ -86,6 +118,17 @@ public class TwoMiddle extends AutoModeBase {
         // runAction(new WaitForSuperstructureAction());
         // System.out.println("Finished waiting for stow");
         // mSuperstructure.scoreL3State();
+
+                //old stuff that worked by picking up at a 30 degree angle
+
+        // runAction(driveToFirstNote_A);
+        // mSuperstructure.setSuperstuctureIntakingGround();
+        // runAction(driveToFirstNote_B);
+        // runAction(new WaitAction(0.1));
+        // runAction(driveToFirstNote_C);
+        // mSuperstructure.setSuperstuctureTransferToShooter();
+        // mSuperstructure.setSuperstuctureShoot(true);
+        // runAction(new WaitAction(1));
 
     }
 

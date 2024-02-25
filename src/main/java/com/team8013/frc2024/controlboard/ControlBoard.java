@@ -21,6 +21,9 @@ public class ControlBoard {
     private final int kDpadDown = 180;
     private final int kDpadLeft = 270;
 
+    private boolean leftBumperBoolean = false;
+    private boolean leftBumperPressed = false;
+
     private static ControlBoard mInstance = null;
 
     int tagLastChased = -1;
@@ -38,6 +41,7 @@ public class ControlBoard {
     private ControlBoard() {
         m_driver = new GenericHID(Ports.DRIVER_PORT);
         operator = new CustomXboxController(Ports.OPERATOR_PORT);
+        leftBumperBoolean = m_driver.getRawButton(2);
     }
 
     
@@ -100,9 +104,10 @@ public class ControlBoard {
             }
     }
 
+    /*right switch up */
     public boolean zeroGyro() {
         //SmartDashboard.putBoolean("Zero Gyro", m_driver.getRawButton(2));
-        return m_driver.getRawButton(2);
+        return m_driver.getRawButton(2);//(m_driver.getRawAxis(6)<-0.3);
     }
     
         public enum SwerveCardinal {
@@ -138,12 +143,21 @@ public class ControlBoard {
             
     }
 
+    /**far left switch */
     public boolean snapToTarget(){
-        return m_driver.getRawAxis(4)<-0.25;//m_driver.getRawButton(1);
+        return m_driver.getRawAxis(4)<-0.25;
+        //m_driver.getRawButton(1); 
     }
 
+    /**right bumper */
     public boolean allignWithHumanPlayer(){
-        return (m_driver.getRawAxis(6)<-0.3);
+        if (leftBumperBoolean!=m_driver.getRawButton(1)){
+            leftBumperBoolean = !leftBumperBoolean;
+            return true;
+        }
+
+        return false;
+        //;
     }
 
     public double pivotPercentOutput(){
