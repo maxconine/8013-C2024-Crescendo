@@ -7,10 +7,10 @@ import com.team8013.frc2024.loops.Loop;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,8 +26,10 @@ public class EndEffectorREV extends Subsystem {
     private CANSparkFlex mMaster;
     private CANSparkFlex mSlave;
 
-    private PIDController pidMaster;
-    private PIDController pidSlave;
+    private SparkPIDController pidMaster;
+    private SparkPIDController pidSlave;
+
+    private double kP, kI, kD, kIz, kFFMaster, kFFSlave, kMaxOutput, kMinOutput;
 
     private EndEffectorREV() {
         mMaster = new CANSparkFlex(42, MotorType.kBrushless);
@@ -44,13 +46,41 @@ public class EndEffectorREV extends Subsystem {
 
         // Customize these configs from constants in the future
 
-        pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI,
-                Constants.EndEffectorConstants.kD);
-        pidSlave = new PIDController(Constants.EndEffectorConstants.kPSlave, Constants.EndEffectorConstants.kI,
-                Constants.EndEffectorConstants.kD);
+        pidMaster = mMaster.getPIDController();
+        pidSlave = mSlave.getPIDController();
+
+        // pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI,
+        //         Constants.EndEffectorConstants.kD);
+        // pidSlave = new PIDController(Constants.EndEffectorConstants.kPSlave, Constants.EndEffectorConstants.kI,
+        //         Constants.EndEffectorConstants.kD);
 
         m_encoderMaster = mMaster.getEncoder();
         m_encoderSlave = mSlave.getEncoder();
+
+        // PID coefficients
+        kP = 0.00001;
+        kI = 0;
+        kD = 0;
+        kIz = 0;
+        kFFMaster = 0.000188;
+        kFFSlave = 000215;
+        kMaxOutput = 1;
+        kMinOutput = -1;
+
+        // set PID coefficients
+        pidMaster.setP(kP);
+        pidMaster.setI(kI);
+        pidMaster.setD(kD);
+        pidMaster.setIZone(kIz);
+        pidMaster.setFF(kFFMaster);
+        pidMaster.setOutputRange(kMinOutput, kMaxOutput);
+
+        pidSlave.setP(kP);
+        pidSlave.setI(kI);
+        pidSlave.setD(kD);
+        pidSlave.setIZone(kIz);
+        pidSlave.setFF(kFFSlave);
+        pidSlave.setOutputRange(kMinOutput, kMaxOutput);
 
     }
 
@@ -138,20 +168,25 @@ public class EndEffectorREV extends Subsystem {
     }
 
     @Override
-    public void writePeriodicOutputs() {
+    public void writePeriodicOutputs(){
+
+        if (mState == State.CLOSED_LOOP) {
+            pidMaster.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity);
+            pidSlave.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity);
+            // mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
+            //         mPeriodicIO.demandMaster);
+            // mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
+            //         mPeriodicIO.demandSlave);
+            SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
+        }
+        else{
 
         if (mState == State.IDLE) {
             mPeriodicIO.demandMaster = 0;
             mPeriodicIO.demandSlave = 0;
             SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
-        }
-        if (mState == State.CLOSED_LOOP) {
-            mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
-                    mPeriodicIO.demandMaster);
-            mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
-                    mPeriodicIO.demandSlave);
-            SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
-        } else if (mState == State.INTAKING) {
+        } 
+        else if (mState == State.INTAKING) {
             mPeriodicIO.demandMaster = 0.605; //0.605
             mPeriodicIO.demandSlave = 0.615; //0.615
             SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
@@ -166,13 +201,14 @@ public class EndEffectorREV extends Subsystem {
         mMaster.set(mPeriodicIO.demandMaster);
         mSlave.set(mPeriodicIO.demandSlave);
     }
+    }
 
     public void setEndEffectorClosedLoop(double rpmMaster, double rpmSlave) {
         if (mState != State.CLOSED_LOOP) {
             mState = State.CLOSED_LOOP;
         }
-        mPeriodicIO.demandMaster = rpmMaster * 2.5;
-        mPeriodicIO.demandSlave = rpmSlave * 2.5;
+        mPeriodicIO.demandMaster = rpmMaster/1.31;
+        mPeriodicIO.demandSlave = rpmSlave/1.131;
 
     }
 
