@@ -16,19 +16,22 @@ import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.auto.actions.WaitToPassYCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
+import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Superstructure;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class TwoRightRed extends AutoModeBase {
+public class TwoRightBlue extends AutoModeBase {
 
     private Superstructure mSuperstructure;
+    private Limelight mLimelight;
 
     // required PathWeaver trajectory paths
     String path_A = "paths/2024Paths/RightRed_A.path";
     String path_B = "paths/2024Paths/RightRed_B.path";
+    String path_C = "paths/2024Paths/RightRed_C.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;
@@ -37,38 +40,49 @@ public class TwoRightRed extends AutoModeBase {
     SwerveTrajectoryAction driveToShootFirstNote;
     final Trajectory drivePath_B;
 
+        SwerveTrajectoryAction driveToThirdNote;
+    final Trajectory drivePath_C;
 
-    public TwoRightRed() {
+
+    public TwoRightBlue() {
         mSuperstructure = Superstructure.getInstance();
+        mLimelight = Limelight.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(0.85, 1.5, 0.0, 0));
-        driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
+                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0));
+        driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(120.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
         drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                Constants.AutoConstants.createConfig(0.85, 1.5, 0.0, 0));
-        driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
+                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0));
+        driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(120.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
+
+        drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
+                Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
+        driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(0));
+        ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
     }
 
     @Override
     protected void routine() throws AutoModeEndedException {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
+        mLimelight.shootAgainstSubwooferSideAngle(true);
 
-        System.out.println("Running 2 note RED RIGHT auto");
+        System.out.println("Running 2 note BLUE RIGHT auto");
         mSuperstructure.autoShot();
         runAction(new WaitAction(1.2));
 
         runAction(new ParallelAction(List.of(
                 driveToFirstNote,
                 new SeriesAction(List.of(
-                        new WaitToPassXCoordinateAction(15.8),
+                        //new WaitToPassYCoordinateAction(6.75),
+                        new WaitAction(0.3),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))),
-                        new WaitAction(0.1),
+                        new WaitAction(0.3),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
 
         runAction(new ParallelAction(List.of(
@@ -78,9 +92,24 @@ public class TwoRightRed extends AutoModeBase {
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(120.0))),
                         new WaitToPassXCoordinateAction(14.7),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter()),
-                        new WaitToPassXCoordinateAction(15.6),
-                        new LambdaAction(() -> mSuperstructure.autoShot()))))));
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter())
+                        // new WaitToPassYCoordinateAction(6.7),
+                        // new LambdaAction(() -> mSuperstructure.autoShot())
+                        )))));
+        mSuperstructure.autoShot();
+        runAction(new WaitAction(0.4));
+        mSuperstructure.setSuperstuctureStow();
+        mLimelight.shootAgainstSubwooferSideAngle(false);
+        
+        runAction(new ParallelAction(List.of(
+                driveToThirdNote,
+                new SeriesAction(List.of( 
+                        new WaitAction(0.3),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
+                        new WaitToPassXCoordinateAction(11.3),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+
 
 
     }
@@ -89,7 +118,7 @@ public class TwoRightRed extends AutoModeBase {
     public Pose2d getStartingPose() {
         Rotation2d startingRotation = Rotation2d.fromDegrees(120.0);
         if (Robot.is_red_alliance) {
-            startingRotation = Rotation2d.fromDegrees(60);
+            startingRotation = Rotation2d.fromDegrees(300);
         }
         return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
     }

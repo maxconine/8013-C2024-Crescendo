@@ -37,6 +37,7 @@ public class Limelight extends Subsystem {
     private ProfiledPIDController omegaController;
     private Pose3d robotPose;
     boolean isRedAlliance = true;
+    private boolean shootAgainstSubwooferSide = false;
 
     private int mLatencyCounter = 0;
 
@@ -304,12 +305,20 @@ public class Limelight extends Subsystem {
         return mPeriodicIO.tanLineToSpeaker;
     }
 
+    public void shootAgainstSubwooferSideAngle(boolean toggle){
+        shootAgainstSubwooferSide = toggle;
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
         if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
             pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
+        }
+
+        if (shootAgainstSubwooferSide){
+            pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+2;
         }
 
 
