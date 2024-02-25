@@ -624,7 +624,7 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == 2
                         && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterFinalHeight
                                 - Constants.ElevatorConstants.kPositionError) {
-                    mEndEffector.setOpenLoopDemand(0.925, 0.95);
+                    mEndEffector.setOpenLoopDemand(0.805, 0.83); //0.925 and 0.95 work for fast
                     // mEndEffector.setEndEffectorClosedLoop(mLimelight.getEndEffectorVelocity(),mLimelight.getEndEffectorVelocity());
                 }
 

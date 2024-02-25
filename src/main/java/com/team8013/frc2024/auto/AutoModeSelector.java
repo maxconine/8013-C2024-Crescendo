@@ -14,6 +14,7 @@ public class AutoModeSelector {
         TWO_AMP_SIDE,
         TWO_STAGE_SIDE,
         TWO_MIDDLE,
+        CAUSE_CHAOS_STAGE_SIDE,
         MIDDLE_AROUND,
         CW_FOUR_PIECE,
         MID_START_3_PIECE
@@ -31,6 +32,7 @@ public class AutoModeSelector {
         mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_AMP_SIDE);
         mModeChooser.setDefaultOption("Two Stage Side", DesiredMode.TWO_STAGE_SIDE);
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
+        mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
         mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece", DesiredMode.MID_START_3_PIECE);
@@ -61,6 +63,8 @@ public class AutoModeSelector {
                 return Optional.of(new TwoStageSide());
             case TWO_MIDDLE:
                 return Optional.of(new TwoMiddle());
+            case CAUSE_CHAOS_STAGE_SIDE:
+                return Optional.of(new CauseChaosStageSide());
             case MIDDLE_AROUND:
                 return Optional.of(new TwoAround());
             case CW_FOUR_PIECE:

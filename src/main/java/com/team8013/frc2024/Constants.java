@@ -346,7 +346,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 2; // was 2, changed to 4
+        public static final double kPThetaController = 2.75; // was 2, changed to 4
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;
