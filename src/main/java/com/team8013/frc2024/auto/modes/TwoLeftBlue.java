@@ -13,7 +13,6 @@ import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
-import com.team8013.frc2024.auto.actions.WaitToPassYCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Limelight;
@@ -23,15 +22,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class TwoRightBlue extends AutoModeBase {
+public class TwoLeftBlue extends AutoModeBase {
 
     private Superstructure mSuperstructure;
     private Limelight mLimelight;
 
     // required PathWeaver trajectory paths
-    String path_A = "paths/2024Paths/RightRed_A.path";
-    String path_B = "paths/2024Paths/RightRed_B.path";
-    String path_C = "paths/2024Paths/RightRed_C.path";
+    String path_A = "paths/2024Paths/LeftRed_A.path";
+    String path_B = "paths/2024Paths/LeftRed_B.path";
+    String path_C = "paths/2024Paths/LeftRed_C.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;
@@ -44,23 +43,23 @@ public class TwoRightBlue extends AutoModeBase {
     final Trajectory drivePath_C;
 
 
-    public TwoRightBlue() {
+    public TwoLeftBlue() {
         mSuperstructure = Superstructure.getInstance();
         mLimelight = Limelight.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); //0.95 also works
         driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(120.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
         drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); //0.95 also works
         driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(120.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
         drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
+                Constants.AutoConstants.createConfig(1.5, 1.5, 0.0, 0));
         driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -71,7 +70,7 @@ public class TwoRightBlue extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
         mLimelight.shootAgainstSubwooferSideAngle(true);
 
-        System.out.println("Running 2 note BLUE RIGHT auto");
+        System.out.println("Running 2 note BLUE LEFT auto");
         mSuperstructure.autoShot();
         runAction(new WaitAction(1.2));
 
@@ -118,7 +117,7 @@ public class TwoRightBlue extends AutoModeBase {
     public Pose2d getStartingPose() {
         Rotation2d startingRotation = Rotation2d.fromDegrees(120.0);
         if (Robot.is_red_alliance) {
-            startingRotation = Rotation2d.fromDegrees(300);
+            startingRotation = Rotation2d.fromDegrees(300);//weird, doesnt work
         }
         return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
     }

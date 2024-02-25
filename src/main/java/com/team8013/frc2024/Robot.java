@@ -594,6 +594,7 @@ public class Robot extends TimedRobot {
 						}
 						is_red_alliance = false;
 					}
+					is_red_alliance = !is_red_alliance; //TODO: this is only for red right side
 				}
 			} else {
 				alliance_changed = true;
