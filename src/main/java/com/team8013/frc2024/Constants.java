@@ -49,7 +49,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = true;
+    public static final boolean disableExtraTelemetry = false;
 
     public static final boolean isManualControlMode = false;
 
@@ -559,7 +559,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 86.3 + 58 + 4; // +4 so it never gets there
+        public static final double CANCODER_OFFSET = 209.5+4;//86.3 + 58 + 4; // +4 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
