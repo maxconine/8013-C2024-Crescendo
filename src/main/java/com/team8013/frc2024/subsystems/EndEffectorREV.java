@@ -39,6 +39,9 @@ public class EndEffectorREV extends Subsystem {
         mMaster.clearFaults();
         mSlave.clearFaults();
 
+        mMaster.enableVoltageCompensation(12);
+        mSlave.enableVoltageCompensation(12);
+
         mSlave.setIdleMode(IdleMode.kCoast);
 
         // mMaster.setInverted(false);

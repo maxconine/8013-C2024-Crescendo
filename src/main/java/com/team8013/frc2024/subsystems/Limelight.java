@@ -53,6 +53,7 @@ public class Limelight extends Subsystem {
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean mOutputsHaveChanged = true;
+    private boolean shootFromPodium = false;
     // private final NetworkTableEntry tCameraPose =
     // mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
@@ -309,6 +310,12 @@ public class Limelight extends Subsystem {
         shootAgainstSubwooferSide = toggle;
     }
 
+    public void setShootingFromPodium(boolean shootingFromPodium){
+        if (shootFromPodium != shootingFromPodium){
+            shootFromPodium = shootingFromPodium;
+        }
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+4.5;
@@ -319,6 +326,10 @@ public class Limelight extends Subsystem {
 
         if (shootAgainstSubwooferSide){
             pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;
+        }
+
+        if (shootFromPodium){
+            pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
         }
 
 

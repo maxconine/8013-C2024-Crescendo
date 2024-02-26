@@ -75,6 +75,7 @@ public class Robot extends TimedRobot {
 	public static boolean flip_trajectories = false;
 	public static boolean wantChase = false;
 	public static boolean doneChasing = true;
+	public static boolean shootFromPodiumBoolean = false;
 
 	private final int kDpadUp = 0;
 	private final int kDpadRight = 90;
@@ -278,6 +279,8 @@ public class Robot extends TimedRobot {
 				mDrive.resetModulesToAbsolute();
 			}
 
+
+
 			if (mControlBoard.getBrake()) {
 				mDrive.orientModules(List.of(
 						Rotation2d.fromDegrees(45),
@@ -290,16 +293,30 @@ public class Robot extends TimedRobot {
 						mControlBoard.getSwerveTranslation().y(),
 						mControlBoard.getSwerveRotation(),
 						mDrive.getHeading()));
+
+				
 			}
+			
+			if (mControlBoard.snapToTarget()) {
+					mDrive.setHeadingControlTarget(202.5);
+					mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
+						0,
+						0,
+						mDrive.getHeading()));
+				//shootFromPodiumBoolean = true;
+				//mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
+			}
+			// else if (!mControlBoard.snapToTarget()){
+			// 	shootFromPodiumBoolean = false;
+			// }
+
+			mLimelight.setShootingFromPodium(mControlBoard.snapToTarget());
 
 			// if (mControlBoard.operator.getController().getRawButton(9)
 			// 		&& mControlBoard.operator.getController().getRawButton(10)) {
 			// 	mElevator.setWantHome(true);
 			// }
 
-			if (mControlBoard.snapToTarget()) {
-				mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
-			}
 			if (mControlBoard.allignWithHumanPlayer()){
 				mDrive.setHeadingControlTarget(45);
 			}

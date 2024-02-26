@@ -478,8 +478,8 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 55.5;
-        public static final double kShootAgainstPodiumAngle = 40;
+        public static final double kShootAgainstSubwooferAngle = 54.5;
+        public static final double kShootAgainstPodiumAngle = 44;
 
         public static final double kShootLoadAngle = 54;
 
@@ -767,7 +767,7 @@ public class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final double kLoadShooterDemand = -0.3;
+        public static final double kLoadShooterDemand = -0.5;
         public static final double kSlingshotDemand = 0.95;
 
         public static TalonFXConfiguration shooterMotorConfig() {

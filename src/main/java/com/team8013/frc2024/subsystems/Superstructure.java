@@ -604,7 +604,9 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setState(State.OUTTAKING);
+                    mEndEffector.setOpenLoopDemand(-0.15,-0.18);
+                    
+                    //mEndEffector.setState(State.OUTTAKING);
 
                 }
 
@@ -624,8 +626,14 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == 2
                         && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterFinalHeight
                                 - Constants.ElevatorConstants.kPositionError) {
-                    //mEndEffector.setOpenLoopDemand(0.805, 0.83); //0.925 and 0.95 work for fast
-                    mEndEffector.setEndEffectorClosedLoop(5700,5700);
+                    if (!mControlBoard.snapToTarget()){
+                    mEndEffector.setOpenLoopDemand(0.66, 0.68); //0.925 and 0.95 work for fast
+                    }
+                    else{
+                        mEndEffector.setOpenLoopDemand(0.93,0.97);
+                    }
+
+                    //mEndEffector.setEndEffectorClosedLoop(5700,4000);
                 }
 
                 if (transfterToShooterTracker == 2) {
@@ -668,6 +676,10 @@ public class Superstructure extends Subsystem {
 
                 if (mPivot.getPivotAngleDeg() > 25) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kAmpScoreHeight);
+                }
+
+                if (!mEndEffector.hasGamePiece()){
+                    mSuperstructureState = SuperstructureState.STOW;
                 }
 
             } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
@@ -842,6 +854,7 @@ public class Superstructure extends Subsystem {
                         &&
                         (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendToScoreTrapHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
+                    mEndEffector.setState(State.OUTTAKING);
                     climbFinished = true;
 
                 }
@@ -966,7 +979,7 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setState(State.OUTTAKING);
+                    mEndEffector.setState(State.OUTTAKING); //TODO: if I make the outtaking slower for shooter load, change this too
 
                 }
 
