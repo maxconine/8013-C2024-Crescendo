@@ -583,7 +583,7 @@ public class Superstructure extends Subsystem {
                  */
 
                 if (transfterToShooterTracker == -1) {
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 5);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
@@ -594,7 +594,7 @@ public class Superstructure extends Subsystem {
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 5);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
                     // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
 
                     transfterToShooterTracker = 1;
@@ -615,7 +615,7 @@ public class Superstructure extends Subsystem {
                 // } //causes it to not work for auto ):
 
                 if (mShooter.getBeamBreak() && transfterToShooterTracker == 1) {
-                    mShooter.setOpenLoopDemand(-0.005);
+                    mShooter.setOpenLoopDemand(-0.01);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
                     // mEndEffector.setOpenLoopDemand(0.95); //HERE DO RPM
@@ -1030,7 +1030,7 @@ public class Superstructure extends Subsystem {
             autoShotTracker = 0;
         }
 
-        if (mEndEffector.getVelocity() > 5000 && autoShotTracker == 0 &&
+        if (mEndEffector.getVelocity() > 3800 && autoShotTracker == 0 &&
                 mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle() - 2) {
             setSuperstuctureShoot(true);
             autoShotTracker = 1;

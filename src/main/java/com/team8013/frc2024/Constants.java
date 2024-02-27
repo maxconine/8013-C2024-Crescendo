@@ -84,7 +84,7 @@ public class Constants {
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); // TODO: This needs to be done // 6.525 *
+        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); //(((5.3 / 1.07)/2)*0.952); //((5.3 / 1.07) / 1.04);// // TODO: This needs to be done // 6.525 * //might just be 2
                                                                            // 8.215 / 8; // 6.55
         public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
 
@@ -767,7 +767,7 @@ public class Constants {
     }
 
     public static final class ShooterConstants {
-        public static final double kLoadShooterDemand = -0.5;
+        public static final double kLoadShooterDemand = -0.65;
         public static final double kSlingshotDemand = 0.95;
 
         public static TalonFXConfiguration shooterMotorConfig() {

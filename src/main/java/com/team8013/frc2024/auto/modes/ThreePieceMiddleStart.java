@@ -110,6 +110,8 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
                         new LambdaAction(() -> Drive.getInstance()
                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))) )))));
+        
+        mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(
                 driveToShootSecondNote,
