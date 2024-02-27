@@ -260,6 +260,8 @@ public class Robot extends TimedRobot {
 			// mLoggingLooper.start();
 			mSuperstructure.stop();
 
+			mDrive.setAutoSpinFast(false);
+
 			mDrive.setNeutralBrake(true);
 			mClimberHook.setWantNeutralBrake(true);
 

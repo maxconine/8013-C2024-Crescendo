@@ -85,6 +85,8 @@ public class TwoStageSide extends AutoModeBase {
                         //new WaitForHeadingAction(160,200),
                         new WaitAction(0.5),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+                        
+        mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(
                 driveToShootFirstNote,
@@ -112,6 +114,8 @@ public class TwoStageSide extends AutoModeBase {
                         //new WaitToPassXCoordinateAction(11.3),
                         new WaitAction(1.5),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+
+        mSuperstructure.setSuperstuctureStow();
 
 
 

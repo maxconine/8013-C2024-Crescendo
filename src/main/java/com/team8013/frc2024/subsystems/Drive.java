@@ -57,6 +57,8 @@ public class Drive extends Subsystem {
 
     private static Drive mInstance;
 
+    private boolean spinFastDuringAuto = false;
+
     public static Drive getInstance() {
         if (mInstance == null) {
             mInstance = new Drive();
@@ -223,6 +225,10 @@ public class Drive extends Subsystem {
         }
     }
 
+    public void setAutoSpinFast(boolean spin) {
+        spinFastDuringAuto = spin;
+    }
+
     private void updateSetpoint() {
         if (mControlState == DriveControlState.FORCE_ORIENT)
             return;
@@ -298,10 +304,17 @@ public class Drive extends Subsystem {
 
         SmartDashboard.putNumber("Accel", min_translational_scalar);
 
-        wanted_speeds = new ChassisSpeeds(
-                prev_chassis_speeds.vxMetersPerSecond + dx * min_translational_scalar,
-                prev_chassis_speeds.vyMetersPerSecond + dy * min_translational_scalar,
-                prev_chassis_speeds.omegaRadiansPerSecond + domega * min_omega_scalar);
+        if (!spinFastDuringAuto) {
+            wanted_speeds = new ChassisSpeeds(
+                    prev_chassis_speeds.vxMetersPerSecond + dx * min_translational_scalar,
+                    prev_chassis_speeds.vyMetersPerSecond + dy * min_translational_scalar,
+                    prev_chassis_speeds.omegaRadiansPerSecond + domega * min_omega_scalar);
+        } else {
+            wanted_speeds = new ChassisSpeeds(
+                    prev_chassis_speeds.vxMetersPerSecond + dx * min_translational_scalar,
+                    prev_chassis_speeds.vyMetersPerSecond + dy * min_translational_scalar,
+                    -12);
+        }
 
         ModuleState[] real_module_setpoints = SwerveConstants.kKinematics.toModuleStates(wanted_speeds);
         mPeriodicIO.des_module_states = real_module_setpoints;

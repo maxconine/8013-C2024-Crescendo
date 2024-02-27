@@ -81,6 +81,8 @@ public class TwoMiddle extends AutoModeBase {
                         new WaitAction(0.4),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
 
+        mSuperstructure.setSuperstuctureStow();
+
         runAction(new ParallelAction(List.of(
                 driveToFirstNote_B,
                 new SeriesAction(List.of(
@@ -106,6 +108,8 @@ public class TwoMiddle extends AutoModeBase {
                                 .setAutoHeading(Rotation2d.fromDegrees(-40)))
                         //new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))
          )))));
+
+        mSuperstructure.setSuperstuctureStow();
 
         // runAction(new ParallelAction(List.of(
         //         driveToFirstNote,

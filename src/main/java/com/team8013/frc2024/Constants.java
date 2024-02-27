@@ -460,7 +460,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5 + 0.3-0.6; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = -77 - 5 + 0.1; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -478,8 +478,8 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 54.5;
-        public static final double kShootAgainstPodiumAngle = 44;
+        public static final double kShootAgainstSubwooferAngle = 55; 
+        public static final double kShootAgainstPodiumAngle = 45;
 
         public static final double kShootLoadAngle = 54;
 
@@ -621,7 +621,7 @@ public class Constants {
         public static final double kMinHeight = 0; // meters
         public static final double kMaxHeight = 0.7;
 
-        public static final double kStowHeight = 0.005;
+        public static final double kStowHeight = 0.01;
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */

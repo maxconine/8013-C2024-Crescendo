@@ -85,6 +85,8 @@ public class TwoAmpSide extends AutoModeBase {
                         new WaitAction(0.3),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
 
+        mSuperstructure.setSuperstuctureStow();
+
         runAction(new ParallelAction(List.of(
                 driveToShootFirstNote,
                 new SeriesAction(List.of(
@@ -109,6 +111,8 @@ public class TwoAmpSide extends AutoModeBase {
                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))),
                         new WaitToPassXCoordinateAction(11.3),
                         new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
+        
+        mSuperstructure.setSuperstuctureStow();
 
 
 
