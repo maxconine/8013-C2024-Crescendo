@@ -31,8 +31,8 @@ public class Wrist extends Subsystem {
     }
 
     private Wrist() {
-        mMotor = new TalonFX(Ports.WRIST, Ports.CANBUS);
-        mCANcoder = new CANcoder(Ports.WRIST_CANCODER, Ports.CANBUS);
+        mMotor = new TalonFX(Ports.WRIST, Ports.CANBUS_UPPER);
+        mCANcoder = new CANcoder(Ports.WRIST_CANCODER, Ports.CANBUS_UPPER);
 
         // Customize these configs from constants in the future
         mMotor.getConfigurator().apply(Constants.WristConstants.wristMotorConfig());

@@ -1,19 +1,13 @@
 package com.team8013.frc2024.auto.modes;
 
-import java.util.List;
-
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Robot;
 import com.team8013.frc2024.auto.AutoModeBase;
 import com.team8013.frc2024.auto.AutoModeEndedException;
 import com.team8013.frc2024.auto.AutoTrajectoryReader;
 import com.team8013.frc2024.auto.actions.LambdaAction;
-import com.team8013.frc2024.auto.actions.ParallelAction;
-import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
-import com.team8013.frc2024.auto.actions.WaitForSuperstructureAction;
-import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Superstructure;
@@ -48,7 +42,7 @@ public class OneNote extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
         System.out.println("Running 1 note auto");
-        //mSuperstructure.autoShot();
+        mSuperstructure.autoShot();
         runAction(new WaitAction(1.5));
         runAction(driveToFirstNote);
 

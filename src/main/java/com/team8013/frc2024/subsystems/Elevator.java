@@ -8,7 +8,6 @@ import com.team8013.lib.Conversions;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.util.DelayedBoolean;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -37,8 +36,8 @@ public class Elevator extends Subsystem {
     }
 
     private Elevator() {
-        mMaster = new TalonFX(Ports.ELEVATOR_A, Ports.CANBUS);
-        mSlave = new TalonFX(Ports.ELEVATOR_B, Ports.CANBUS);
+        mMaster = new TalonFX(Ports.ELEVATOR_A, Ports.CANBUS_UPPER);
+        mSlave = new TalonFX(Ports.ELEVATOR_B, Ports.CANBUS_UPPER);
 
         // Customize these configs from constants in the future
         mMaster.getConfigurator().apply(Constants.ElevatorConstants.elevatorFastMotorConfig());
@@ -276,8 +275,6 @@ public class Elevator extends Subsystem {
         private double position;
         private double velocity;
         private double torqueCurrent;
-
-        private boolean beamBreak;
 
         private ControlModeState mControlModeState;
 

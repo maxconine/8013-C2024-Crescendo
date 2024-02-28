@@ -9,7 +9,6 @@ import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -43,9 +42,9 @@ public class Pivot extends Subsystem {
     }
 
     private Pivot() {
-        mMaster = new TalonFX(Ports.PIVOT_B, Ports.CANBUS);
-        mSlave = new TalonFX(Ports.PIVOT_A, Ports.CANBUS);
-        mCANcoder = new CANcoder(Ports.PIVOT_CANCODER, Ports.CANBUS);
+        mMaster = new TalonFX(Ports.PIVOT_B, Ports.CANBUS_UPPER);
+        mSlave = new TalonFX(Ports.PIVOT_A, Ports.CANBUS_UPPER);
+        mCANcoder = new CANcoder(Ports.PIVOT_CANCODER, Ports.CANBUS_LOWER);
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
         // Customize these configs from constants in the future

@@ -1,21 +1,11 @@
 package com.team8013.frc2024;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-// import com.ctre.phoenix.motorcontrol.NeutralMode;
-// import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-// import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-// import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-// import com.ctre.phoenix.sensors.CANCoderConfiguration;
-// import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-// import com.ctre.phoenix.sensors.SensorTimeBase;
-// import com.ctre.phoenixpro.signals.NeutralModeValue;
-import com.team254.lib.geometry.Rotation2d;
 import com.team8013.frc2024.subsystems.Drive.KinematicLimits;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.swerve.SwerveModule.SwerveModuleConstants;
@@ -24,7 +14,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 

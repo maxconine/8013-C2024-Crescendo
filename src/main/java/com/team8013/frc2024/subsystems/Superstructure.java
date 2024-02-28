@@ -1,9 +1,7 @@
 package com.team8013.frc2024.subsystems;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.team254.lib.util.Util;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
@@ -12,13 +10,10 @@ import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 import com.team8013.frc2024.subsystems.EndEffectorREV.State;
-//import com.team8013.frc2024.subsystems.EndEffectorREV.State;
-import com.team8013.frc2024.subsystems.Shooter.ControlState;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
 import com.team8013.lib.requests.SequentialRequest;
-import com.team8013.lib.swerve.SwerveModule.mPeriodicIO;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -72,11 +67,11 @@ public class Superstructure extends Subsystem {
     private double manualControClimbHeight = Constants.ElevatorConstants.kClimbInitHeight;
     private boolean mWantsToShoot = false;
     private boolean autoShot = false;
-    private boolean bringElevatorIntoLoad = false;
+    //private boolean bringElevatorIntoLoad = false;
     private Timer shootingTimer = new Timer();
-    private Timer autoShootingTimer = new Timer();
+    //private Timer autoShootingTimer = new Timer();
 
-    private double manualControlPivotShootMode = Constants.PivotConstants.kShootAgainstSubwooferAngle;
+    //private double manualControlPivotShootMode = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -110,21 +105,21 @@ public class Superstructure extends Subsystem {
         queuedRequests.clear();
     }
 
-    private void setRequestQueue(List<Request> requests) {
-        clearRequestQueue();
-        for (Request req : requests) {
-            queuedRequests.add(req);
-        }
-    }
+    // private void setRequestQueue(List<Request> requests) {
+    //     clearRequestQueue();
+    //     for (Request req : requests) {
+    //         queuedRequests.add(req);
+    //     }
+    // }
 
-    private void setRequestQueue(Request activeRequest, ArrayList<Request> requests) {
-        request(activeRequest);
-        setRequestQueue(requests);
-    }
+    // private void setRequestQueue(Request activeRequest, ArrayList<Request> requests) {
+    //     request(activeRequest);
+    //     setRequestQueue(requests);
+    // }
 
-    private void addRequestToQueue(Request req) {
-        queuedRequests.add(req);
-    }
+    // private void addRequestToQueue(Request req) {
+    //     queuedRequests.add(req);
+    // }
 
     @Override
     public void registerEnabledLoops(ILooper enabledLooper) {

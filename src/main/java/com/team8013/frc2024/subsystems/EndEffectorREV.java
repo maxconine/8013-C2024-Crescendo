@@ -1,6 +1,5 @@
 package com.team8013.frc2024.subsystems;
 
-import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
@@ -32,15 +31,15 @@ public class EndEffectorREV extends Subsystem {
     private double kP, kI, kD, kIz, kFFMaster, kFFSlave, kMaxOutput, kMinOutput;
 
     private EndEffectorREV() {
-        mMaster = new CANSparkFlex(42, MotorType.kBrushless);
-        mSlave = new CANSparkFlex(43, MotorType.kBrushless);
+        mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless);
+        mSlave = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless);
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
         mMaster.clearFaults();
         mSlave.clearFaults();
 
-        mMaster.enableVoltageCompensation(12);
-        mSlave.enableVoltageCompensation(12);
+        // mMaster.enableVoltageCompensation(12);
+        // mSlave.enableVoltageCompensation(12);
 
         mSlave.setIdleMode(IdleMode.kCoast);
 
@@ -60,13 +59,31 @@ public class EndEffectorREV extends Subsystem {
         m_encoderMaster = mMaster.getEncoder();
         m_encoderSlave = mSlave.getEncoder();
 
-        // PID coefficients
+        /*
+         * Slot 1: Subwoofer (4500 RPM)
+         * 
+         * 
+         * Slot 2: Podium (5700)
+         * TODO:
+         * Set all values to 0 and tune Feed Forward to hit ~4700 rpm (over max
+         * velocity)
+         * Next, tune the P starting at 0.00002 until target velocity is aquired
+         * Once you get a small bit of oscilation, lower P a little and set I to very
+         * low (0.00000000015)
+         * 
+         * Another method:
+         * fine tune rpm values, wait for the PID loop to either overshoot or to be
+         * within a certain error range to switch to this
+         * spool up pid values for 5700 rpm for a podium shot
+         */
+
+        // PID coefficients for fine targeting
         kP = 0.00001;
-        kI = 0;
+        kI = 0; // 0.00000000015
         kD = 0;
-        kIz = 0;
+        kIz = 0; // 0.01 the range of error for I value to take effect, maybe around 10 or so?
         kFFMaster = 0.000188;
-        kFFSlave = 000215;
+        kFFSlave = 0.000215;
         kMaxOutput = 1;
         kMinOutput = -1;
 
@@ -78,12 +95,12 @@ public class EndEffectorREV extends Subsystem {
         pidMaster.setFF(kFFMaster);
         pidMaster.setOutputRange(kMinOutput, kMaxOutput);
 
-        pidSlave.setP(kP);
-        pidSlave.setI(kI);
-        pidSlave.setD(kD);
-        pidSlave.setIZone(kIz);
-        pidSlave.setFF(kFFSlave);
-        pidSlave.setOutputRange(kMinOutput, kMaxOutput);
+        pidSlave.setP(kP, 1);
+        pidSlave.setI(kI, 1);
+        pidSlave.setD(kD, 1);
+        pidSlave.setIZone(kIz, 1);
+        pidSlave.setFF(kFFSlave, 1);
+        pidSlave.setOutputRange(-1, 1);
 
     }
 

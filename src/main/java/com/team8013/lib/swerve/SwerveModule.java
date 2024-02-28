@@ -34,16 +34,16 @@ public class SwerveModule extends Subsystem {
         kAngleOffset = moduleConstants.angleOffset;
 
         // Absolute encoder config
-        angleEncoder = new CANcoder(moduleConstants.cancoderID, Ports.CANBUS);
+        angleEncoder = new CANcoder(moduleConstants.cancoderID, Ports.CANBUS_LOWER);
         angleEncoder.getConfigurator().apply(Constants.SwerveConstants.swerveCancoderConfig());
 
         // Angle motor config
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Ports.CANBUS);
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Ports.CANBUS_LOWER);
         mAngleMotor.getConfigurator().apply(Constants.SwerveConstants.swerveAngleFXConfig());
         mAngleMotor.setPosition(0);
 
         // Drive motor config
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Ports.CANBUS);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Ports.CANBUS_LOWER);
         mDriveMotor.getConfigurator().apply(Constants.SwerveConstants.swerveDriveFXConfig());
         mDriveMotor.setPosition(0.0);
 
@@ -195,10 +195,10 @@ public class SwerveModule extends Subsystem {
 
     @Override
     public void outputTelemetry() {
-        //SmartDashboard.putNumber("Module" + kModuleNumber + " Angle Position", mPeriodicIO.rotationPosition);
-        //SmartDashboard.putNumber("Module" + kModuleNumber + " CANCODER Position", getCanCoder());
-        //SmartDashboard.putNumber("Module" + kModuleNumber + " Drive Position", mPeriodicIO.drivePosition);
-        //SmartDashboard.putNumber("Module" + kModuleNumber + " Velocity", mPeriodicIO.velocity);
+        SmartDashboard.putNumber("Module" + kModuleNumber + " Angle Position", mPeriodicIO.rotationPosition);
+        SmartDashboard.putNumber("Module" + kModuleNumber + " CANCODER Position", getCanCoder());
+        SmartDashboard.putNumber("Module" + kModuleNumber + " Drive Position", mPeriodicIO.drivePosition);
+        SmartDashboard.putNumber("Module" + kModuleNumber + " Velocity", mPeriodicIO.velocity);
     }
 
     @Log

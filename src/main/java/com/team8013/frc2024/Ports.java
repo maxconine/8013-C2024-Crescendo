@@ -2,7 +2,8 @@ package com.team8013.frc2024;
 
 public class Ports {
 
-    public static final String CANBUS = "Jonas";
+    public static final String CANBUS_UPPER = "Jonas";
+    public static final String CANBUS_LOWER = "Pegasus";
 
     public static final int DRIVER_PORT = 2;
     public static final int OPERATOR_PORT = 1;
@@ -19,8 +20,8 @@ public class Ports {
     public static final int WRIST = 18;
     public static final int WRIST_CANCODER = 22;
 
-    public static final int END_EFFECTOR_A = 1; // (Beam break side)
-    public static final int END_EFFECTOR_B = 2;
+    public static final int END_EFFECTOR_A = 42; // (Beam break side)
+    public static final int END_EFFECTOR_B = 43;
     public static final int END_EFFECTOR_BEAM_BREAK = 9;
     public static final int SHOOTER_BEAM_BREAK = 8;
 

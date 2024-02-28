@@ -22,7 +22,8 @@ public class ControlBoard {
     private final int kDpadLeft = 270;
 
     private boolean leftBumperBoolean = false;
-    private boolean leftBumperPressed = false;
+
+    private boolean leftSwitchReset = true;
 
     private static ControlBoard mInstance = null;
 
@@ -145,8 +146,18 @@ public class ControlBoard {
 
     /**far left switch */
     public boolean snapToTarget(){
+        if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
+            leftSwitchReset = false;
+            return true;
+        }
+        else if(!(m_driver.getRawAxis(4)<-0.25)){
+            leftSwitchReset = true;
+        }
+        return false;
+    }
+
+    public boolean farLeftSwitchUp(){
         return m_driver.getRawAxis(4)<-0.25;
-        //m_driver.getRawButton(1); 
     }
 
     /**right bumper */

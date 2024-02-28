@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
-import com.team8013.lib.Util;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -30,7 +29,7 @@ public class Pigeon {
     private Rotation2d pitchAdjustmentAngle = new Rotation2d();
 
     private Pigeon(int port) {        
-        mGyro = new Pigeon2(port, Ports.CANBUS);
+        mGyro = new Pigeon2(port, Ports.CANBUS_LOWER);
         mGyro.getConfigurator().apply(new Pigeon2Configuration());
     }
 

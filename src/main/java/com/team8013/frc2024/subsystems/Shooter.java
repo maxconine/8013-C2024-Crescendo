@@ -1,10 +1,8 @@
 package com.team8013.frc2024.subsystems;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityDutyCycle;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -13,7 +11,6 @@ import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.logger.Log;
-import com.team8013.lib.requests.Request;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
@@ -39,8 +36,8 @@ public class Shooter extends Subsystem {
     // 0.0);
 
     private Shooter() {
-        mMaster = new TalonFX(Ports.Shooter_A, Ports.CANBUS);
-        mSlave = new TalonFX(Ports.Shooter_B, Ports.CANBUS);
+        mMaster = new TalonFX(Ports.Shooter_A, Ports.CANBUS_UPPER);
+        mSlave = new TalonFX(Ports.Shooter_B, Ports.CANBUS_UPPER);
         mBeamBreak = new DigitalInput(Ports.SHOOTER_BEAM_BREAK);
 
         // Customize these configs from constants in the future

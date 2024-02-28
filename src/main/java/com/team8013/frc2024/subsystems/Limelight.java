@@ -42,23 +42,30 @@ public class Limelight extends Subsystem {
     private int mLatencyCounter = 0;
 
     // distance to target
+    
     public Optional<Double> mDistanceToTarget = Optional.empty();
-
-    // private final NetworkTableInstance instance;// =
-    // NetworkTableInstance.getDefault(); // changed networktable setup
-    // NetworkTable mNetworkTable;// = instance.getTable("Limelight_0"); // changed
-    // table name to match limelights name
 
     NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean mOutputsHaveChanged = true;
     private boolean shootFromPodium = false;
-    // private final NetworkTableEntry tCameraPose =
-    // mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
+
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
     private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
     private final NetworkTableEntry tTargetID = mNetworkTable.getEntry("tid");
+
+    
+
+    // private final NetworkTableEntry tCameraPose =
+    // mNetworkTable.getEntry("camerapose_targetspace"); // makes it work idk
+
+        // private final NetworkTableInstance instance;// =
+    // NetworkTableInstance.getDefault(); // changed networktable setup
+    // NetworkTable mNetworkTable;// = instance.getTable("Limelight_0"); // changed
+    // table name to match limelights name
+
+
 
     private Limelight() {
 
@@ -395,61 +402,61 @@ public class Limelight extends Subsystem {
 
     @Override
     public synchronized void readPeriodicInputs() {
-        final double latency = mNetworkTable.getEntry("tl").getDouble(0) / 1000.0
-                + (11.0 / 1000.0); // 90fps original latency calculation
-        final double latencyTimestamp = Timer.getFPGATimestamp() - (mNetworkTable.getEntry("cl").getDouble(0) / 1000.0)
-                - (mNetworkTable
-                        .getEntry("tl").getDouble(0) / 1000.0);
-        mPeriodicIO.givenLedMode = (int) mNetworkTable.getEntry("ledMode").getDouble(1.0);
-        mPeriodicIO.givenPipeline = (int) mNetworkTable.getEntry("pipeline").getDouble(0);
+        // final double latency = mNetworkTable.getEntry("tl").getDouble(0) / 1000.0
+        //         + (11.0 / 1000.0); // 90fps original latency calculation
+        // final double latencyTimestamp = Timer.getFPGATimestamp() - (mNetworkTable.getEntry("cl").getDouble(0) / 1000.0)
+        //         - (mNetworkTable
+        //                 .getEntry("tl").getDouble(0) / 1000.0);
+        // mPeriodicIO.givenLedMode = (int) mNetworkTable.getEntry("ledMode").getDouble(1.0);
+        // mPeriodicIO.givenPipeline = (int) mNetworkTable.getEntry("pipeline").getDouble(0);
 
-        if (latency == mPeriodicIO.latency) {
-            mLatencyCounter++;
-        } else {
-            mLatencyCounter = 0;
-        }
+        // if (latency == mPeriodicIO.latency) {
+        //     mLatencyCounter++;
+        // } else {
+        //     mLatencyCounter = 0;
+        // }
 
-        mPeriodicIO.latency = latency;
-        mPeriodicIO.latencyTimestamp = latencyTimestamp;
-        mPeriodicIO.has_comms = mLatencyCounter < 10;
+        // mPeriodicIO.latency = latency;
+        // mPeriodicIO.latencyTimestamp = latencyTimestamp;
+        // mPeriodicIO.has_comms = mLatencyCounter < 10;
 
-        mPeriodicIO.sees_target = mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
+        // mPeriodicIO.sees_target = mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
 
-        // double[] limelightCameraPose3d = tCameraPose.getDoubleArray(new double[]
+        // // double[] limelightCameraPose3d = tCameraPose.getDoubleArray(new double[]
 
-        if (isRedAlliance) {
-            double[] robotPose3d = botpose_wpiblue.getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-            mPeriodicIO.botPosex = robotPose3d[0];
-            mPeriodicIO.botPosey = robotPose3d[1];
-            mPeriodicIO.botPosez = robotPose3d[2];
-            mPeriodicIO.botPoseRoll = robotPose3d[3];
-            mPeriodicIO.botPosePitch = robotPose3d[4];
-            mPeriodicIO.botPoseYaw = robotPose3d[5];
-        } else {
-            double[] robotPose3d = botpose_wpired.getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
-            mPeriodicIO.botPosex = robotPose3d[0];
-            mPeriodicIO.botPosey = robotPose3d[1];
-            mPeriodicIO.botPosez = robotPose3d[2];
-            mPeriodicIO.botPoseRoll = robotPose3d[3];
-            mPeriodicIO.botPosePitch = robotPose3d[4];
-            mPeriodicIO.botPoseYaw = robotPose3d[5];
-        }
+        // if (isRedAlliance) {
+        //     double[] robotPose3d = botpose_wpiblue.getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+        //     mPeriodicIO.botPosex = robotPose3d[0];
+        //     mPeriodicIO.botPosey = robotPose3d[1];
+        //     mPeriodicIO.botPosez = robotPose3d[2];
+        //     mPeriodicIO.botPoseRoll = robotPose3d[3];
+        //     mPeriodicIO.botPosePitch = robotPose3d[4];
+        //     mPeriodicIO.botPoseYaw = robotPose3d[5];
+        // } else {
+        //     double[] robotPose3d = botpose_wpired.getDoubleArray(new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 });
+        //     mPeriodicIO.botPosex = robotPose3d[0];
+        //     mPeriodicIO.botPosey = robotPose3d[1];
+        //     mPeriodicIO.botPosez = robotPose3d[2];
+        //     mPeriodicIO.botPoseRoll = robotPose3d[3];
+        //     mPeriodicIO.botPosePitch = robotPose3d[4];
+        //     mPeriodicIO.botPoseYaw = robotPose3d[5];
+        // }
 
-        mPeriodicIO.tagInView = tTargetID.getDouble(0.0); // .getDoubleArray(new double[] {0.0, 0.0, 0.0, 0.0, 0.0,
-                                                          // 0.0})[0];
-        // {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}); // for some reason doing the array like this
-        // made it less buggy?
-        // mPeriodicIO.limelightCameraPosex = limelightCameraPose3d[0];
-        // mPeriodicIO.limelightCameraPosey = -limelightCameraPose3d[2];
-        // mPeriodicIO.limelightCameraPosez = -limelightCameraPose3d[1];
-        // mPeriodicIO.limelightCameraPoseRoll = limelightCameraPose3d[3];
-        // mPeriodicIO.limelightCameraPosePith = limelightCameraPose3d[4];
-        // mPeriodicIO.limelightCameraPoseYaw = limelightCameraPose3d[5];
+        // mPeriodicIO.tagInView = tTargetID.getDouble(0.0); // .getDoubleArray(new double[] {0.0, 0.0, 0.0, 0.0, 0.0,
+        //                                                   // 0.0})[0];
+        // // {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}); // for some reason doing the array like this
+        // // made it less buggy?
+        // // mPeriodicIO.limelightCameraPosex = limelightCameraPose3d[0];
+        // // mPeriodicIO.limelightCameraPosey = -limelightCameraPose3d[2];
+        // // mPeriodicIO.limelightCameraPosez = -limelightCameraPose3d[1];
+        // // mPeriodicIO.limelightCameraPoseRoll = limelightCameraPose3d[3];
+        // // mPeriodicIO.limelightCameraPosePith = limelightCameraPose3d[4];
+        // // mPeriodicIO.limelightCameraPoseYaw = limelightCameraPose3d[5];
 
-        // double[] robotPose3d = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        // // double[] robotPose3d = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-        mPeriodicIO.tanLineToSpeaker = Math
-                .sqrt(mPeriodicIO.botPosex * mPeriodicIO.botPosex + Math.pow(mPeriodicIO.botPosey - 2.61, 2));
+        // mPeriodicIO.tanLineToSpeaker = Math
+        //         .sqrt(mPeriodicIO.botPosex * mPeriodicIO.botPosex + Math.pow(mPeriodicIO.botPosey - 2.61, 2));
     }
 
     @Override
@@ -472,33 +479,33 @@ public class Limelight extends Subsystem {
 
     @Override
     public void outputTelemetry() {
-        SmartDashboard.putBoolean("Limelight Ok (Has Comms)", mPeriodicIO.has_comms);
-        SmartDashboard.putNumber("Limelight Pipeline Latency (ms)", mPeriodicIO.latency);
-        SmartDashboard.putNumber("Limelight dt", mPeriodicIO.dt);
+        // SmartDashboard.putBoolean("Limelight Ok (Has Comms)", mPeriodicIO.has_comms);
+        // SmartDashboard.putNumber("Limelight Pipeline Latency (ms)", mPeriodicIO.latency);
+        // SmartDashboard.putNumber("Limelight dt", mPeriodicIO.dt);
 
-        SmartDashboard.putBoolean("Limelight Has Target", mPeriodicIO.sees_target);
-        SmartDashboard.putNumber("Limelight tag ID In view", mPeriodicIO.tagInView);
-        // SmartDashboard.putNumber("Limelight Tx: ", mPeriodicIO.xOffset);
-        // SmartDashboard.putNumber("Limelight Ty: ", mPeriodicIO.yOffset);
+        // SmartDashboard.putBoolean("Limelight Has Target", mPeriodicIO.sees_target);
+        // SmartDashboard.putNumber("Limelight tag ID In view", mPeriodicIO.tagInView);
+        // // SmartDashboard.putNumber("Limelight Tx: ", mPeriodicIO.xOffset);
+        // // SmartDashboard.putNumber("Limelight Ty: ", mPeriodicIO.yOffset);
 
-        // SmartDashboard.putNumber("Limelight Distance To Target",
-        // mDistanceToTarget.isPresent() ? mDistanceToTarget.get() : 0.0);
+        // // SmartDashboard.putNumber("Limelight Distance To Target",
+        // // mDistanceToTarget.isPresent() ? mDistanceToTarget.get() : 0.0);
 
-        SmartDashboard.putNumber("Limelight x", mPeriodicIO.limelightCameraPosex);
-        SmartDashboard.putNumber("Limelight y", mPeriodicIO.limelightCameraPosey);
-        SmartDashboard.putNumber("Limelight z", mPeriodicIO.limelightCameraPosez);
-        SmartDashboard.putNumber("Limelight Yaw", mPeriodicIO.limelightCameraPoseYaw);
+        // SmartDashboard.putNumber("Limelight x", mPeriodicIO.limelightCameraPosex);
+        // SmartDashboard.putNumber("Limelight y", mPeriodicIO.limelightCameraPosey);
+        // SmartDashboard.putNumber("Limelight z", mPeriodicIO.limelightCameraPosez);
+        // SmartDashboard.putNumber("Limelight Yaw", mPeriodicIO.limelightCameraPoseYaw);
 
-        SmartDashboard.putNumber("limelight bot pose x", mPeriodicIO.botPosex);
-        SmartDashboard.putNumber("Limelight bot pose y", mPeriodicIO.botPosey);
-        SmartDashboard.putNumber("Limelight bot pose z", mPeriodicIO.botPosez);
-        SmartDashboard.putNumber("Limelight bot pose Yaw", mPeriodicIO.botPoseYaw);
+        // SmartDashboard.putNumber("limelight bot pose x", mPeriodicIO.botPosex);
+        // SmartDashboard.putNumber("Limelight bot pose y", mPeriodicIO.botPosey);
+        // SmartDashboard.putNumber("Limelight bot pose z", mPeriodicIO.botPosez);
+        // SmartDashboard.putNumber("Limelight bot pose Yaw", mPeriodicIO.botPoseYaw);
 
-        SmartDashboard.putNumber("Tag In View", mPeriodicIO.tagInView);
+        // SmartDashboard.putNumber("Tag In View", mPeriodicIO.tagInView);
 
-        SmartDashboard.putNumber("Limelight Tangent Line to Speaker", mPeriodicIO.tanLineToSpeaker);
+        // SmartDashboard.putNumber("Limelight Tangent Line to Speaker", mPeriodicIO.tanLineToSpeaker);
 
-        SmartDashboard.putBoolean("WantChaseMode", mPeriodicIO.wantsChaseMode);
+        // SmartDashboard.putBoolean("WantChaseMode", mPeriodicIO.wantsChaseMode);
     }
 
     @Override
