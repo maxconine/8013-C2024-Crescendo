@@ -207,21 +207,21 @@ public class Robot extends TimedRobot {
 				
 			}
 			
-			if (mControlBoard.snapToTarget()) {
-					mDrive.setHeadingControlTarget(202.5);
-					mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
-						0,
-						0,
-						mDrive.getHeading()));
-				//shootFromPodiumBoolean = true;
-				//mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
-			}
+			// if (mControlBoard.snapToTarget()) {
+			// 		mDrive.setHeadingControlTarget(202.5);
+			// 		mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
+			// 			0,
+			// 			0,
+			// 			mDrive.getHeading()));
+			// 	//shootFromPodiumBoolean = true;
+			// 	//mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
+			// }
 			// else if (!mControlBoard.snapToTarget()){
 			// 	shootFromPodiumBoolean = false;
 			// }
 
 			if (mControlBoard.snapToTarget()){
-
+				mDrive.setHeadingControlTarget(202.5);
 			}
 
 			mLimelight.setShootingFromPodium(mControlBoard.farLeftSwitchUp());

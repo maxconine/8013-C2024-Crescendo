@@ -43,6 +43,8 @@ public class EndEffectorREV extends Subsystem {
 
         mSlave.setIdleMode(IdleMode.kCoast);
 
+
+
         // mMaster.setInverted(false);
         // mSlave.setInverted(false);
 
@@ -50,6 +52,9 @@ public class EndEffectorREV extends Subsystem {
 
         pidMaster = mMaster.getPIDController();
         pidSlave = mSlave.getPIDController();
+
+        pidMaster.setIZone(0.01);
+        pidSlave.setIZone(0.01);
 
         // pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI,
         //         Constants.EndEffectorConstants.kD);
@@ -78,12 +83,12 @@ public class EndEffectorREV extends Subsystem {
          */
 
         // PID coefficients for fine targeting
-        kP = 0.00001;
-        kI = 0; // 0.00000000015
+        kP = 0.00023;
+        kI = 0;
         kD = 0;
-        kIz = 0; // 0.01 the range of error for I value to take effect, maybe around 10 or so?
-        kFFMaster = 0.000188;
-        kFFSlave = 0.000215;
+        kIz = 0;
+        kFFMaster = 0.000153;
+        kFFSlave = 0.000154;
         kMaxOutput = 1;
         kMinOutput = -1;
 
@@ -227,8 +232,8 @@ public class EndEffectorREV extends Subsystem {
         if (mState != State.CLOSED_LOOP) {
             mState = State.CLOSED_LOOP;
         }
-        mPeriodicIO.demandMaster = rpmMaster/1.31;
-        mPeriodicIO.demandSlave = rpmSlave/1.131;
+        mPeriodicIO.demandMaster = rpmMaster;
+        mPeriodicIO.demandSlave = rpmSlave;
 
     }
 
