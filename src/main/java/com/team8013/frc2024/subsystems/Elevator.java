@@ -36,14 +36,14 @@ public class Elevator extends Subsystem {
     }
 
     private Elevator() {
-        mMaster = new TalonFX(Ports.ELEVATOR_A, Ports.CANBUS_UPPER);
-        mSlave = new TalonFX(Ports.ELEVATOR_B, Ports.CANBUS_UPPER);
+        mSlave = new TalonFX(Ports.ELEVATOR_A, Ports.CANBUS_UPPER);
+        mMaster = new TalonFX(Ports.ELEVATOR_B, Ports.CANBUS_UPPER);
 
         // Customize these configs from constants in the future
         mMaster.getConfigurator().apply(Constants.ElevatorConstants.elevatorFastMotorConfig());
         mSlave.getConfigurator().apply(Constants.ElevatorConstants.elevatorFastMotorConfig());
 
-        mSlave.setControl(new Follower(Ports.ELEVATOR_A, true));
+        mSlave.setControl(new Follower(Ports.ELEVATOR_B, true));
         setNeutralBrake(false);
     }
 
@@ -209,6 +209,11 @@ public class Elevator extends Subsystem {
 
         } else if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
             mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
+        }
+
+        if (mPeriodicIO.position < 0.03 && mPeriodicIO.torqueCurrent < -90) {
+            zeroSensors();
+            setSetpointMotionMagic(0.01);
         }
     }
 

@@ -53,8 +53,8 @@ public class EndEffectorREV extends Subsystem {
         pidMaster = mMaster.getPIDController();
         pidSlave = mSlave.getPIDController();
 
-        pidMaster.setIZone(0.01);
-        pidSlave.setIZone(0.01);
+        // pidMaster.setIZone(0.01);
+        // pidSlave.setIZone(0.01);
 
         // pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI,
         //         Constants.EndEffectorConstants.kD);
@@ -83,12 +83,12 @@ public class EndEffectorREV extends Subsystem {
          */
 
         // PID coefficients for fine targeting
-        kP = 0.00023;
+        kP = 0.00022;
         kI = 0;
         kD = 0;
-        kIz = 0;
-        kFFMaster = 0.000153;
-        kFFSlave = 0.000154;
+        kIz = 0.00;
+        kFFMaster = 0.00015;
+        kFFSlave = 0.000148;
         kMaxOutput = 1;
         kMinOutput = -1;
 
@@ -100,12 +100,12 @@ public class EndEffectorREV extends Subsystem {
         pidMaster.setFF(kFFMaster);
         pidMaster.setOutputRange(kMinOutput, kMaxOutput);
 
-        pidSlave.setP(kP, 1);
-        pidSlave.setI(kI, 1);
-        pidSlave.setD(kD, 1);
-        pidSlave.setIZone(kIz, 1);
-        pidSlave.setFF(kFFSlave, 1);
-        pidSlave.setOutputRange(-1, 1);
+        pidSlave.setP(kP);
+        pidSlave.setI(kI);
+        pidSlave.setD(kD);
+        pidSlave.setIZone(kIz);
+        pidSlave.setFF(kFFSlave);
+        pidSlave.setOutputRange(kMinOutput,kMaxOutput);
 
     }
 
@@ -212,8 +212,8 @@ public class EndEffectorREV extends Subsystem {
             SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
         } 
         else if (mState == State.INTAKING) {
-            mPeriodicIO.demandMaster = 0.605; //0.605
-            mPeriodicIO.demandSlave = 0.615; //0.615
+            mPeriodicIO.demandMaster = 0.705; //0.605
+            mPeriodicIO.demandSlave = 0.715; //0.615
             SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
         } else if (mState == State.OUTTAKING) {
             mPeriodicIO.demandMaster = -0.30;

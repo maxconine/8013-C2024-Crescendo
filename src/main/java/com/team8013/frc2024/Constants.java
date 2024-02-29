@@ -38,7 +38,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = false;
+    public static final boolean disableExtraTelemetry = true;
 
     public static final boolean isManualControlMode = false;
 
@@ -659,6 +659,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 300;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
             return config;
         }
@@ -681,6 +682,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 60;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
             return config;
         }
