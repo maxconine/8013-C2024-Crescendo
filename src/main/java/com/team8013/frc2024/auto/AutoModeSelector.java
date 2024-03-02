@@ -17,7 +17,8 @@ public class AutoModeSelector {
         CAUSE_CHAOS_STAGE_SIDE,
         MIDDLE_AROUND,
         CW_FOUR_PIECE,
-        MID_START_3_PIECE
+        MID_START_3_PIECE,
+        MID_START_3_PIECE_AMP_SIDE
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -35,7 +36,8 @@ public class AutoModeSelector {
         mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
         mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
         mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
-        mModeChooser.setDefaultOption("Middle Start 3 Piece", DesiredMode.MID_START_3_PIECE);
+        mModeChooser.setDefaultOption("Middle Start 3 Piece Stage Side", DesiredMode.MID_START_3_PIECE);
+        mModeChooser.setDefaultOption("Middle Start 3 Piece Amp Side", DesiredMode.MID_START_3_PIECE_AMP_SIDE);
         SmartDashboard.putData("Auto Mode", mModeChooser);
     }
 
@@ -71,6 +73,8 @@ public class AutoModeSelector {
                 return Optional.of(new CWFourPiece());
             case MID_START_3_PIECE:
                 return Optional.of(new ThreePieceMiddleStart());
+            case MID_START_3_PIECE_AMP_SIDE:
+                return Optional.of(new ThreePieceMiddleStartAmpSide());
 
             default:
                 System.out.println("ERROR: unexpected auto mode: " + mode);

@@ -7,7 +7,6 @@ package com.team8013.frc2024;
 import java.util.List;
 import java.util.Optional;
 
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -71,7 +70,7 @@ public class Robot extends TimedRobot {
 	public static boolean doneChasing = true;
 	public static boolean shootFromPodiumBoolean = false;
 
-	//private final int kDpadUp = 0;
+	// private final int kDpadUp = 0;
 	private final int kDpadRight = 90;
 	private final int kDpadDown = 180;
 	private final int kDpadLeft = 270;
@@ -131,7 +130,7 @@ public class Robot extends TimedRobot {
 
 			mEnabledLooper.start();
 			mAutoModeExecutor.start();
-			//mLoggingLooper.start();
+			// mLoggingLooper.start();
 
 			mDrive.setNeutralBrake(true);
 
@@ -159,7 +158,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		try {
-			if (is_red_alliance) { //TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
+			if (is_red_alliance) { // TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
 				mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
 				flip_trajectories = false;
 			}
@@ -189,8 +188,6 @@ public class Robot extends TimedRobot {
 				mDrive.resetModulesToAbsolute();
 			}
 
-
-
 			if (mControlBoard.getBrake()) {
 				mDrive.orientModules(List.of(
 						Rotation2d.fromDegrees(45),
@@ -204,35 +201,46 @@ public class Robot extends TimedRobot {
 						mControlBoard.getSwerveRotation(),
 						mDrive.getHeading()));
 
-				
 			}
-			
+
 			// if (mControlBoard.snapToTarget()) {
-			// 		mDrive.setHeadingControlTarget(202.5);
-			// 		mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
-			// 			0,
-			// 			0,
-			// 			mDrive.getHeading()));
-			// 	//shootFromPodiumBoolean = true;
-			// 	//mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
+			// mDrive.setHeadingControlTarget(202.5);
+			// mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
+			// 0,
+			// 0,
+			// mDrive.getHeading()));
+			// //shootFromPodiumBoolean = true;
+			// //mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
 			// }
 			// else if (!mControlBoard.snapToTarget()){
-			// 	shootFromPodiumBoolean = false;
+			// shootFromPodiumBoolean = false;
 			// }
 
-			if (mControlBoard.snapToTarget()){
-				mDrive.setHeadingControlTarget(202.5);
+			if (mControlBoard.farLeftSwitchUp()) {
+				if (!is_red_alliance) {
+					mDrive.setHeadingControlTarget(202.5);
+				} else {
+					mDrive.setHeadingControlTarget(360 - 202.5);
+				}
+				mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
+						0,
+						0,
+						mDrive.getHeading()));
 			}
 
 			mLimelight.setShootingFromPodium(mControlBoard.farLeftSwitchUp());
 
 			// if (mControlBoard.operator.getController().getRawButton(9)
-			// 		&& mControlBoard.operator.getController().getRawButton(10)) {
-			// 	mElevator.setWantHome(true);
+			// && mControlBoard.operator.getController().getRawButton(10)) {
+			// mElevator.setWantHome(true);
 			// }
 
-			if (mControlBoard.allignWithHumanPlayer()){
-				mDrive.setHeadingControlTarget(45);
+			if (mControlBoard.allignWithHumanPlayer()) {
+				if (!is_red_alliance) {
+					mDrive.setHeadingControlTarget(45);
+				} else {
+					mDrive.setHeadingControlTarget(-45);
+				}
 			}
 
 			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
@@ -297,11 +305,11 @@ public class Robot extends TimedRobot {
 				// }
 
 				// if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
-				// 	mEndEffector.setState(State.INTAKING);
+				// mEndEffector.setState(State.INTAKING);
 				// } else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
-				// 	mEndEffector.setState(State.OUTTAKING);
+				// mEndEffector.setState(State.OUTTAKING);
 				// } else {
-				// 	mEndEffector.setState(State.IDLE);
+				// mEndEffector.setState(State.IDLE);
 				// }
 
 			} else {
@@ -348,16 +356,15 @@ public class Robot extends TimedRobot {
 					} else if (mControlBoard.operator.getButton(Button.RB)) {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					}
-					
+
 					mSuperstructure.setSuperstuctureShoot(mControlBoard.operator.getButton(Button.B));
-					
 
 				}
 				if (mSuperstructure.inClimbMode()) {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
 						mSuperstructure.setClimbModeStage2();
 					}
-					if (mControlBoard.operator.getTrigger(Side.LEFT)&&mControlBoard.operator.getTrigger(Side.RIGHT)) {
+					if (mControlBoard.operator.getTrigger(Side.LEFT) && mControlBoard.operator.getTrigger(Side.RIGHT)) {
 						mSuperstructure.setClimbModeStage3();
 					}
 					if (mSuperstructure.climbFinished() && mControlBoard.operator.getButton(Button.START)
@@ -375,7 +382,8 @@ public class Robot extends TimedRobot {
 					}
 				}
 
-				//mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV() == kDpadUp));
+				// mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV()
+				// == kDpadUp));
 				// mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
 
 				// mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
@@ -525,12 +533,12 @@ public class Robot extends TimedRobot {
 						}
 						is_red_alliance = false;
 					}
-					is_red_alliance = !is_red_alliance; //TODO: this is only for red right side
+					is_red_alliance = !is_red_alliance; // TODO: this is only for red right side
 				}
 			} else {
 				alliance_changed = true;
 			}
-			flip_trajectories = is_red_alliance; //TODO: THIS MIGHT MESS EVERYTHING UP?
+			flip_trajectories = is_red_alliance; // TODO: THIS MIGHT MESS EVERYTHING UP?
 
 			SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);

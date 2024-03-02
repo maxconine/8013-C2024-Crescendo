@@ -13,7 +13,6 @@ import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
-import com.team8013.frc2024.auto.actions.WaitToPassYCoordinateAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Superstructure;
@@ -22,16 +21,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class ThreePieceMiddleStart extends AutoModeBase {
+public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
 
         private Superstructure mSuperstructure;
 
         // required PathWeaver trajectory paths
-        String path_A = "paths/2024Paths/3PieceMiddleStart_C.path";
-        String path_B = "paths/2024Paths/3PieceMiddleStart_D.path";
+        String path_A = "paths/2024Paths/3PieceMiddleStartAmpSide_C.path";
+        String path_B = "paths/2024Paths/3PieceMiddleStartAmpSide_D.path";
         String path_C = "paths/2024Paths/3PieceMiddleStart_A.path";
         String path_D = "paths/2024Paths/3PieceMiddleStart_B.path";
-        String path_E = "paths/2024Paths/TwoMiddle_C.path";
+        //String path_E = "paths/2024Paths/TwoMiddle_C.path";
 
         // trajectories
         SwerveTrajectoryAction driveToFirstNote;
@@ -46,10 +45,10 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         SwerveTrajectoryAction driveToShootSecondNote;
         final Trajectory drivePath_D;
 
-        SwerveTrajectoryAction driveOut;
-        final Trajectory drivePath_E;
+        // SwerveTrajectoryAction driveOut;
+        // final Trajectory drivePath_E;
 
-        public ThreePieceMiddleStart() {
+        public ThreePieceMiddleStartAmpSide() {
                 mSuperstructure = Superstructure.getInstance();
 
                 // read trajectories from PathWeaver and generate trajectory actions
@@ -73,10 +72,10 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 driveToShootSecondNote = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
 
-                drivePath_E = AutoTrajectoryReader.generateTrajectoryFromFile(path_E,
-                Constants.AutoConstants.createConfig(3, 1.5, 0.0, 0));
-                driveOut = new SwerveTrajectoryAction(drivePath_E, Rotation2d.fromDegrees(180));
-                ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_E);
+                // drivePath_E = AutoTrajectoryReader.generateTrajectoryFromFile(path_E,
+                // Constants.AutoConstants.createConfig(3, 1.5, 0.0, 0));
+                // driveOut = new SwerveTrajectoryAction(drivePath_E, Rotation2d.fromDegrees(180));
+                // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_E);
         }
 
         @Override
@@ -92,7 +91,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
                                 new SeriesAction(List.of(
-                                                new WaitToPassYCoordinateAction(5.25),
+                                                new WaitAction(0.25),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(0.0))),
                                                 new WaitAction(0.1),
@@ -139,16 +138,18 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new WaitToPassXCoordinateAction(15.6),
                                                 new LambdaAction(() -> mSuperstructure.autoShot()))))));
 
-                runAction(new WaitAction(0.8));
+                runAction(new WaitAction(0.5));
+                mSuperstructure.setSuperstuctureShoot(true);
+                runAction(new WaitAction(0.3));
                 mSuperstructure.setSuperstuctureStow();
 
-                runAction(new ParallelAction(List.of(
-                                driveOut,
-                                new SeriesAction(List.of(
-                                                new WaitAction(0.3),
-                                                new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(0)))
-                                )))));
+                // runAction(new ParallelAction(List.of(
+                //                 driveOut,
+                //                 new SeriesAction(List.of(
+                //                                 new WaitAction(0.3),
+                //                                 new LambdaAction(() -> Drive.getInstance()
+                //                                                 .setAutoHeading(Rotation2d.fromDegrees(0)))
+                //                 )))));
                 // runAction(new ParallelAction(List.of(
                 // driveToFirstNote,
                 // new LambdaAction(() -> Drive.getInstance()
