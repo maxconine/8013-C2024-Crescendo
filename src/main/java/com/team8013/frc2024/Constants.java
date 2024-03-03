@@ -73,7 +73,9 @@ public class Constants {
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); //(((5.3 / 1.07)/2)*0.952); //((5.3 / 1.07) / 1.04);// // TODO: This needs to be done // 6.525 * //might just be 2
+        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); // (((5.3 / 1.07)/2)*0.952); //((5.3 / 1.07)
+                                                                           // / 1.04);// // TODO: This needs to be done
+                                                                           // // 6.525 * //might just be 2
                                                                            // 8.215 / 8; // 6.55
         public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
 
@@ -467,10 +469,10 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56; //changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
-        public static final double kShootLoadAngle = 56; //changed from 54
+        public static final double kShootLoadAngle = 56; // changed from 54
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle1 = 63; // deg
@@ -548,7 +550,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 206.1+3.3;//+4;//86.3 + 58 + 4; // +3.3 so it never gets there
+        public static final double CANCODER_OFFSET = 206.1 + 3.3;// +4;//86.3 + 58 + 4; // +3.3 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -587,8 +589,9 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // down to intake is increasing, up to load
-                                                                            // is decreasing
+            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // down to intake is increasing, up
+                                                                                   // to load
+            // is decreasing
 
             return config;
         }
@@ -633,8 +636,12 @@ public class Constants {
 
         public static final double kExtendOffChain1 = 0.054;
         public static final double kExtendOffChain2 = 0.126;
-        public static final double kExtendOffChain3 = 0.26-Conversions.inchesToMeters(1); //to go within height limits
-        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1); // height of the elvator when scoring in the trap
+        public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
+                                                                                            // limits
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1); // height of the
+                                                                                                     // elvator when
+                                                                                                     // scoring in the
+                                                                                                     // trap
 
         /* De Climb */
         public static final double kDeclimbHeight1 = 0.267;

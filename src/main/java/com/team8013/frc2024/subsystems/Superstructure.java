@@ -949,7 +949,7 @@ public class Superstructure extends Subsystem {
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260
                         && intakingShooterSourceTracker == 1) {
-                    mEndEffector.setOpenLoopDemand(0.48);
+                    mEndEffector.setOpenLoopDemand(0.41);
                     intakingShooterSourceTracker = 2;
                     // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece() && intakingShooterSourceTracker == 2) {
@@ -978,7 +978,7 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setState(State.OUTTAKING); // TODO: if I make the outtaking slower for shooter load,
+                    mEndEffector.setOpenLoopDemand(-0.15, -0.18); // TODO: if I make the outtaking slower for shooter load,
                                                             // change this too
 
                 }
