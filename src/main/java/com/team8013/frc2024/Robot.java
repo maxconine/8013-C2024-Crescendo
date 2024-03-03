@@ -172,6 +172,8 @@ public class Robot extends TimedRobot {
 			mDrive.setNeutralBrake(true);
 			mClimberHook.setWantNeutralBrake(true);
 
+			mSuperstructure.setSuperstuctureShoot(false); // prevents robot from catching note after 1st shot
+
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
@@ -216,19 +218,20 @@ public class Robot extends TimedRobot {
 			// shootFromPodiumBoolean = false;
 			// }
 
-			if (mControlBoard.farLeftSwitchUp()) {
-				if (!is_red_alliance) {
-					mDrive.setHeadingControlTarget(202.5);
-				} else {
-					mDrive.setHeadingControlTarget(360 - 202.5);
-				}
-				mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
-						0,
-						0,
-						mDrive.getHeading()));
-			}
+			/* Uncomment to enable podium shots */
+			// if (mControlBoard.farLeftSwitchUp()) {
+			// if (!is_red_alliance) {
+			// mDrive.setHeadingControlTarget(202.5);
+			// } else {
+			// mDrive.setHeadingControlTarget(360 - 202.5);
+			// }
+			// mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
+			// 0,
+			// 0,
+			// mDrive.getHeading()));
+			// }
 
-			mLimelight.setShootingFromPodium(mControlBoard.farLeftSwitchUp());
+			// mLimelight.setShootingFromPodium(mControlBoard.farLeftSwitchUp());
 
 			// if (mControlBoard.operator.getController().getRawButton(9)
 			// && mControlBoard.operator.getController().getRawButton(10)) {

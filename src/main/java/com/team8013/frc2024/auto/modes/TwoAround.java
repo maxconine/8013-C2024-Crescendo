@@ -49,15 +49,21 @@ public class TwoAround extends AutoModeBase {
         driveToFirstNote_A = new SwerveTrajectoryAction(drive_to_first_note_path_A, Rotation2d.fromDegrees(180));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_A);
 
-        // drive_to_first_note_path_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
+        // drive_to_first_note_path_B =
+        // AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
         // Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
-        // driveToFirstNote_B = new SwerveTrajectoryAction(drive_to_first_note_path_B, Rotation2d.fromDegrees(180));
-        // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_B);
+        // driveToFirstNote_B = new SwerveTrajectoryAction(drive_to_first_note_path_B,
+        // Rotation2d.fromDegrees(180));
+        // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj",
+        // drive_to_first_note_path_B);
 
-        // drive_to_first_note_path_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
+        // drive_to_first_note_path_C =
+        // AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
         // Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0));
-        // driveToFirstNote_C = new SwerveTrajectoryAction(drive_to_first_note_path_C, Rotation2d.fromDegrees(180));
-        // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_C);
+        // driveToFirstNote_C = new SwerveTrajectoryAction(drive_to_first_note_path_C,
+        // Rotation2d.fromDegrees(180));
+        // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj",
+        // drive_to_first_note_path_C);
     }
 
     @Override
@@ -72,26 +78,26 @@ public class TwoAround extends AutoModeBase {
         // mSuperstructure.setSuperstuctureShoot(true);
 
         runAction(new ParallelAction(List.of(
-            driveToFirstNote_A,
-            new SeriesAction(List.of(
-                new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
-                new LambdaAction(() -> Drive.getInstance()
-                        .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                new WaitToPassXCoordinateAction(15.5),
-                new LambdaAction(() -> Drive.getInstance()
-                        .setAutoHeading(Rotation2d.fromDegrees(130.0))),
-                new WaitAction(0.8),
-                new WaitToPassXCoordinateAction(15),
-                new LambdaAction(() -> Drive.getInstance()
-                        .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                new WaitAction(0.3),
-                new LambdaAction(() -> mSuperstructure.setSuperstuctureStow()),
-                new LambdaAction(() -> mSuperstructure.autoShot()))))));
+                driveToFirstNote_A,
+                new SeriesAction(List.of(
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(180.0))),
+                        new WaitToPassXCoordinateAction(15.5),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(130.0))),
+                        new WaitAction(0.8),
+                        new WaitToPassXCoordinateAction(15),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(180.0))),
+                        new WaitAction(0.3),
+                        new LambdaAction(() -> mSuperstructure.setSuperstuctureStow()),
+                        new LambdaAction(() -> mSuperstructure.autoShot()))))));
 
         // runAction(new ParallelAction(List.of(
-        //         driveToFirstNote,
-        //         new LambdaAction(() -> Drive.getInstance()
-        //                         .setAutoHeading(Rotation2d.fromDegrees(0))))));
+        // driveToFirstNote,
+        // new LambdaAction(() -> Drive.getInstance()
+        // .setAutoHeading(Rotation2d.fromDegrees(0))))));
 
         // mSuperstructure.setSuperstuctureIntakingGround();
 

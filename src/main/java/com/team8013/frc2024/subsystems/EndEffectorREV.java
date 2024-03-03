@@ -216,8 +216,8 @@ public class EndEffectorREV extends Subsystem {
             mPeriodicIO.demandSlave = 0.715; //0.615
             SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
         } else if (mState == State.OUTTAKING) {
-            mPeriodicIO.demandMaster = -0.30;
-            mPeriodicIO.demandSlave = -0.35;
+            mPeriodicIO.demandMaster = -0.50; //was 0.35
+            mPeriodicIO.demandSlave = -0.55; //was 0.35
             SmartDashboard.putString("END EFFECTOR STATE", "OUTTAKING");
         } else if (mState == State.OPEN_LOOP) {
             SmartDashboard.putString("END EFFECTOR STATE", "OPEN LOOP");

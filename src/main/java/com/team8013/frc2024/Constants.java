@@ -467,10 +467,10 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 55; 
+        public static final double kShootAgainstSubwooferAngle = 56; //changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
-        public static final double kShootLoadAngle = 54;
+        public static final double kShootLoadAngle = 56; //changed from 54
 
         /* CLIMB CONSTANTS */
         public static final double kClimbInitAngle1 = 63; // deg
@@ -634,7 +634,7 @@ public class Constants {
         public static final double kExtendOffChain1 = 0.054;
         public static final double kExtendOffChain2 = 0.126;
         public static final double kExtendOffChain3 = 0.26-Conversions.inchesToMeters(1); //to go within height limits
-        public static final double kExtendToScoreTrapHeight = 0.447; // height of the elvator when scoring in the trap
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1); // height of the elvator when scoring in the trap
 
         /* De Climb */
         public static final double kDeclimbHeight1 = 0.267;
@@ -659,7 +659,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 300;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
             return config;
         }
@@ -682,7 +682,7 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 60;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
             return config;
         }

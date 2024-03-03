@@ -23,108 +23,108 @@ import edu.wpi.first.math.trajectory.Trajectory;
 
 public class TwoStageSide extends AutoModeBase {
 
-    private Superstructure mSuperstructure;
-    private Limelight mLimelight;
+        private Superstructure mSuperstructure;
+        private Limelight mLimelight;
 
-    // required PathWeaver trajectory paths
-    String path_A = "paths/2024Paths/LeftRed_A.path";
-    String path_B = "paths/2024Paths/LeftRed_B.path";
-    String path_C = "paths/2024Paths/LeftRed_C.path";
+        // required PathWeaver trajectory paths
+        String path_A = "paths/2024Paths/LeftRed_A.path";
+        String path_B = "paths/2024Paths/LeftRed_B.path";
+        String path_C = "paths/2024Paths/LeftRed_C.path";
 
-    // trajectories
-    SwerveTrajectoryAction driveToFirstNote;
-    final Trajectory drivePath_A;
+        // trajectories
+        SwerveTrajectoryAction driveToFirstNote;
+        final Trajectory drivePath_A;
 
-    SwerveTrajectoryAction driveToShootFirstNote;
-    final Trajectory drivePath_B;
+        SwerveTrajectoryAction driveToShootFirstNote;
+        final Trajectory drivePath_B;
 
         SwerveTrajectoryAction driveToThirdNote;
-    final Trajectory drivePath_C;
+        final Trajectory drivePath_C;
 
+        public TwoStageSide() {
+                mSuperstructure = Superstructure.getInstance();
+                mLimelight = Limelight.getInstance();
 
-    public TwoStageSide() {
-        mSuperstructure = Superstructure.getInstance();
-        mLimelight = Limelight.getInstance();
+                // read trajectories from PathWeaver and generate trajectory actions
+                drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
+                                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); // 0.95 also works
+                driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(240));
+                ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
-        // read trajectories from PathWeaver and generate trajectory actions
-        drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); //0.95 also works
-        driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(240));
-        ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
+                drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
+                                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); // 0.95 also works
+                driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(240));
+                ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
-        drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                Constants.AutoConstants.createConfig(0.8, 1.5, 0.0, 0)); //0.95 also works
-        driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(240));
-        ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
+                drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
+                                Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
+                driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(240));
+                ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
-        drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
-        driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(240));
-        ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
-
-    }
-
-    @Override
-    protected void routine() throws AutoModeEndedException {
-        runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
-        mLimelight.shootAgainstSubwooferSideAngle(true);
-
-        System.out.println("Running 2 note auto");
-        mSuperstructure.autoShot();
-        runAction(new WaitAction(1.2));
-
-        runAction(new ParallelAction(List.of(
-                driveToFirstNote,
-                new SeriesAction(List.of(
-                        //new WaitToPassYCoordinateAction(6.75),
-                        new WaitAction(0.3),
-                        new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
-                        //new WaitForHeadingAction(160,200),
-                        new WaitAction(0.5),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
-                        
-        mSuperstructure.setSuperstuctureStow();
-
-        runAction(new ParallelAction(List.of(
-                driveToShootFirstNote,
-                new SeriesAction(List.of(
-                        // new WaitToPassXCoordinateAction(3.2),
-                        new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(240.0))),
-                        new WaitAction(0.5),
-                        //new WaitForHeadingAction(220,260),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureTransferToShooter())
-                        // new WaitToPassYCoordinateAction(6.7),
-                        // new LambdaAction(() -> mSuperstructure.autoShot())
-                        )))));
-        mSuperstructure.autoShot();
-        runAction(new WaitAction(0.4));
-        mSuperstructure.setSuperstuctureStow();
-        mLimelight.shootAgainstSubwooferSideAngle(false);
-        
-        runAction(new ParallelAction(List.of(
-                driveToThirdNote,
-                new SeriesAction(List.of( 
-                        new WaitAction(0.3),
-                        new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
-                        //new WaitToPassXCoordinateAction(11.3),
-                        new WaitAction(1.5),
-                        new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))))));
-
-        mSuperstructure.setSuperstuctureStow();
-
-
-
-    }
-
-    @Override
-    public Pose2d getStartingPose() {
-        Rotation2d startingRotation = Rotation2d.fromDegrees(240);
-        if (Robot.is_red_alliance) {
-            startingRotation = Rotation2d.fromDegrees(300);//weird, doesnt work
         }
-        return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
-    }
+
+        @Override
+        protected void routine() throws AutoModeEndedException {
+                runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
+                // mLimelight.shootAgainstSubwooferSideAngle(true);
+
+                System.out.println("Running 2 note auto");
+                mSuperstructure.autoShot();
+                runAction(new WaitAction(1.3));
+
+                runAction(new ParallelAction(List.of(
+                                driveToFirstNote,
+                                new SeriesAction(List.of(
+                                                // new WaitToPassYCoordinateAction(6.75),
+                                                new WaitAction(0.3),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
+                                                // new WaitForHeadingAction(160,200),
+                                                new WaitAction(0.5),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureIntakingGround()))))));
+
+                mSuperstructure.setSuperstuctureStow();
+
+                runAction(new ParallelAction(List.of(
+                                driveToShootFirstNote,
+                                new SeriesAction(List.of(
+                                                // new WaitToPassXCoordinateAction(3.2),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(240.0))),
+                                                new WaitAction(0.5),
+                                                // new WaitForHeadingAction(220,260),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureTransferToShooter())
+                                // new WaitToPassYCoordinateAction(6.7),
+                                // new LambdaAction(() -> mSuperstructure.autoShot())
+                                )))));
+                mSuperstructure.autoShot();
+                runAction(new WaitAction(0.5));
+                mSuperstructure.setSuperstuctureStow();
+                // mLimelight.shootAgainstSubwooferSideAngle(false);
+
+                runAction(new ParallelAction(List.of(
+                                driveToThirdNote,
+                                new SeriesAction(List.of(
+                                                new WaitAction(0.3),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(0.0))),
+                                                // new WaitToPassXCoordinateAction(11.3),
+                                                new WaitAction(1.5),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureIntakingGround()))))));
+
+                mSuperstructure.setSuperstuctureStow();
+
+        }
+
+        @Override
+        public Pose2d getStartingPose() {
+                Rotation2d startingRotation = Rotation2d.fromDegrees(240);
+                if (Robot.is_red_alliance) {
+                        startingRotation = Rotation2d.fromDegrees(300);// weird, doesnt work
+                }
+                return new Pose2d(drivePath_A.getInitialPose().getTranslation(), startingRotation);
+        }
 }

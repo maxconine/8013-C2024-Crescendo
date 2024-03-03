@@ -74,7 +74,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
 
                 drivePath_E = AutoTrajectoryReader.generateTrajectoryFromFile(path_E,
-                Constants.AutoConstants.createConfig(3, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(3, 1.5, 0.0, 0));
                 driveOut = new SwerveTrajectoryAction(drivePath_E, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_E);
         }
@@ -84,10 +84,11 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
                 System.out.println("Running 3 note auto");
-                mSuperstructure.setSuperstuctureTransferToShooter();
-                runAction(new WaitAction(0.2));
+                // mSuperstructure.setSuperstuctureTransferToShooter();
+                // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.8));
+                runAction(new WaitAction(1.2));
+                mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -113,7 +114,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new WaitToPassXCoordinateAction(15.6),
                                                 new LambdaAction(() -> mSuperstructure.autoShot()))))));
 
-                runAction(new WaitAction(0.3));
+                runAction(new WaitAction(0.45));
                 mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
@@ -147,8 +148,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                 new SeriesAction(List.of(
                                                 new WaitAction(0.3),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(0)))
-                                )))));
+                                                                .setAutoHeading(Rotation2d.fromDegrees(0))))))));
                 // runAction(new ParallelAction(List.of(
                 // driveToFirstNote,
                 // new LambdaAction(() -> Drive.getInstance()

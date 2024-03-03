@@ -659,11 +659,12 @@ public class Superstructure extends Subsystem {
                     transfterToShooterTracker = 4;
                 }
 
-                if ((transfterToShooterTracker == 4) && (shootingTimer.get() > 0.3)) {
+                if ((transfterToShooterTracker == 4) && (shootingTimer.get() > 0.4)) {
                     shootingTimer.stop();
                     shootingTimer.reset();
                     // done shooting
                     mShooter.setOpenLoopDemand(0);
+                    mWantsToShoot = false;
                     // mEndEffector.setState(State.IDLE);
                     mSuperstructureState = SuperstructureState.STOW;
                 }
@@ -1025,12 +1026,14 @@ public class Superstructure extends Subsystem {
         // mSuperstructureState.toString());
 
         if (autoShot && autoShotTracker == -1) {
-            setSuperstuctureTransferToShooter();
+            if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
+                setSuperstuctureTransferToShooter();
+            }
             autoShotTracker = 0;
         }
 
         if (mEndEffector.getVelocity() > 3800 && autoShotTracker == 0 &&
-                mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle() - 2) {
+                mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle() - 1.5) {
             setSuperstuctureShoot(true);
             autoShotTracker = 1;
             autoShot = false;
