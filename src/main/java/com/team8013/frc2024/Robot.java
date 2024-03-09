@@ -358,6 +358,8 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setSuperstuctureTransferToShooter();
 					} else if (mControlBoard.operator.getButton(Button.RB)) {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
+					} else if (mControlBoard.operator.getButton(Button.B)) {
+						mSuperstructure.setSuperstuctureShooterToEndEffector();
 					}
 
 					mSuperstructure.setSuperstuctureShoot(mControlBoard.operator.getButton(Button.B));

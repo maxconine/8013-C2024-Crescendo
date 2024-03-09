@@ -59,6 +59,7 @@ public class Superstructure extends Subsystem {
     private int deClimbTracker = -1;
     private int autoShotTracker = -1;
     private int intakingShooterSourceTracker = -1;
+    private int shooterToEndEffectorTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
     private boolean climbFinished = false;
@@ -403,7 +404,8 @@ public class Superstructure extends Subsystem {
         SHOOT,
         STOW,
         CLIMB,
-        DECLIMB
+        DECLIMB,
+        SHOOTER_TO_END_EFFECTOR
     }
 
     public void setSuperstuctureIntakingGround() {
@@ -463,6 +465,13 @@ public class Superstructure extends Subsystem {
 
     }
 
+    public void setSuperstuctureShooterToEndEffector() {
+        if (mSuperstructureState != SuperstructureState.SHOOTER_TO_END_EFFECTOR && mShooter.getBeamBreak()) {
+            mSuperstructureState = SuperstructureState.SHOOTER_TO_END_EFFECTOR;
+            shooterToEndEffectorTracker = -1;
+        }
+    }
+
     public void setManualControlMode(boolean isManualControl) {
         if (manualControlMode != isManualControl) {
             manualControlMode = isManualControl;
@@ -472,8 +481,6 @@ public class Superstructure extends Subsystem {
     public void setClimbMode() {
         if (mSuperstructureState != SuperstructureState.CLIMB) {
             mSuperstructureState = SuperstructureState.CLIMB;
-
-
 
             // tell the robot limelight to automatically get the bot in position
 
@@ -589,7 +596,7 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 0)
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
                     // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
 
@@ -598,7 +605,7 @@ public class Superstructure extends Subsystem {
 
                 // mShooterLoaded = mShooter.getBeamBreak();
 
-                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
+                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kShootHeight+Constants.ElevatorConstants.kPositionError)
                         && (!mShooter.getBeamBreak())) {
                     mEndEffector.setOpenLoopDemand(-0.15, -0.18);
 
@@ -992,6 +999,28 @@ public class Superstructure extends Subsystem {
 
                     mSuperstructureState = SuperstructureState.STOW;
                 }
+            } else if (mSuperstructureState == SuperstructureState.SHOOTER_TO_END_EFFECTOR) {
+
+                if (shooterToEndEffectorTracker == -1) {
+                    mElevator.setSetpointMotionMagic(Conversions.inchesToMeters(6));
+                    mPivot.setSetpointMotionMagic(15);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
+                    shooterToEndEffectorTracker = 0;
+                }
+                if ((mElevator.getElevatorUnits() > Conversions.inchesToMeters(6)
+                        - Constants.ElevatorConstants.kPositionError) &&
+                        (mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 2)
+                        && shooterToEndEffectorTracker == 0) {
+                    mShooter.setOpenLoopDemand(0.95);
+                    mEndEffector.setOpenLoopDemand(0.7);
+                    shooterToEndEffectorTracker = 1;
+                }
+                if (shooterToEndEffectorTracker == 1 && !mShooter.getBeamBreak()) {
+                    mShooter.setOpenLoopDemand(0);
+                    mEndEffector.setOpenLoopDemand(0);
+                    mSuperstructureState = SuperstructureState.STOW;
+                }
+
             }
 
             if ((mSuperstructureState == SuperstructureState.CLIMB
@@ -1020,7 +1049,8 @@ public class Superstructure extends Subsystem {
             // }
 
             if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER
-                    && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE) {
+                    && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE
+                    && mSuperstructureState != SuperstructureState.SHOOTER_TO_END_EFFECTOR) {
                 mShooter.setOpenLoopDemand(0);
             }
         }
