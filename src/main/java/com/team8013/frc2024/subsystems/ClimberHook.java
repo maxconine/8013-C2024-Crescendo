@@ -102,6 +102,10 @@ public class ClimberHook extends Subsystem {
         return mPeriodicIO.position_degrees;
     }
 
+    public double getTorqueCurrent(){
+        return mPeriodicIO.current;
+    }
+
     public static class mPeriodicIO {
         // Inputs
         public double timestamp = 0.0;

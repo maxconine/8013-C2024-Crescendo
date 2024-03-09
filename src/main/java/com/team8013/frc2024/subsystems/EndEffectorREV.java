@@ -31,8 +31,8 @@ public class EndEffectorREV extends Subsystem {
     private double kP, kI, kD, kIz, kFFMaster, kFFSlave, kMaxOutput, kMinOutput;
 
     private EndEffectorREV() {
-        mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless);
-        mSlave = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless);
+        mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless); //top
+        mSlave = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless); //bottom
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
         mMaster.clearFaults();
@@ -251,8 +251,12 @@ public class EndEffectorREV extends Subsystem {
         return mPeriodicIO.current;
     }
 
-    public double getVelocity() {
+    public double getVelocityMaster() {
         return mPeriodicIO.velocityMaster;
+    }
+
+    public double getVelocitySlave(){
+        return mPeriodicIO.velocitySlave;
     }
 
     // @Log

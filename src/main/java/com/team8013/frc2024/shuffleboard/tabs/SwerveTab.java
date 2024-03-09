@@ -64,10 +64,10 @@ public class SwerveTab extends ShuffleboardTabBase {
                     .withSize(5, 1)
                     .getEntry();
 
-            mDriveMPS[i] = mTab
+            mDriveMPS[i] = mDriveLayouts[i]
                 .add("Swerve Module " + i + " MPS ", 0.0)
-                .withPosition(i * 2, 2)
-                .withSize(2, 1)
+                .withPosition(1, 2)
+                .withSize(5, 1)
                 .getEntry();
             
  
