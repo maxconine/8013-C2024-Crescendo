@@ -473,8 +473,7 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.CLIMB) {
             mSuperstructureState = SuperstructureState.CLIMB;
 
-            mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
-            mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
+
 
             // tell the robot limelight to automatically get the bot in position
 
@@ -655,6 +654,8 @@ public class Superstructure extends Subsystem {
                 }
 
                 if ((transfterToShooterTracker == 3) && (!mShooter.getBeamBreak())) {
+                    shootingTimer.stop();
+                    shootingTimer.reset();
                     shootingTimer.start();
                     transfterToShooterTracker = 4;
                 }
@@ -769,6 +770,8 @@ public class Superstructure extends Subsystem {
                 // - Constants.ElevatorConstants.kPositionError) //take out check for elevator
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle2
                                 - Constants.PivotConstants.kPositionError)) {
+                    mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
+                    mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
                     mWrist.setSetpointMotionMagic(200);
@@ -978,8 +981,8 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setOpenLoopDemand(-0.15, -0.18); // TODO: if I make the outtaking slower for shooter load,
-                                                            // change this too
+                    mEndEffector.setOpenLoopDemand(-0.15, -0.18);
+                    // change this too
 
                 }
 
@@ -1033,7 +1036,7 @@ public class Superstructure extends Subsystem {
         }
 
         if (mEndEffector.getVelocity() > 3800 && autoShotTracker == 0 &&
-                mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle() - 1.5) {
+                (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() - 1.5))) {
             setSuperstuctureShoot(true);
             autoShotTracker = 1;
             autoShot = false;

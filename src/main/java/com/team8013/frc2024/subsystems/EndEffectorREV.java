@@ -43,8 +43,6 @@ public class EndEffectorREV extends Subsystem {
 
         mSlave.setIdleMode(IdleMode.kCoast);
 
-
-
         // mMaster.setInverted(false);
         // mSlave.setInverted(false);
 
@@ -56,10 +54,12 @@ public class EndEffectorREV extends Subsystem {
         // pidMaster.setIZone(0.01);
         // pidSlave.setIZone(0.01);
 
-        // pidMaster = new PIDController(Constants.EndEffectorConstants.kP, Constants.EndEffectorConstants.kI,
-        //         Constants.EndEffectorConstants.kD);
-        // pidSlave = new PIDController(Constants.EndEffectorConstants.kPSlave, Constants.EndEffectorConstants.kI,
-        //         Constants.EndEffectorConstants.kD);
+        // pidMaster = new PIDController(Constants.EndEffectorConstants.kP,
+        // Constants.EndEffectorConstants.kI,
+        // Constants.EndEffectorConstants.kD);
+        // pidSlave = new PIDController(Constants.EndEffectorConstants.kPSlave,
+        // Constants.EndEffectorConstants.kI,
+        // Constants.EndEffectorConstants.kD);
 
         m_encoderMaster = mMaster.getEncoder();
         m_encoderSlave = mSlave.getEncoder();
@@ -105,7 +105,7 @@ public class EndEffectorREV extends Subsystem {
         pidSlave.setD(kD);
         pidSlave.setIZone(kIz);
         pidSlave.setFF(kFFSlave);
-        pidSlave.setOutputRange(kMinOutput,kMaxOutput);
+        pidSlave.setOutputRange(kMinOutput, kMaxOutput);
 
     }
 
@@ -193,39 +193,37 @@ public class EndEffectorREV extends Subsystem {
     }
 
     @Override
-    public void writePeriodicOutputs(){
+    public void writePeriodicOutputs() {
 
         if (mState == State.CLOSED_LOOP) {
             pidMaster.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity);
             pidSlave.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity);
             // mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
-            //         mPeriodicIO.demandMaster);
+            // mPeriodicIO.demandMaster);
             // mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
-            //         mPeriodicIO.demandSlave);
+            // mPeriodicIO.demandSlave);
             SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
-        }
-        else{
+        } else {
 
-        if (mState == State.IDLE) {
-            mPeriodicIO.demandMaster = 0;
-            mPeriodicIO.demandSlave = 0;
-            SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
-        } 
-        else if (mState == State.INTAKING) {
-            mPeriodicIO.demandMaster = 0.705; //0.605
-            mPeriodicIO.demandSlave = 0.715; //0.615
-            SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
-        } else if (mState == State.OUTTAKING) {
-            mPeriodicIO.demandMaster = -0.50; //was 0.35
-            mPeriodicIO.demandSlave = -0.55; //was 0.35
-            SmartDashboard.putString("END EFFECTOR STATE", "OUTTAKING");
-        } else if (mState == State.OPEN_LOOP) {
-            SmartDashboard.putString("END EFFECTOR STATE", "OPEN LOOP");
-        }
+            if (mState == State.IDLE) {
+                mPeriodicIO.demandMaster = 0;
+                mPeriodicIO.demandSlave = 0;
+                SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
+            } else if (mState == State.INTAKING) {
+                mPeriodicIO.demandMaster = 0.705; // 0.605
+                mPeriodicIO.demandSlave = 0.715; // 0.615
+                SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
+            } else if (mState == State.OUTTAKING) {
+                mPeriodicIO.demandMaster = -0.50; // was 0.35
+                mPeriodicIO.demandSlave = -0.55; // was 0.35
+                SmartDashboard.putString("END EFFECTOR STATE", "OUTTAKING");
+            } else if (mState == State.OPEN_LOOP) {
+                SmartDashboard.putString("END EFFECTOR STATE", "OPEN LOOP");
+            }
 
-        mMaster.set(mPeriodicIO.demandMaster);
-        mSlave.set(mPeriodicIO.demandSlave);
-    }
+            mMaster.set(mPeriodicIO.demandMaster);
+            mSlave.set(mPeriodicIO.demandSlave);
+        }
     }
 
     public void setEndEffectorClosedLoop(double rpmMaster, double rpmSlave) {

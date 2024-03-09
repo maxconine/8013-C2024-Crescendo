@@ -106,9 +106,10 @@ public class TwoMiddle extends AutoModeBase {
                                                 // new WaitToPassXCoordinateAction(11.3),
                                                 new WaitAction(2),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-40)))
-                                // new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()))
-                                )))));
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-40))),
+                                                new WaitAction(1),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureIntakingGround()))))));
 
                 mSuperstructure.setSuperstuctureStow();
 

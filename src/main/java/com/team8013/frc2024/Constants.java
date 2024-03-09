@@ -38,7 +38,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = true;
+    public static final boolean disableExtraTelemetry = false;
 
     public static final boolean isManualControlMode = false;
 
@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = -77 - 5 + 0.2; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = 218-5.2; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -550,7 +550,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 206.1 + 3.3;// +4;//86.3 + 58 + 4; // +3.3 so it never gets there
+        public static final double CANCODER_OFFSET = 141.32+4+3.9;// +4;//86.3 + 58 + 4; // +3.3 so it never gets there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -589,8 +589,8 @@ public class Constants {
             config.MotionMagic.MotionMagicAcceleration = 120;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; // down to intake is increasing, up
-                                                                                   // to load
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // down to intake is increasing, up
+                                                                            // to load
             // is decreasing
 
             return config;
