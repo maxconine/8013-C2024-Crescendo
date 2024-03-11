@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.team8013.frc2024.regressions.ShooterRegression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Limelight extends Subsystem {
 
     private static Limelight mInstance;
     private final Drive mSwerve = Drive.getInstance();
+    private final ShooterRegression mRegression = new ShooterRegression();
 
     private ProfiledPIDController xController;
     private ProfiledPIDController yController;
@@ -330,6 +332,10 @@ public class Limelight extends Subsystem {
         // if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
         //     pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
         // }
+
+        if (mPeriodicIO.sees_target){
+            pivAngle = mRegression.getAngle(mPeriodicIO.tanLineToSpeaker);
+        }
 
         if (shootAgainstSubwooferSide){
             pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;
