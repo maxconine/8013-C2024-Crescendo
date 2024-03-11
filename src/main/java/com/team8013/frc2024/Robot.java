@@ -362,7 +362,9 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setSuperstuctureShooterToEndEffector();
 					}
 
-					mSuperstructure.setSuperstuctureShoot(mControlBoard.operator.getButton(Button.B));
+					if(mControlBoard.operator.getButton(Button.B)){ //used to be sending button b all the time, this makes it more automated but you can't undo -- make sure to test this
+						mSuperstructure.setSuperstuctureShoot(true);
+					}
 
 				}
 				if (mSuperstructure.inClimbMode()) {

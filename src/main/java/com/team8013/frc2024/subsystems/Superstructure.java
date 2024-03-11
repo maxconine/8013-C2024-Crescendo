@@ -654,8 +654,8 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)
-                        && mPivot.getPivotAngleDeg() > mLimelight.getPivotShootingAngle()
-                                - Constants.PivotConstants.kPositionError) {
+                        && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle()
+                                - Constants.PivotConstants.kPositionError)) && (mEndEffector.getVelocityMaster() > 3800)) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
