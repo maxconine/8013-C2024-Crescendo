@@ -4,6 +4,7 @@ import com.team254.lib.geometry.Rotation2d;
 import com.team254.lib.util.Util;
 import com.team254.lib.vision.TargetInfo;
 import com.team8013.frc2024.Constants;
+import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.Conversions;
@@ -11,8 +12,7 @@ import com.team8013.lib.swerve.ChassisSpeeds;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -33,13 +33,15 @@ public class Limelight extends Subsystem {
     private static Limelight mInstance;
     private final Drive mSwerve = Drive.getInstance();
     private final ShooterRegression mRegression = new ShooterRegression();
+    private ControlBoard mControlBoard = ControlBoard.getInstance();
 
     private ProfiledPIDController xController;
     private ProfiledPIDController yController;
     private ProfiledPIDController omegaController;
-    private Pose3d robotPose;
+    private Pose2d robotPose;
     boolean isRedAlliance = true;
     private boolean shootAgainstSubwooferSide = false;
+    private boolean wantNoteChase = false;
 
     private int mLatencyCounter = 0;
 
@@ -48,6 +50,8 @@ public class Limelight extends Subsystem {
     public Optional<Double> mDistanceToTarget = Optional.empty();
 
     NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    NetworkTable mNetworkTableNoteVision = NetworkTableInstance.getDefault().getTable("limelight_Vision"); //TODO:
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean mOutputsHaveChanged = true;
@@ -70,13 +74,11 @@ public class Limelight extends Subsystem {
 
 
     private Limelight() {
-
-        // mNetworkTable.getEntry("tv");
-
         // mNetworkTable.getEntry("ledMode").setNumber(3);
 
         /* Aril Tag Chase */
         // initializeAprilTagChase();
+        initializeNoteChase();
     }
 
     public static Limelight getInstance() {
@@ -152,6 +154,10 @@ public class Limelight extends Subsystem {
         public double tagInView;
         public boolean wantsChaseMode;
 
+        public boolean noteInView;
+        public double noteX;
+        public double noteY;
+
         public double botPosex;
         public double botPosey;
         public double botPosez;
@@ -183,70 +189,68 @@ public class Limelight extends Subsystem {
         return null;
     }
 
-    private void initializeAprilTagChase() {
+    private void initializeNoteChase() { 
         xController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.X_CONSTRAINTS);
-        yController = new ProfiledPIDController(1.5, 0, 0, Constants.VisionAlignConstants.Y_CONSTRAINTS); // 3 also
+        yController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.Y_CONSTRAINTS); // 3 also
                                                                                                           // works for y
                                                                                                           // and x
         omegaController = new ProfiledPIDController(7, 0, 0, Constants.VisionAlignConstants.OMEGA_CONSTRAINTS);
-        xController.setTolerance(0.2);
-        yController.setTolerance(0.2);
+        xController.setTolerance(0.05); //change if having consistency issues was originally 0.2
+        yController.setTolerance(0.05);
         omegaController.setTolerance(Units.degreesToRadians(0.2));
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // lastTarget = null;
-        robotPose = new Pose3d(
-                mPeriodicIO.limelightCameraPosex,
-                mPeriodicIO.limelightCameraPosey,
-                0.0,
-                new Rotation3d(0.0, 0.0, mPeriodicIO.limelightCameraPoseYaw * Math.PI / 180));
-        // omegaController.reset(new TrapezoidProfile.State());
-        // //robotPose.getRotation());
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
+        //reset position to odometry, already done in periodic
+        // xController.reset(mSwerve.getPose().getX());
+        // yController.reset(mSwerve.getPose().getY());
     }
 
-    public void isRedAlliance(boolean redAlliance) {
-        isRedAlliance = redAlliance;
+    public void wantNoteChase(boolean chase){
+        if (wantNoteChase != chase){
+            wantNoteChase = chase;
+        }
     }
 
-    public double getTargetID() {
-        return mPeriodicIO.tagInView;
-    }
+    private void noteChasePeriodic(){
 
-    private void aprilTagChasePeriodic() {
-        // var limelightPose3d =
-        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("camerapose_targetspace").getDoubleArray(new
-        // double[6]);
+        //set robot pose to odometry pose
+        robotPose = mSwerve.getPose();
 
-        robotPose = new Pose3d(
-                mPeriodicIO.limelightCameraPosex,
-                mPeriodicIO.limelightCameraPosey,
-                0.0,
-                new Rotation3d(0.0, 0.0, mPeriodicIO.limelightCameraPoseYaw * Math.PI / 180)); // getRadians()));
+        //do I need to reset pid controllers every cycle even if I am using .calculate?
+        // xController.reset(robotPose.getX());
+        // yController.reset(robotPose.getY());
+        // omegaController.reset(robotPose.getRotation().getRadians());
 
-        // if limelight has targets
-        if ((mPeriodicIO.sees_target) && (mPeriodicIO.tagInView == Constants.VisionAlignConstants.TAG_TO_CHASE)) {
-            // Find the tag we want to chase
+        // if limelight sees_note, update goal pose by the coordinates plus odometry
+        //note: x positive going forwards and y positive going left
+        if (mPeriodicIO.noteInView){
+            //Pose2d notePose = new Pose2d(mPeriodicIO.noteX,mPeriodicIO.noteY,new edu.wpi.first.math.geometry.Rotation2d(0));
+            
+
+
+            Pose2d notePose = new Pose2d(mPeriodicIO.noteX,mPeriodicIO.noteY, new edu.wpi.first.math.geometry.Rotation2d(0));
+
+            Transform2d rotationTransform = new Transform2d(new Pose2d(0,0,new edu.wpi.first.math.geometry.Rotation2d(0)), notePose);
 
             // Transform the tag's pose to set our goal
-            Pose2d goalPose = robotPose.transformBy(Constants.VisionAlignConstants.TAG_TO_GOAL).toPose2d();
+            Pose2d goalPose = new Pose2d(robotPose.getX() + mPeriodicIO.noteY,robotPose.getY() - mPeriodicIO.noteX, rotationTransform.getRotation());
 
-            SmartDashboard.putNumber("GoalPose x", goalPose.getX());
-            SmartDashboard.putNumber("GoalPose y", goalPose.getY());
-            SmartDashboard.putNumber("GoalPose rotation degrees", goalPose.getRotation().getDegrees());
+            SmartDashboard.putNumber("Goal Pose x", goalPose.getX());
+            SmartDashboard.putNumber("Goal Pose y", goalPose.getY());
+            SmartDashboard.putNumber("Goal Pose rotation degrees", goalPose.getRotation().getDegrees());
 
-            // Drive
-            xController.setGoal(0);
-            yController.setGoal(1.0);
-            omegaController.setGoal(0);// goalPose.getRotation().getRadians()
+            // set pid controller goals
+            xController.setGoal(goalPose.getX()); //previously all 0
+            yController.setGoal(goalPose.getY());
+            omegaController.setGoal(goalPose.getRotation().getRadians());// goalPose.getRotation().getRadians()
 
             // Drive to the target
-            double newXTarget = robotPose.getX();
-            if ((newXTarget > -0.2) && (newXTarget < 0.2)) {
-                newXTarget = 0.0;
-            }
-            double xSpeed = xController.calculate(newXTarget);
+            // double newXTarget = robotPose.getX();
+            // if ((newXTarget > -0.2) && (newXTarget < 0.2)) {
+            //     newXTarget = 0.0;
+            // }
+
+            double xSpeed = xController.calculate(robotPose.getX());
             if (xController.atGoal()) {
                 xSpeed = 0;
             }
@@ -256,7 +260,7 @@ public class Limelight extends Subsystem {
                 ySpeed = 0;
             }
 
-            double omegaSpeed = omegaController.calculate(mPeriodicIO.limelightCameraPoseYaw * Math.PI / 180);
+            double omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
             if (omegaController.atGoal()) {
                 omegaSpeed = 0;
             }
@@ -266,14 +270,83 @@ public class Limelight extends Subsystem {
             SmartDashboard.putNumber("drive call omega", omegaSpeed);
 
             // mSwerve.drive(new Translation2d(ySpeed,xSpeed), -omegaSpeed, false, false);
-            mSwerve.feedTeleopSetpoint(new ChassisSpeeds(-ySpeed, -xSpeed, -0));
+            mSwerve.feedTeleopSetpoint(new ChassisSpeeds(xSpeed, ySpeed, omegaSpeed));
             // mSwerve.drive(new Translation2d(ySpeed,0), 0, true, false);
         } else {
             // No target has been visible
             mSwerve.feedTeleopSetpoint(new ChassisSpeeds(0, 0, 0));
         }
-
     }
+    
+
+    public void isRedAlliance(boolean redAlliance) {
+        isRedAlliance = !redAlliance; //opposite because it is flipped in normal code because I drew the trajectories on the wrong side
+    }
+
+    public double getTargetID() {
+        return mPeriodicIO.tagInView;
+    }
+
+    // private void aprilTagChasePeriodic() {
+    //     // var limelightPose3d =
+    //     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("camerapose_targetspace").getDoubleArray(new
+    //     // double[6]);
+
+    //     robotPose = new Pose3d(
+    //             mPeriodicIO.limelightCameraPosex,
+    //             mPeriodicIO.limelightCameraPosey,
+    //             0.0,
+    //             new Rotation3d(0.0, 0.0, mPeriodicIO.limelightCameraPoseYaw * Math.PI / 180)); // getRadians()));
+
+    //     // if limelight has targets
+    //     if ((mPeriodicIO.sees_target) && (mPeriodicIO.tagInView == Constants.VisionAlignConstants.TAG_TO_CHASE)) {
+    //         // Find the tag we want to chase
+
+    //         // Transform the tag's pose to set our goal
+    //         Pose2d goalPose = robotPose.transformBy(Constants.VisionAlignConstants.TAG_TO_GOAL).toPose2d();
+
+    //         SmartDashboard.putNumber("GoalPose x", goalPose.getX());
+    //         SmartDashboard.putNumber("GoalPose y", goalPose.getY());
+    //         SmartDashboard.putNumber("GoalPose rotation degrees", goalPose.getRotation().getDegrees());
+
+    //         // Drive
+    //         xController.setGoal(0);
+    //         yController.setGoal(1.0);
+    //         omegaController.setGoal(0);// goalPose.getRotation().getRadians()
+
+    //         // Drive to the target
+    //         double newXTarget = robotPose.getX();
+    //         if ((newXTarget > -0.2) && (newXTarget < 0.2)) {
+    //             newXTarget = 0.0;
+    //         }
+    //         double xSpeed = xController.calculate(newXTarget);
+    //         if (xController.atGoal()) {
+    //             xSpeed = 0;
+    //         }
+
+    //         double ySpeed = yController.calculate(robotPose.getY());
+    //         if (yController.atGoal()) {
+    //             ySpeed = 0;
+    //         }
+
+    //         double omegaSpeed = omegaController.calculate(mPeriodicIO.limelightCameraPoseYaw * Math.PI / 180);
+    //         if (omegaController.atGoal()) {
+    //             omegaSpeed = 0;
+    //         }
+
+    //         SmartDashboard.putNumber("drive call x", xSpeed);
+    //         SmartDashboard.putNumber("drive call y", ySpeed);
+    //         SmartDashboard.putNumber("drive call omega", omegaSpeed);
+
+    //         // mSwerve.drive(new Translation2d(ySpeed,xSpeed), -omegaSpeed, false, false);
+    //         mSwerve.feedTeleopSetpoint(new ChassisSpeeds(-ySpeed, -xSpeed, -0));
+    //         // mSwerve.drive(new Translation2d(ySpeed,0), 0, true, false);
+    //     } else {
+    //         // No target has been visible
+    //         mSwerve.feedTeleopSetpoint(new ChassisSpeeds(0, 0, 0));
+    //     }
+
+    // }
 
     public Pose2d robotPose2d() {
         return new Pose2d(mPeriodicIO.limelightCameraPosex, mPeriodicIO.limelightCameraPosey,
@@ -327,84 +400,114 @@ public class Limelight extends Subsystem {
 
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
-        double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+4.5;
+        double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
         // if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
         //     pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
         // }
 
-        if (mPeriodicIO.sees_target){
+        if (mPeriodicIO.sees_target && mControlBoard.snapToTarget()){
             pivAngle = mRegression.getAngle(mPeriodicIO.tanLineToSpeaker);
         }
 
-        if (shootAgainstSubwooferSide){
-            pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;
-        }
+        // if (shootAgainstSubwooferSide){
+        //     pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;
+        // }
 
-        if (shootFromPodium){
-            pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
-        }
+        // if (shootFromPodium){
+        //     pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
+        // }
 
-
-        //double pivAngle = Math.pow((-0.105 * (mPeriodicIO.tanLineToSpeaker)) + 2.404, 4.87);
-        // double pivAngle = 54.9-8.59*mPeriodicIO.tanLineToSpeaker +
-        // 0.95*Math.pow(mPeriodicIO.tanLineToSpeaker, 2);
         SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
 
-        if (pivAngle > Constants.PivotConstants.kMaxAngle) {
-            pivAngle = Constants.PivotConstants.kMaxAngle;
-        } else if (pivAngle < Constants.PivotConstants.kMinAngle) {
-            pivAngle = Constants.PivotConstants.kMinAngle;
-        }
+        pivAngle = Util.limit(pivAngle, Constants.PivotConstants.kMinAngle, Constants.PivotConstants.kMaxAngle);
 
         return pivAngle;
     }
 
-    public double getEndEffectorVelocityMaster(){
-        double kShootVelocity = 0.925;
-        // if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
-        //     kShootVelocity = -6500;
-        // }
-        if (shootAgainstSubwooferSide){
-            kShootVelocity = 0.805;
-
+    public double getEndEffectorShootingVelocity(){
+        double vel = Constants.EndEffectorConstants.kSubwooferRPM;
+        if (mControlBoard.snapToTarget()){
+            vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
         }
-        return kShootVelocity;
+        vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6500);
+        SmartDashboard.putNumber("Limelight Generated RPM", vel);
+        return vel;
     }
 
-    public double getEndEffectorVelocitySlave(){
-        double kShootVelocity = 0.95;
-        if (shootAgainstSubwooferSide){
-            kShootVelocity = 0.83;
+    // public double getEndEffectorVelocityMaster(){
+    //     double kShootVelocity = 0.925;
+    //     // if (mPeriodicIO.sees_target && mPeriodicIO.tanLineToSpeaker<2){
+    //     //     kShootVelocity = -6500;
+    //     // }
+    //     if (shootAgainstSubwooferSide){
+    //         kShootVelocity = 0.805;
 
-        }
-        return kShootVelocity;
+    //     }
+    //     return kShootVelocity;
+    // }
+
+    // public double getEndEffectorVelocitySlave(){
+    //     double kShootVelocity = 0.95;
+    //     if (shootAgainstSubwooferSide){
+    //         kShootVelocity = 0.83;
+
+    //     }
+    //     return kShootVelocity;
         
-    }
+    // }
 
-    /** returns the degrees the robot should snap to */
+    /** returns the degrees the robot should snap to in order to shoot in the speaker*/
     public double getTargetSnap() {
-        double degreesToSnap = 180;
+        Transform2d transformOdometry = new Transform2d(new Pose2d(mSwerve.getPoseX(), mSwerve.getPoseY(), new edu.wpi.first.math.geometry.Rotation2d(0)),
+        speakerPoseOnField());
+        double degreesToSnap = transformOdometry.getRotation().getDegrees();
+        //instead of dead reckoning, try using odometry
+
         if (mPeriodicIO.sees_target){
         //             if (mPeriodicIO.tanLineToSpeaker>1.8){
         //     degreesToSnap = 163;
         // }
 
-        if ((mPeriodicIO.botPosey - 2.58) < 0) {
-            degreesToSnap = 90
-                    + (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
-        } else {
-            degreesToSnap = -90
-                    - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
-        }
-        
-        //= Math.atan((mPeriodicIO.botPosey-2.6)/mPeriodicIO.botPosex);
+        // if ((mPeriodicIO.botPosey - 2.58) < 0) { //this equation needs to be worked out
+        //     degreesToSnap = 90
+        //             + (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
 
-        //-162
-    }
+        
+        // } else {
+        //     degreesToSnap = -90
+        //             - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
+        // }
+
+            Transform2d transform = new Transform2d(new Pose2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(0)),
+            speakerPoseOnField());
+
+            degreesToSnap = transform.getRotation().getDegrees(); //if not facing the right direction try making the goal pose rotation value 180
+
+        }
         SmartDashboard.putNumber("degrees to snap to", degreesToSnap);
         return degreesToSnap;
     }
+
+    private double doTanLineToSpeakerMath(){ //make sure to 
+        if (mPeriodicIO.sees_target){
+            Transform2d transform = new Transform2d(limelightBotPose2d(),speakerPoseOnField());
+            return transform.getTranslation().getNorm();
+        }
+        else{
+            Transform2d transform = new Transform2d(mSwerve.getPose(),speakerPoseOnField());
+            return transform.getTranslation().getNorm();
+        }
+    }
+
+    public Pose2d limelightBotPose2d(){
+        return new Pose2d(mPeriodicIO.botPosey,mPeriodicIO.botPosex, new edu.wpi.first.math.geometry.Rotation2d(mPeriodicIO.botPoseYaw * (Math.PI/180)));
+    }
+    public Pose2d speakerPoseOnField(){
+        return new Pose2d(0,2.58,new edu.wpi.first.math.geometry.Rotation2d(0));
+    }
+
+
 
     @Override
     public synchronized void readPeriodicInputs() {
@@ -463,6 +566,9 @@ public class Limelight extends Subsystem {
 
         // mPeriodicIO.tanLineToSpeaker = Math
         //         .sqrt(mPeriodicIO.botPosex * mPeriodicIO.botPosex + Math.pow(mPeriodicIO.botPosey - 2.61, 2));
+        mPeriodicIO.tanLineToSpeaker = doTanLineToSpeakerMath();
+
+        //add note vision updates
     }
 
     @Override
@@ -479,6 +585,10 @@ public class Limelight extends Subsystem {
             mNetworkTable.getEntry("snapshot").setNumber(mPeriodicIO.snapshot);
 
             mOutputsHaveChanged = false;
+        }
+
+        if (wantNoteChase){
+            noteChasePeriodic();
         }
 
     }
@@ -512,6 +622,8 @@ public class Limelight extends Subsystem {
         // SmartDashboard.putNumber("Limelight Tangent Line to Speaker", mPeriodicIO.tanLineToSpeaker);
 
         // SmartDashboard.putBoolean("WantChaseMode", mPeriodicIO.wantsChaseMode);
+
+        //add note vision updates
     }
 
     @Override

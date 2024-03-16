@@ -28,7 +28,8 @@ public class EndEffectorREV extends Subsystem {
     private SparkPIDController pidMaster;
     private SparkPIDController pidSlave;
 
-    private double kP, kI, kD, kIz, kFFMaster, kFFSlave, kMaxOutput, kMinOutput;
+    private double kPSubWof, kPPodium, kI, kD, kIz, kFFMasterSubWof, kFFSlaveSubWof, kFFMasterPodium, kFFSlavePodium, kMaxOutput, kMinOutput;
+    private int slotID;
 
     private EndEffectorREV() {
         mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless); //top
@@ -83,28 +84,38 @@ public class EndEffectorREV extends Subsystem {
          */
 
         // PID coefficients for fine targeting
-        kP = 0.00022;
+        kPSubWof = 0.00022;
+        kPPodium = 0.00022;
         kI = 0;
         kD = 0;
         kIz = 0.00;
-        kFFMaster = 0.00015;
-        kFFSlave = 0.000148;
+
+        kFFMasterSubWof = 0.00015;
+        kFFSlaveSubWof = 0.000148;
+
+        kFFMasterPodium = 0;
+        kFFSlavePodium = 0;
+
         kMaxOutput = 1;
         kMinOutput = -1;
 
         // set PID coefficients
-        pidMaster.setP(kP);
+        pidMaster.setP(kPSubWof,0);
+        pidMaster.setP(kPPodium,1);
         pidMaster.setI(kI);
         pidMaster.setD(kD);
         pidMaster.setIZone(kIz);
-        pidMaster.setFF(kFFMaster);
+        pidMaster.setFF(kFFMasterSubWof,0);
+        pidMaster.setFF(kFFMasterPodium,1);
         pidMaster.setOutputRange(kMinOutput, kMaxOutput);
 
-        pidSlave.setP(kP);
+        pidSlave.setP(kPSubWof,0);
+        pidMaster.setP(kPPodium,1);
         pidSlave.setI(kI);
         pidSlave.setD(kD);
         pidSlave.setIZone(kIz);
-        pidSlave.setFF(kFFSlave);
+        pidSlave.setFF(kFFSlaveSubWof,0);
+        pidSlave.setFF(kFFSlavePodium, 1);
         pidSlave.setOutputRange(kMinOutput, kMaxOutput);
 
     }
@@ -196,8 +207,8 @@ public class EndEffectorREV extends Subsystem {
     public void writePeriodicOutputs() {
 
         if (mState == State.CLOSED_LOOP) {
-            pidMaster.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity);
-            pidSlave.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity);
+            pidMaster.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity,slotID);
+            pidSlave.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity,slotID);
             // mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
             // mPeriodicIO.demandMaster);
             // mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
@@ -230,9 +241,21 @@ public class EndEffectorREV extends Subsystem {
         if (mState != State.CLOSED_LOOP) {
             mState = State.CLOSED_LOOP;
         }
+        
+        //set slot id
+        if (rpmMaster <5000){
+            slotID = 0;
+        }
+        else {
+            slotID = 1;
+        }
         mPeriodicIO.demandMaster = rpmMaster;
         mPeriodicIO.demandSlave = rpmSlave;
 
+    }
+
+    public void setEndEffectorClosedLoop(double rpmBoth){
+        setEndEffectorClosedLoop(rpmBoth, rpmBoth);
     }
 
     public boolean hasGamePiece() {

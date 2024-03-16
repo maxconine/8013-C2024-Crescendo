@@ -69,6 +69,7 @@ public class Robot extends TimedRobot {
 	public static boolean wantChase = false;
 	public static boolean doneChasing = true;
 	public static boolean shootFromPodiumBoolean = false;
+	private boolean autoAllignBoolean = false;
 
 	// private final int kDpadUp = 0;
 	private final int kDpadRight = 90;
@@ -244,6 +245,15 @@ public class Robot extends TimedRobot {
 				} else {
 					mDrive.setHeadingControlTarget(-45);
 				}
+			}
+
+			if (mControlBoard.snapToTarget() != autoAllignBoolean && mControlBoard.snapToTarget()){
+				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
+				autoAllignBoolean = !autoAllignBoolean;
+			}
+
+			if (!mControlBoard.snapToTarget()){
+				autoAllignBoolean = false;
 			}
 
 			mSuperstructure.setManualControlMode(Constants.isManualControlMode);

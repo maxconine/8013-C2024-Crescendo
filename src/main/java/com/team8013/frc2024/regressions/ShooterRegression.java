@@ -15,35 +15,39 @@ public class ShooterRegression {
             * 
             * distance, angle, rpm
             * 
-            * do this without converting to radians and stuff
+            * 
+            
+        */
+        //do this without converting to radians and stuff
             SHOOTER_TUNING.put(new InterpolatingDouble(1.0),
-                    new Vector2(Math.toRadians(7.0), Units.rotationsPerMinuteToRadiansPerSecond(1725)));
+                    new Vector2(7.0, 1725));
             SHOOTER_TUNING.put(new InterpolatingDouble(1.5),
-                    new Vector2(Math.toRadians(9.5), Units.rotationsPerMinuteToRadiansPerSecond(1725)));
+                    new Vector2(9.5, 1725));
             SHOOTER_TUNING.put(new InterpolatingDouble(2.0),
-                    new Vector2(Math.toRadians(11.5), Units.rotationsPerMinuteToRadiansPerSecond(1750)));
+                    new Vector2(11.5, 1750));
             SHOOTER_TUNING.put(new InterpolatingDouble(2.5),
-                    new Vector2(Math.toRadians(13.5), Units.rotationsPerMinuteToRadiansPerSecond(1825)));
+                    new Vector2(13.5, 1825));
             SHOOTER_TUNING.put(new InterpolatingDouble(3.0),
-                    new Vector2(Math.toRadians(16.0), Units.rotationsPerMinuteToRadiansPerSecond(1900)));
+                    new Vector2(16.0, 1900));
             SHOOTER_TUNING.put(new InterpolatingDouble(3.5),
-                    new Vector2(Math.toRadians(18.5), Units.rotationsPerMinuteToRadiansPerSecond(2000)));
+                    new Vector2(18.5, 2000));
             SHOOTER_TUNING.put(new InterpolatingDouble(4.0),
-                    new Vector2(Math.toRadians(21.5), Units.rotationsPerMinuteToRadiansPerSecond(2100)));
+                    new Vector2(21.5, 2100));
             SHOOTER_TUNING.put(new InterpolatingDouble(4.5),
-                    new Vector2(Math.toRadians(24.0), Units.rotationsPerMinuteToRadiansPerSecond(2175)));
+                    new Vector2(24.0, 2175));
             SHOOTER_TUNING.put(new InterpolatingDouble(5.0),
-                    new Vector2(Math.toRadians(25.5), Units.rotationsPerMinuteToRadiansPerSecond(2275)));
+                    new Vector2(25.5, 2275));
             SHOOTER_TUNING.put(new InterpolatingDouble(5.5),
-                    new Vector2(Math.toRadians(27.5), Units.rotationsPerMinuteToRadiansPerSecond(2400)));
+                    new Vector2(27.5, 2400));
             SHOOTER_TUNING.put(new InterpolatingDouble(6.0),
-                    new Vector2(Math.toRadians(30.0), Units.rotationsPerMinuteToRadiansPerSecond(2475)));
-            */
+                    new Vector2(30.0, 2475));
         
             
     }
-    
-    public ShooterRegression(){}
+
+    public ShooterRegression(){
+
+    }
 
 
 

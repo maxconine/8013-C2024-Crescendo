@@ -629,15 +629,8 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == 2
                         && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterFinalHeight
                                 - Constants.ElevatorConstants.kPositionError) {
-                    if (!mControlBoard.snapToTarget()) {
-                        mEndEffector.setEndEffectorClosedLoop(4400, 4400);
-                        // mEndEffector.setOpenLoopDemand(0.66, 0.68); //0.925 and 0.95 work for fast
-                    } else {
-                        // mEndEffector.setEndEffectorClosedLoop(6000, 6000);
-                        mEndEffector.setOpenLoopDemand(0.93, 0.97);
-                    }
-
-                    // mEndEffector.setEndEffectorClosedLoop(5700,4000);
+                    //determine end effector rpm here
+                    mEndEffector.setEndEffectorClosedLoop(mLimelight.getEndEffectorShootingVelocity());
                 }
 
                 if (transfterToShooterTracker == 2) {

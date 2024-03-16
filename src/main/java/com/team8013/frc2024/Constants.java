@@ -469,7 +469,7 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56+4.5; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
         public static final double kShootLoadAngle = 56; // changed from 54
@@ -736,32 +736,32 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        // public static final double kShootRPM = 2000;
+        public static final double kSubwooferRPM = 4400;
 
-        public static final double kP = .000094;
-        public static final double kPSlave = 0.000098;
-        public static final double kI = 0;
-        public static final double kD = 0.000012;
-        public static final double Ff = 0;
-        public static final double Izone = 0.01;
-        public static final double minOut = -1;
-        public static final double maxOut = 1;
-        public static final double openLoopRamp = 0;
-        public static final double closedLoopRamp = 0;
+        // public static final double kP = .000094;
+        // public static final double kPSlave = 0.000098;
+        // public static final double kI = 0;
+        // public static final double kD = 0.000012;
+        // public static final double Ff = 0;
+        // public static final double Izone = 0.01;
+        // public static final double minOut = -1;
+        // public static final double maxOut = 1;
+        // public static final double openLoopRamp = 0;
+        // public static final double closedLoopRamp = 0;
 
-        public static TalonFXConfiguration endEffectorMotorConfig() {
-            TalonFXConfiguration config = new TalonFXConfiguration();
+        // public static TalonFXConfiguration endEffectorMotorConfig() {
+        //     TalonFXConfiguration config = new TalonFXConfiguration();
 
-            config.CurrentLimits.SupplyCurrentLimitEnable = false;
-            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
-            config.CurrentLimits.SupplyCurrentThreshold = 20;
-            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+        //     config.CurrentLimits.SupplyCurrentLimitEnable = false;
+        //     config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
+        //     config.CurrentLimits.SupplyCurrentThreshold = 20;
+        //     config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
-            config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        //     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        //     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-            return config;
-        }
+        //     return config;
+        // }
     }
 
     public static final class ShooterConstants {
