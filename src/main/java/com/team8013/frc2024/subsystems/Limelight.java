@@ -42,6 +42,8 @@ public class Limelight extends Subsystem {
     boolean isRedAlliance = true;
     private boolean shootAgainstSubwooferSide = false;
     private boolean wantNoteChase = false;
+    private boolean gottenNotePose = false;
+    private Pose2d notePose = new Pose2d(0,0, new edu.wpi.first.math.geometry.Rotation2d(0));
 
     private int mLatencyCounter = 0;
 
@@ -228,12 +230,12 @@ public class Limelight extends Subsystem {
             
 
 
-            Pose2d notePose = new Pose2d(mPeriodicIO.noteX,mPeriodicIO.noteY, new edu.wpi.first.math.geometry.Rotation2d(0));
+            Pose2d notePose = this.notePose;//new Pose2d(mPeriodicIO.noteX,mPeriodicIO.noteY, new edu.wpi.first.math.geometry.Rotation2d(0));
 
             Transform2d rotationTransform = new Transform2d(new Pose2d(0,0,new edu.wpi.first.math.geometry.Rotation2d(0)), notePose);
 
             // Transform the tag's pose to set our goal
-            Pose2d goalPose = new Pose2d(robotPose.getX() + mPeriodicIO.noteY,robotPose.getY() - mPeriodicIO.noteX, rotationTransform.getRotation());
+            Pose2d goalPose = new Pose2d(robotPose.getX() + notePose.getY(),robotPose.getY() - notePose.getX(), rotationTransform.getRotation());
 
             SmartDashboard.putNumber("Goal Pose x", goalPose.getX());
             SmartDashboard.putNumber("Goal Pose y", goalPose.getY());
@@ -461,6 +463,7 @@ public class Limelight extends Subsystem {
     public double getTargetSnap() {
         Transform2d transformOdometry = new Transform2d(new Pose2d(mSwerve.getPoseX(), mSwerve.getPoseY(), new edu.wpi.first.math.geometry.Rotation2d(0)),
         speakerPoseOnField());
+        Rotation2d rot = new Rotation2d(transformOdometry.getX(), transformOdometry.getY(), true); //this might also work, worth a try
         double degreesToSnap = transformOdometry.getRotation().getDegrees();
         //instead of dead reckoning, try using odometry
 
@@ -589,6 +592,15 @@ public class Limelight extends Subsystem {
 
         if (wantNoteChase){
             noteChasePeriodic();
+        }
+
+        //gets the note pose that is used during the note chase once so that there is no camera delay while chasing
+        if (!gottenNotePose && wantNoteChase){
+            notePose = new Pose2d(mPeriodicIO.noteX,mPeriodicIO.noteY, new edu.wpi.first.math.geometry.Rotation2d(0));
+            gottenNotePose = true;
+        }
+        if (!wantNoteChase){
+            gottenNotePose = false;
         }
 
     }
