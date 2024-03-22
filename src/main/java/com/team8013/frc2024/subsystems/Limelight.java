@@ -43,6 +43,7 @@ public class Limelight extends Subsystem {
     private boolean shootAgainstSubwooferSide = false;
     private boolean wantNoteChase = false;
     private boolean gottenNotePose = false;
+    private boolean cantFindTargetOnInitialSnap = false;
     private Pose2d notePose = new Pose2d(0,0, new edu.wpi.first.math.geometry.Rotation2d(0));
 
     private int mLatencyCounter = 0;
@@ -370,9 +371,9 @@ public class Limelight extends Subsystem {
                 edu.wpi.first.math.geometry.Rotation2d.fromDegrees(mPeriodicIO.botPoseYaw));
     }
 
-    public void setWantChase(boolean chase) {
-        mPeriodicIO.wantsChaseMode = chase;
-    }
+    // public void setWantChase(boolean chase) {
+    //     mPeriodicIO.wantsChaseMode = chase;
+    // }
 
     // public double getLensHeight() {
     // return mConstants.kHeight;
@@ -461,11 +462,15 @@ public class Limelight extends Subsystem {
 
     /** returns the degrees the robot should snap to in order to shoot in the speaker*/
     public double getTargetSnap() {
-        Transform2d transformOdometry = new Transform2d(new Pose2d(mSwerve.getPoseX(), mSwerve.getPoseY(), new edu.wpi.first.math.geometry.Rotation2d(0)),
-        speakerPoseOnField());
-        Rotation2d rot = new Rotation2d(transformOdometry.getX(), transformOdometry.getY(), true); //this might also work, worth a try
-        double degreesToSnap = transformOdometry.getRotation().getDegrees();
-        //instead of dead reckoning, try using odometry
+        double degreesToSnap = 180;
+        cantFindTargetOnInitialSnap = true;
+
+
+        //instead of dead reckoning, this is using odometry
+        // Transform2d transformOdometry = new Transform2d(new Pose2d(mSwerve.getPoseX(), mSwerve.getPoseY(), new edu.wpi.first.math.geometry.Rotation2d(0)),
+        // speakerPoseOnField());
+        // Rotation2d rot = new Rotation2d(transformOdometry.getX(), transformOdometry.getY(), true); //this might also work, worth a try
+        // double degreesToSnap = transformOdometry.getRotation().getDegrees();
 
         if (mPeriodicIO.sees_target){
         //             if (mPeriodicIO.tanLineToSpeaker>1.8){
@@ -481,6 +486,7 @@ public class Limelight extends Subsystem {
         //     degreesToSnap = -90
         //             - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
         // }
+            cantFindTargetOnInitialSnap = false;
 
             Transform2d transform = new Transform2d(new Pose2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(0)),
             speakerPoseOnField());
@@ -508,6 +514,14 @@ public class Limelight extends Subsystem {
     }
     public Pose2d speakerPoseOnField(){
         return new Pose2d(0,2.58,new edu.wpi.first.math.geometry.Rotation2d(0));
+    }
+
+    public boolean cantFindTargetOnInitialSnap(){
+        return cantFindTargetOnInitialSnap;
+    }
+
+    public boolean isDoneWithNotePickup(){//zero the odometry with 'known' location?
+        return (xController.atGoal() && yController.atGoal()); //add theta?
     }
 
 
@@ -593,6 +607,8 @@ public class Limelight extends Subsystem {
         if (wantNoteChase){
             noteChasePeriodic();
         }
+
+        //if robot is not moving and targets in view, zero the odometry??
 
         //gets the note pose that is used during the note chase once so that there is no camera delay while chasing
         if (!gottenNotePose && wantNoteChase){

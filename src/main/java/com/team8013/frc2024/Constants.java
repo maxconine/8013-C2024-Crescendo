@@ -528,7 +528,7 @@ public class Constants {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 25; // start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 40;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -538,6 +538,29 @@ public class Constants {
             config.Slot0.kV = 0.0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicExpo_kA = 0.7;
+            config.MotionMagic.MotionMagicAcceleration = 50;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+            return config;
+        }
+
+        public static TalonFXConfiguration pivotCurlMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            // TODO: do any of these configs even matter?
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 40;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.7;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 35; //TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
             config.MotionMagic.MotionMagicAcceleration = 50;
 
@@ -631,6 +654,7 @@ public class Constants {
 
         /* CLIMB */
         public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4); // initial height going up
+        public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); //TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
@@ -685,6 +709,29 @@ public class Constants {
             config.Slot0.kV = 0.0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 60;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+            return config;
+        }
+
+        public static TalonFXConfiguration elevatorCurlMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            // TODO: do any of these configs even matter?
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.6;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 55; //TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 60;
 
@@ -788,7 +835,7 @@ public class Constants {
     public static final class ClimberHookConstants {
         public static final double kHookAngle = 80; // degrees
         public static final double kDeclimb1Angle = 80;
-        public static final double kUnhookAngle = 25;
+        public static final double kUnhookAngle = 0; //makes it so we don't have to worry about resetting it while practicing
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
         public static final double kGearRatio = 75;

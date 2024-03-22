@@ -2,6 +2,7 @@ package com.team8013.frc2024.subsystems;
 
 import java.util.ArrayList;
 
+import com.team254.lib.util.Util;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
@@ -763,17 +764,20 @@ public class Superstructure extends Subsystem {
                 }
 
                 // Stage 2: once climb set up, wait for user to press button to pull down to
-                // chain
-                if ((climbModeStage2) && (climbingTracker == 0)
-                // && (mElevator.getElevatorUnits() >=
-                // Constants.ElevatorConstants.kClimbInitHeight
-                // - Constants.ElevatorConstants.kPositionError) //take out check for elevator
+                // chain CURL
+                if ((climbModeStage2) && (climbingTracker == 0) && !(Util.epsilonEquals(mElevator.getElevatorUnits(), Constants.ElevatorConstants.kClimbInitHeight, Constants.ElevatorConstants.kPositionError))){
+                    //if elevator is not in place, make it
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
+                }
+                else if ((climbModeStage2) && (climbingTracker == 0)
+                && (Util.epsilonEquals(mElevator.getElevatorUnits(), Constants.ElevatorConstants.kClimbInitHeight, Constants.ElevatorConstants.kPositionError))
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kClimbInitAngle2
                                 - Constants.PivotConstants.kPositionError)) {
-                    mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
-                    mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
+                    mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorCurlMotorConfig());
+                    mPivot.setMotorConfig(Constants.PivotConstants.pivotCurlMotorConfig());
+
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle1);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle2);
                     mWrist.setSetpointMotionMagic(200);
                     climbingTracker = 1;
                 } else if (climbingTracker == 0) { // manual control height
@@ -782,27 +786,29 @@ public class Superstructure extends Subsystem {
                     } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                         manualControClimbHeight -= 0.0015;
                     }
+                    manualControClimbHeight = Util.limit(manualControClimbHeight, Constants.ElevatorConstants.kMaxClimbInitHeight);
                     mElevator.setSetpointMotionMagic(manualControClimbHeight);
                 }
 
-                if (climbingTracker == 1
-                        && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kPullOntoChainHeight
-                                + Constants.ElevatorConstants.kPositionError)) {
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle2);
+                if (climbingTracker == 1){
+                    //     && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kPullOntoChainHeight
+                    //             + Constants.ElevatorConstants.kPositionError)) {              
+                    // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle2);
                     climbingTracker = 2;
                 }
 
                 if (climbingTracker == 2 && mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
                         + 1) {
                     mClimberHook.setSetpointMotionMagic(80);
-
                     climbingTracker = 3;
                 }
 
                 if (climbingTracker == 3 && climbModeStage3 && mClimberHook.getAngleDeg() > 78) {
+                    mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
+                    mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain1);
-                    mClimberHook.setSetpointMotionMagic(80);
+                    mClimberHook.setSetpointMotionMagic(80); //bring value up to help press the robot against the wall
                     climbingTracker = 4;
                 }
 
@@ -856,9 +862,8 @@ public class Superstructure extends Subsystem {
                 if ((climbingTracker == 8) &&
                         (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendToScoreTrapHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
-                    mEndEffector.setState(State.OUTTAKING);
+                    mEndEffector.setState(State.OUTTAKING); //does nothing. overriden down below
                     climbFinished = true;
-
                 }
 
             } else if (mSuperstructureState == SuperstructureState.DECLIMB) {

@@ -252,6 +252,10 @@ public class Robot extends TimedRobot {
 				autoAllignBoolean = !autoAllignBoolean;
 			}
 
+			if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
+				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
+			} //flip 180 if no tag seen, and continue searching for tag until tag seen and then snap to correct angle (2 snaps total)
+
 			if (!mControlBoard.snapToTarget()){
 				autoAllignBoolean = false;
 			}
