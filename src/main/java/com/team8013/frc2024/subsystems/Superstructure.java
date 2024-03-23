@@ -73,8 +73,7 @@ public class Superstructure extends Subsystem {
     private Timer shootingTimer = new Timer();
     // private Timer autoShootingTimer = new Timer();
 
-    // private double manualControlPivotShootMode =
-    // Constants.PivotConstants.kShootAgainstSubwooferAngle;
+    private double manualControlPivotShootMode = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -641,6 +640,7 @@ public class Superstructure extends Subsystem {
                     // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                     // manualControlPivotShootMode -= 0.1;
                     // }
+                    //manualControlPivotShootMode = Util.limit(manualControlPivotShootMode, Constants.PivotConstants.kMinAngle,Constants.PivotConstants.kMaxAngle);
                     // mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
                     mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
                 }
@@ -649,7 +649,7 @@ public class Superstructure extends Subsystem {
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)
                         && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle()
-                                - Constants.PivotConstants.kPositionError)) && (mEndEffector.getVelocityMaster() > 3800)) {
+                                - Constants.PivotConstants.kPositionError)) && (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }

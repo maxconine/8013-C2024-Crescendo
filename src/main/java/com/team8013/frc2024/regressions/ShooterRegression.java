@@ -20,27 +20,27 @@ public class ShooterRegression {
         */
         //do this without converting to radians and stuff
             SHOOTER_TUNING.put(new InterpolatingDouble(1.0),
-                    new Vector2(7.0, 1725));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(1.5),
-                    new Vector2(9.5, 1725));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(2.0),
-                    new Vector2(11.5, 1750));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(2.5),
-                    new Vector2(13.5, 1825));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(3.0),
-                    new Vector2(16.0, 1900));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(3.5),
-                    new Vector2(18.5, 2000));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(4.0),
-                    new Vector2(21.5, 2100));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(4.5),
-                    new Vector2(24.0, 2175));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(5.0),
-                    new Vector2(25.5, 2275));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(5.5),
-                    new Vector2(27.5, 2400));
+                    new Vector2(60, 6400));
             SHOOTER_TUNING.put(new InterpolatingDouble(6.0),
-                    new Vector2(30.0, 2475));
+                    new Vector2(60, 6400));
         
             
     }
