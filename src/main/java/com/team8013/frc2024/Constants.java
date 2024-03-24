@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 218-5.2; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = 290.1 - 5.2; // -5.2 so it never gets to -360 and breaks
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -469,7 +469,7 @@ public class Constants {
         public static final double kStowAngle = 6;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56+4.5; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 4.5; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
         public static final double kShootLoadAngle = 56; // changed from 54
@@ -560,7 +560,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 35; //TODO: change this
+            config.MotionMagic.MotionMagicCruiseVelocity = 35; // TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
             config.MotionMagic.MotionMagicAcceleration = 50;
 
@@ -573,7 +573,8 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 141.32+4+3.9;// +4;//86.3 + 58 + 4; // +3.3 so it never gets there
+        public static final double CANCODER_OFFSET = 141.32 + 4 + 3.9;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+                                                                      // there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -654,7 +655,7 @@ public class Constants {
 
         /* CLIMB */
         public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4); // initial height going up
-        public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); //TODO: set this
+        public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
 
@@ -731,7 +732,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 55; //TODO: change this
+            config.MotionMagic.MotionMagicCruiseVelocity = 55; // TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 60;
 
@@ -797,17 +798,17 @@ public class Constants {
         // public static final double closedLoopRamp = 0;
 
         // public static TalonFXConfiguration endEffectorMotorConfig() {
-        //     TalonFXConfiguration config = new TalonFXConfiguration();
+        // TalonFXConfiguration config = new TalonFXConfiguration();
 
-        //     config.CurrentLimits.SupplyCurrentLimitEnable = false;
-        //     config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
-        //     config.CurrentLimits.SupplyCurrentThreshold = 20;
-        //     config.CurrentLimits.SupplyTimeThreshold = 0.1;
+        // config.CurrentLimits.SupplyCurrentLimitEnable = false;
+        // config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
+        // config.CurrentLimits.SupplyCurrentThreshold = 20;
+        // config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
-        //     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        //     config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        // config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        // config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
-        //     return config;
+        // return config;
         // }
     }
 
@@ -835,7 +836,8 @@ public class Constants {
     public static final class ClimberHookConstants {
         public static final double kHookAngle = 80; // degrees
         public static final double kDeclimb1Angle = 80;
-        public static final double kUnhookAngle = 0; //makes it so we don't have to worry about resetting it while practicing
+        public static final double kUnhookAngle = 0; // makes it so we don't have to worry about resetting it while
+                                                     // practicing
         public static final double kMaxAngle = 131;
         public static final double kMinAngle = 0;
         public static final double kGearRatio = 75;

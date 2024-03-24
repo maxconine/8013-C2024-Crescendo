@@ -14,9 +14,9 @@ public class VisionTab extends ShuffleboardTabBase {
 	private GenericEntry mSeesTarget;
 	private GenericEntry mLimelightOk;
 	private GenericEntry mLimelightLatency;
-	private GenericEntry mLimelightDt;
-	private GenericEntry mLimelightTx;
-	private GenericEntry mLimelightTy;
+	private GenericEntry mLimelightTanToSpeaker;
+	private GenericEntry mLimelightPosex;
+	private GenericEntry mLimelightPosey;
 
 	@Override
 	public void createEntries() {
@@ -38,19 +38,19 @@ public class VisionTab extends ShuffleboardTabBase {
 				.withSize(2, 2)
 				.withWidget(BuiltInWidgets.kTextView)
 				.getEntry();
-		mLimelightDt = mTab
-				.add("Limelight Loop Time", -1.0)
+		mLimelightTanToSpeaker = mTab
+				.add("Limelight Tan Line To Speaker", -1.0)
 				.withPosition(4, 0)
 				.withSize(2, 2)
 				.withWidget(BuiltInWidgets.kTextView)
 				.getEntry();
-		mLimelightTx = mTab
-				.add("Limelight TX", 0.0)
+		mLimelightPosex = mTab
+				.add("Limelight Bot Pose X", 0.0)
 				.withPosition(0, 1)
 				.withSize(1, 1)
 				.getEntry();
-		mLimelightTy = mTab
-				.add("Limelight TY", 0.0)
+		mLimelightPosey = mTab
+				.add("Limelight Bot Pose Y", 0.0)
 				.withPosition(1, 1)
 				.withSize(1, 1)
 				.getEntry();
@@ -61,6 +61,9 @@ public class VisionTab extends ShuffleboardTabBase {
 		mSeesTarget.setBoolean(mLimelight.hasTarget());
 		mLimelightOk.setBoolean(mLimelight.limelightOK());
 		mLimelightLatency.setDouble(mLimelight.getLatency());
+		mLimelightTanToSpeaker.setDouble(mLimelight.getTanLineToSpeaker());
+		mLimelightPosex.setDouble(mLimelight.limelightBotPose2d().getX());
+		mLimelightPosey.setDouble(mLimelight.limelightBotPose2d().getY());
 		// mLimelightDt.setDouble(mLimelight.getDt());
 		// mLimelightTx.setDouble(mLimelight.getOffset()[0]);
 		// mLimelightTy.setDouble(mLimelight.getOffset()[1]);

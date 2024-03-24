@@ -18,33 +18,33 @@ public class SubsystemsTab extends ShuffleboardTabBase {
     /*
      * Information:
      * Pivot:
-     *  CanCoder
-     *  Motor Angle Calculated
-     *  Motor Torque Current
+     * CanCoder
+     * Motor Angle Calculated
+     * Motor Torque Current
      * 
      * Elevator:
-     *  Elevator Position Meters
-     *  Elevator Position Inches
-     *  Motor Torque Current
-     *  Elevator Demand ?
+     * Elevator Position Meters
+     * Elevator Position Inches
+     * Motor Torque Current
+     * Elevator Demand ?
      * 
      * End Effector
-     *  Velocity Top (when stowed)
-     *  Velocity Bottom
-     *  Beam Break
-     *  Demand
+     * Velocity Top (when stowed)
+     * Velocity Bottom
+     * Beam Break
+     * Demand
      * 
      * Wrist:
-     *  CanCoder
-     *  Motor Angle Calculated
-     *  Motor Torque Current
+     * CanCoder
+     * Motor Angle Calculated
+     * Motor Torque Current
      * 
      * Climber Hooks:
-     *  Angle
+     * Angle
      * 
      * Shooter:
-     *  Beam Break
-     *  Demand
+     * Beam Break
+     * Demand
      * 
      * 
      */
@@ -56,38 +56,38 @@ public class SubsystemsTab extends ShuffleboardTabBase {
     private ClimberHook mClimberHook = ClimberHook.getInstance();
     private Shooter mShooter = Shooter.getInstance();
 
-    /*Pivot */
+    /* Pivot */
     private GenericEntry mPivotCanCoder;
     private GenericEntry mPivotMotorAngle;
     private GenericEntry mPivotTorqueCurrent;
     private ShuffleboardLayout mPivotLayout;
 
-    /*Elevator */
+    /* Elevator */
     private GenericEntry mElevatorPositionInches;
     private GenericEntry mElevatorPositionMeters;
     private GenericEntry mElevatorTorqueCurrent;
     private GenericEntry mElevatorDemand;
     private ShuffleboardLayout mElevatorLayout;
 
-    /*End Effector */
+    /* End Effector */
     private GenericEntry mEndEffectorVelocityTop;
     private GenericEntry mEndEffectorVelocityBottom;
     private GenericEntry mEndEffectorBeamBreak;
     private GenericEntry mEndEffectorDemand;
     private ShuffleboardLayout mEndEffectorLayout;
 
-    /*Wrist */
+    /* Wrist */
     private GenericEntry mWristCanCoder;
     private GenericEntry mWristMotorAngle;
     private GenericEntry mWristTorqueCurrent;
     private ShuffleboardLayout mWristLayout;
 
-    /*Climber Hook */
+    /* Climber Hook */
     private GenericEntry mClimberHookMotorAngle;
     private GenericEntry mClimberHookTorqueCurrent;
     private ShuffleboardLayout mClimberHookLayout;
 
-    /*Shooter */
+    /* Shooter */
     private GenericEntry mShooterBeamBreak;
     private GenericEntry mShooterDemand;
     private ShuffleboardLayout mShooterLayout;
@@ -99,133 +99,132 @@ public class SubsystemsTab extends ShuffleboardTabBase {
 
     @Override
     public void createEntries() {
-        mTab = Shuffleboard.getTab("Swerve");
+        mTab = Shuffleboard.getTab("Subsystems");
 
-        /*Pivot */
+        /* Pivot */
         mPivotLayout = mTab
-            .getLayout("Pivot", BuiltInLayouts.kGrid)
-            .withSize(2, 2)
-            .withPosition(0 * 2, 0);
+                .getLayout("Pivot", BuiltInLayouts.kGrid)
+                .withSize(2, 2)
+                .withPosition(0 * 2, 0);
         mPivotCanCoder = mPivotLayout.add("Cancoder", 0.0)
-            .withPosition(0, 0)
-            .withSize(5, 1).getEntry();
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mPivotMotorAngle = mPivotLayout.add("Estimated Angle", 0)
-            .withPosition(1, 0)
-            .withSize(5, 1).getEntry();          
+                .withPosition(1, 0)
+                .withSize(5, 1).getEntry();
         mPivotTorqueCurrent = mPivotLayout.add("Torque Current", 0.0)
-            .withPosition(0, 1)
-            .withSize(5, 1).getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
 
-
-        /*Elevator */
+        /* Elevator */
         mElevatorLayout = mTab
-        .getLayout("Elevator", BuiltInLayouts.kGrid)
-        .withSize(2, 2)
-        .withPosition(1 * 2, 0);
+                .getLayout("Elevator", BuiltInLayouts.kGrid)
+                .withSize(2, 2)
+                .withPosition(1 * 2, 0);
         mElevatorPositionInches = mElevatorLayout.add("Position Inches", 0.0)
-        .withPosition(0, 0)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mElevatorPositionMeters = mElevatorLayout.add("Position Meters", 0.0)
-        .withPosition(1, 0)
-        .withSize(5, 1).getEntry();          
+                .withPosition(1, 0)
+                .withSize(5, 1).getEntry();
         mElevatorTorqueCurrent = mElevatorLayout.add("Torque Current", 0.0)
-        .withPosition(0, 1)
-        .withSize(5, 1).getEntry();
-        mElevatorDemand = mElevatorLayout.add("Demand",0.0)
-            .withPosition(1, 1)
-            .withSize(5, 1)
-            .getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
+        mElevatorDemand = mElevatorLayout.add("Demand", 0.0)
+                .withPosition(1, 1)
+                .withSize(5, 1)
+                .getEntry();
 
-        /*End Effector */
+        /* End Effector */
         mEndEffectorLayout = mTab
-        .getLayout("Elevator", BuiltInLayouts.kGrid)
-        .withSize(2, 2)
-        .withPosition(2 * 2, 0);
+                .getLayout("End Effector", BuiltInLayouts.kGrid)
+                .withSize(2, 2)
+                .withPosition(2 * 2, 0);
         mEndEffectorVelocityTop = mEndEffectorLayout.add("Vel Top (stowed)", 0.0)
-        .withPosition(0, 0)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mEndEffectorVelocityBottom = mEndEffectorLayout.add("Vel Bottom", 0.0)
-        .withPosition(1, 0)
-        .withSize(5, 1).getEntry();          
+                .withPosition(1, 0)
+                .withSize(5, 1).getEntry();
         mEndEffectorBeamBreak = mEndEffectorLayout.add("Beam Break", false)
-        .withPosition(0, 1)
-        .withSize(5, 1).getEntry();
-        mEndEffectorDemand = mEndEffectorLayout.add("Demand",0.0)
-        .withPosition(1, 1)
-        .withSize(5, 1)
-        .getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
+        mEndEffectorDemand = mEndEffectorLayout.add("Demand", 0.0)
+                .withPosition(1, 1)
+                .withSize(5, 1)
+                .getEntry();
 
-        /*Wrist */
+        /* Wrist */
         mWristLayout = mTab
-        .getLayout("Wrist", BuiltInLayouts.kGrid)
-        .withSize(2, 2)
-        .withPosition(3 * 2, 0);
+                .getLayout("Wrist", BuiltInLayouts.kGrid)
+                .withSize(2, 2)
+                .withPosition(3 * 2, 0);
         mWristCanCoder = mWristLayout.add("Cancoder", 0.0)
-        .withPosition(0, 0)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mWristMotorAngle = mWristLayout.add("Estimated Angle", 0)
-        .withPosition(1, 0)
-        .withSize(5, 1).getEntry();          
+                .withPosition(1, 0)
+                .withSize(5, 1).getEntry();
         mWristTorqueCurrent = mWristLayout.add("Torque Current", 0.0)
-        .withPosition(0, 1)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
 
-        /*Climber Hook */
+        /* Climber Hook */
         mClimberHookLayout = mTab
-        .getLayout("Climber Hook", BuiltInLayouts.kGrid)
-        .withSize(2, 1)
-        .withPosition(0 * 2, 3);
+                .getLayout("Climber Hook", BuiltInLayouts.kGrid)
+                .withSize(2, 1)
+                .withPosition(0 * 2, 2);
         mClimberHookMotorAngle = mClimberHookLayout.add("Estimated Angle", 0.0)
-        .withPosition(0, 0)
-        .withSize(5, 1).getEntry();        
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mClimberHookTorqueCurrent = mClimberHookLayout.add("Torque Current", 0.0)
-        .withPosition(0, 1)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
 
-        /*Shooter */
+        /* Shooter */
         mShooterLayout = mTab
-        .getLayout("Shooter", BuiltInLayouts.kGrid)
-        .withSize(2, 1)
-        .withPosition(1 * 2, 3);
-        mShooterBeamBreak = mShooterLayout.add("Beam Break", 0.0)
-        .withPosition(0, 0)
-        .withSize(5, 1).getEntry();        
+                .getLayout("Shooter", BuiltInLayouts.kGrid)
+                .withSize(2, 1)
+                .withPosition(1 * 2, 2);
+        mShooterBeamBreak = mShooterLayout.add("Beam Break", false)
+                .withPosition(0, 0)
+                .withSize(5, 1).getEntry();
         mShooterDemand = mShooterLayout.add("Demand", 0.0)
-        .withPosition(0, 1)
-        .withSize(5, 1).getEntry();
+                .withPosition(0, 1)
+                .withSize(5, 1).getEntry();
 
     }
 
     @Override
     public void update() {
-        
-        /*Pivot */
+
+        /* Pivot */
         mPivotCanCoder.setDouble(truncate(mPivot.getCanCoder()));
         mPivotMotorAngle.setDouble(truncate(mPivot.getPivotAngleDeg()));
         mPivotTorqueCurrent.setDouble(truncate(mPivot.getPivotCurrent()));
-        
-        /*Elevator */
+
+        /* Elevator */
         mElevatorDemand.setDouble(truncate(mElevator.getElevatorDemand()));
         mElevatorPositionInches.setDouble(truncate(Conversions.metersToInches(mElevator.getElevatorUnits())));
         mElevatorPositionMeters.setDouble(truncate(mElevator.getElevatorUnits()));
         mElevatorTorqueCurrent.setDouble(truncate(mElevator.getElevatorCurrent()));
 
-        /*End Effector */
+        /* End Effector */
         mEndEffectorBeamBreak.setBoolean(mEndEffector.hasGamePiece());
         mEndEffectorVelocityTop.setDouble(truncate(mEndEffector.getVelocityMaster()));
         mEndEffectorVelocityBottom.setDouble(truncate(mEndEffector.getVelocitySlave()));
         mEndEffectorDemand.setDouble(truncate(mEndEffector.getEndEffectorMasterDemand()));
 
-        /*Wrist */
+        /* Wrist */
         mWristCanCoder.setDouble(truncate(mWrist.getCanCoder()));
         mWristMotorAngle.setDouble(truncate(mWrist.getWristAngleDeg()));
         mWristTorqueCurrent.setDouble(truncate(mWrist.getWristCurrent()));
 
-        /*Climber Hooks */
+        /* Climber Hooks */
         mClimberHookMotorAngle.setDouble(truncate(mClimberHook.getAngleDeg()));
         mClimberHookTorqueCurrent.setDouble(truncate(mClimberHook.getTorqueCurrent()));
-        
-        /*Shooter */
+
+        /* Shooter */
         mShooterBeamBreak.setBoolean(mShooter.getBeamBreak());
         mShooterDemand.setDouble(truncate(mShooter.getShooterDemand()));
     }

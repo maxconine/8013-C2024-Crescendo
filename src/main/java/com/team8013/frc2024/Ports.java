@@ -10,8 +10,8 @@ public class Ports {
 
     public static final int PIGEON = 13;
 
-    public static final int ELEVATOR_A = 14;
-    public static final int ELEVATOR_B = 15;
+    public static final int ELEVATOR_A = 15;
+    public static final int ELEVATOR_B = 14;
 
     public static final int PIVOT_A = 16;
     public static final int PIVOT_B = 17;
