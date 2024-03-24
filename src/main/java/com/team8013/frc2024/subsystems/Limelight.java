@@ -41,7 +41,7 @@ public class Limelight extends Subsystem {
 
     private int mLatencyCounter = 0;
 
-    NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight-crepe");
 
     //NetworkTable mNetworkTableNoteVision = NetworkTableInstance.getDefault().getTable("limelight_Vision"); //TODO: for 2nd limelight
 
@@ -320,21 +320,27 @@ public class Limelight extends Subsystem {
         //     degreesToSnap = 163;
         // }
 
-        // if ((mPeriodicIO.botPosey - 2.58) < 0) { //this equation needs to be worked out
-        //     degreesToSnap = 90
-        //             + (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
+        if (mPeriodicIO.botPosey < 2.58) { //this equation needs to be worked out
+            degreesToSnap = 180 - (Math.atan((2.58-mPeriodicIO.botPosey)/mPeriodicIO.botPosex)*(180 / Math.PI));
+            
+            // 90
+            //         + (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
 
         
-        // } else {
-        //     degreesToSnap = -90
-        //             - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
-        // }
+        } else {
+            degreesToSnap = 180 + (Math.atan((mPeriodicIO.botPosey - 2.58)/mPeriodicIO.botPosex)*(180 / Math.PI));
+            
+            // -90
+            //         - (Math.atan(mPeriodicIO.botPosex / Math.abs(mPeriodicIO.botPosey - 2.58)) * (180 / Math.PI));
+        }
+
+
             cantFindTargetOnInitialSnap = false;
 
-            Transform2d transform = new Transform2d(new Pose2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(0)),
-            speakerPoseOnField());
+            // Transform2d transform = new Transform2d(new Pose2d(mPeriodicIO.botPosex, mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(0)),
+            // speakerPoseOnField());
 
-            degreesToSnap = transform.getRotation().getDegrees(); //if not facing the right direction try making the goal pose rotation value 180
+            // degreesToSnap = transform.getRotation().getDegrees(); //if not facing the right direction try making the goal pose rotation value 180
 
             //if the above doesn't work try atan2
             //degreesToSnap = Math.atan2(mPeriodicIO.botPosex, mPeriodicIO.botPosey-2.58); //angle looking from the speaker to the robot -(really weird)
@@ -345,18 +351,20 @@ public class Limelight extends Subsystem {
 
     private double doTanLineToSpeakerMath(){ //make sure to 
         if (mPeriodicIO.sees_target){
-            Transform2d transform = new Transform2d(limelightBotPose2d(),speakerPoseOnField());
-            return transform.getTranslation().getNorm();
+                return Math.sqrt(Math.pow(mPeriodicIO.botPosey-2.58,2) + Math.pow(mPeriodicIO.botPosex, 2));
+
+            // Transform2d transform = new Transform2d(limelightBotPose2d(),speakerPoseOnField());
+            // return transform.getTranslation().getNorm();
         }
         else{ //should not be needed
             // Transform2d transform = new Transform2d(mSwerve.getPose(),speakerPoseOnField());
             // return transform.getTranslation().getNorm();
-            return 0.0;
+            return mPeriodicIO.tanLineToSpeaker;
         }
     }
 
     public Pose2d limelightBotPose2d(){
-        return new Pose2d(mPeriodicIO.botPosey,mPeriodicIO.botPosex, new edu.wpi.first.math.geometry.Rotation2d(mPeriodicIO.botPoseYaw * (Math.PI/180)));
+        return new Pose2d(mPeriodicIO.botPosex,mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(mPeriodicIO.botPoseYaw * (Math.PI/180)));
     }
     public Pose2d speakerPoseOnField(){
         return new Pose2d(0,2.58,new edu.wpi.first.math.geometry.Rotation2d(0));

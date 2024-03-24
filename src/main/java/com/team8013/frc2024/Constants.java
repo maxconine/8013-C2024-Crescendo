@@ -573,7 +573,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 141.32 + 4 + 3.9;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+        public static final double CANCODER_OFFSET = 82.7+3.3+1.63;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
                                                                       // there
 
         public static final double kGearRatio = 25; // radians per rotation
@@ -596,7 +596,7 @@ public class Constants {
         public static final double kIntakeCruiseVelocity = 50;
         public static final double kIntakeAcceleration = 120;
 
-        public static TalonFXConfiguration wristMotorConfig() {
+        public static TalonFXConfiguration wristMotorClimbConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
             config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
@@ -609,6 +609,30 @@ public class Constants {
             config.Slot0.kV = 0.0;
 
             config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicExpo_kA = 0.2;
+            config.MotionMagic.MotionMagicAcceleration = 120;
+
+            config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; // down to intake is increasing, up
+                                                                            // to load
+            // is decreasing
+
+            return config;
+        }
+
+        public static TalonFXConfiguration wristMotorConfig() {
+            TalonFXConfiguration config = new TalonFXConfiguration();
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimit = 15; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyTimeThreshold = 0.1;
+
+            config.Slot0.kP = 0.6;
+            config.Slot0.kI = 0.0;
+            config.Slot0.kD = 0.0;
+            config.Slot0.kV = 0.0;
+
+            config.MotionMagic.MotionMagicCruiseVelocity = 80;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 120;
 
@@ -649,7 +673,7 @@ public class Constants {
         public static final double kIntakeCruiseVelocity = 90;
         public static final double kIntakeAcceleration = 120;
 
-        public static final double kFloorIntakeHeight = 0.290;
+        public static final double kFloorIntakeHeight = 0.28;
         public static final double kSourceIntakeHeight = 0.064;
         public static final double kSourceLoadShooterHeight = 0.22;
 
@@ -753,12 +777,12 @@ public class Constants {
                 { 0.1, 343, 8 },
                 { 0.125, 345, 8 },
                 { 0.15, 348, 7 },
-                { 0.175, 352, 7 },
-                { 0.2, 353, 7 },
-                { 0.215, 354, 7 },
-                { 0.23, 359.7 + 1, 7 },
-                { 0.235, 359.7 + 2, 7 },
-                { 0.24, 362 + 3, 6 } // really 0.275, but less so that everything else goes into position
+                { 0.175, 354, 7 },
+                { 0.2, 356, 7 },
+                { 0.215, 358, 7 },
+                { 0.23, 359.7 + 3, 7 },
+                { 0.235, 359.7 + 4, 7 },
+                { 0.237, 362 + 5, 6 } // really 0.275, but less so that everything else goes into position
 
         };
 

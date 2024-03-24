@@ -86,6 +86,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1.2));
+                
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -104,7 +105,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
 
@@ -149,6 +150,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                                                 .setSuperstuctureIntakingGround()))))));
 
                 mSuperstructure.setSuperstuctureStow();
+                mSuperstructure.setSuperstuctureShoot(false);
 
                 runAction(new ParallelAction(List.of(
                                 driveToShootSecondNote,
@@ -156,7 +158,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                                                new WaitAction(0.1),
+                                                new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();

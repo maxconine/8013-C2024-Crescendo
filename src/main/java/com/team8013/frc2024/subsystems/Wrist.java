@@ -9,6 +9,7 @@ import com.team8013.lib.Util;
 import com.team8013.lib.logger.Log;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -126,6 +127,10 @@ public class Wrist extends Subsystem {
         MotionMagicConfigs configs = new MotionMagicConfigs();
         configs.MotionMagicAcceleration = acceleration;
         mMotor.getConfigurator().apply(configs);
+    }
+
+    public void setMotorConfig(TalonFXConfiguration config) {
+        mMotor.getConfigurator().apply(config);
     }
 
     @Log

@@ -432,7 +432,7 @@ public class Superstructure extends Subsystem {
     }
 
     public void setSuperstuctureTransferToShooter() {
-        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
+        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER && (mShooter.getBeamBreak()||mEndEffector.hasGamePiece())) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
 
             if (!mShooter.getBeamBreak()) {
@@ -636,11 +636,11 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == 2) {
                     /* Manual control here */
                     // if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                    // manualControlPivotShootMode += 0.1;
+                    // manualControlPivotShootMode += 0.05;
                     // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                    // manualControlPivotShootMode -= 0.1;
+                    // manualControlPivotShootMode -= 0.05;
                     // }
-                    //manualControlPivotShootMode = Util.limit(manualControlPivotShootMode, Constants.PivotConstants.kMinAngle,Constants.PivotConstants.kMaxAngle);
+                    // manualControlPivotShootMode = Util.limit(manualControlPivotShootMode, Constants.PivotConstants.kMinAngle,Constants.PivotConstants.kMaxAngle);
                     // mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
                     mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
                 }
@@ -648,8 +648,8 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)
-                        && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle()
-                                - Constants.PivotConstants.kPositionError)) && (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
+                         && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() //TODO: RE ENABLE THIS
+                                 - Constants.PivotConstants.kPositionError)) && (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
@@ -775,6 +775,7 @@ public class Superstructure extends Subsystem {
                                 - Constants.PivotConstants.kPositionError)) {
                     mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorCurlMotorConfig());
                     mPivot.setMotorConfig(Constants.PivotConstants.pivotCurlMotorConfig());
+                    mWrist.setMotorConfig(Constants.WristConstants.wristMotorClimbConfig());
 
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kPullOntoChainHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kPullOntoChainAngle2);
@@ -1057,14 +1058,14 @@ public class Superstructure extends Subsystem {
         // mSuperstructureState.toString());
 
         if (autoShot && autoShotTracker == -1) {
-            if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
+            if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER && (mEndEffector.hasGamePiece()||mShooter.getBeamBreak())) {
                 setSuperstuctureTransferToShooter();
             }
             autoShotTracker = 0;
         }
 
         if (mEndEffector.getVelocityMaster() > 3800 && autoShotTracker == 0 &&
-                (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() - 1.5))) {
+                (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() - 1.5)) && mShooter.getBeamBreak() && autoShot) {
             setSuperstuctureShoot(true);
             autoShotTracker = 1;
             autoShot = false;

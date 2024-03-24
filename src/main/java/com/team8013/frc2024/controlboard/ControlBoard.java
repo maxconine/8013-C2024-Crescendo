@@ -146,14 +146,15 @@ public class ControlBoard {
 
     /**far left switch */
     public boolean snapToTarget(){
-        if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
-            leftSwitchReset = false;
-            return true;
-        }
-        else if(!(m_driver.getRawAxis(4)<-0.25)){
-            leftSwitchReset = true;
-        }
-        return false;
+        return m_driver.getRawAxis(4)<-0.25;
+        // if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
+        //     leftSwitchReset = false;
+        //     return true;
+        // }
+        // else if(!(m_driver.getRawAxis(4)<-0.25)){
+        //     leftSwitchReset = true;
+        // }
+        //return false;
     }
 
     public boolean farLeftSwitchUp(){
@@ -264,7 +265,7 @@ public class ControlBoard {
     // // Locks wheels in X formation
     public boolean getBrake() {
         SmartDashboard.putNumber("Get Brake", m_driver.getRawAxis(4));
-        return  (m_driver.getRawAxis(4)<-0.3); //m_driver.getRawButton(4); //far left switch
+        return  false;//(m_driver.getRawAxis(4)<-0.3); //m_driver.getRawButton(4); //far left switch
     }
 
     // // Intake Controls

@@ -248,8 +248,9 @@ public class Robot extends TimedRobot {
 			}
 
 			if (mControlBoard.snapToTarget() != autoAllignBoolean && mControlBoard.snapToTarget()){
+				System.out.println("Snapping to target" + mLimelight.getTargetSnap());
 				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
-				autoAllignBoolean = !autoAllignBoolean;
+				autoAllignBoolean = true;
 			}
 
 			if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
