@@ -807,8 +807,8 @@ public class Superstructure extends Subsystem {
                 if (climbingTracker == 3 && climbModeStage3 && mClimberHook.getAngleDeg() > 78) {
                     mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
                     mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle1);
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain1);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle2);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
                     mClimberHook.setSetpointMotionMagic(80); //bring value up to help press the robot against the wall
                     climbingTracker = 4;
                 }
@@ -816,8 +816,8 @@ public class Superstructure extends Subsystem {
                 // Stage 3: wait for user to press button to extend up to trap
                 if ((climbingTracker == 4)
                         && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendOffChainAngle1
-                                - Constants.PivotConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain2);
+                                - 4)) {
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendOffChainAngle2);
 
                     climbingTracker = 5;
@@ -826,18 +826,22 @@ public class Superstructure extends Subsystem {
                 if ((climbingTracker == 5)
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendOffChain2
                                 - Constants.ElevatorConstants.kPositionError)
-                        && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendOffChainAngle2
-                                - Constants.PivotConstants.kPositionError) {
-                    climbingTracker = 6;
+                        // && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendOffChainAngle2
+                        //         - 4) 
+                 ) {
+
                     mWrist.setSetpointMotionMagic(225);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle1); // fast
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
-                    // mWrist.setSetpointMotionMagic(Constants.WristConstants.);
                 }
 
+                if (climbingTracker == 5 && mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendOffChainAngle2 - 2){
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kExtendOffChain3);
+                    climbingTracker = 6;
+                } 
+
                 if ((climbingTracker == 6)
-                        && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle1
-                                - Constants.PivotConstants.kPositionError)
+                        // && (mPivot.getPivotAngleDeg() > Constants.PivotConstants.kExtendToScoreTrapAngle1
+                        //         - 4)
                         &&
                         (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kExtendOffChain3
                                 - Constants.ElevatorConstants.kPositionError)) {

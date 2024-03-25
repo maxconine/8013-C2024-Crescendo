@@ -537,9 +537,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicCruiseVelocity = 35;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 50;
+            config.MotionMagic.MotionMagicAcceleration = 80;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -560,9 +560,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 35; // TODO: change this
+            config.MotionMagic.MotionMagicCruiseVelocity = 15; // TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
-            config.MotionMagic.MotionMagicAcceleration = 50;
+            config.MotionMagic.MotionMagicAcceleration = 30;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -608,7 +608,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicCruiseVelocity = 80;
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 120;
 
@@ -733,9 +733,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 50;
+            config.MotionMagic.MotionMagicCruiseVelocity = 140; //was 50 for 1st comp
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 60;
+            config.MotionMagic.MotionMagicAcceleration = 140;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -747,8 +747,8 @@ public class Constants {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
-            config.CurrentLimits.SupplyCurrentThreshold = 20;
+            config.CurrentLimits.SupplyCurrentLimit = 35; // start off pretty low
+            config.CurrentLimits.SupplyCurrentThreshold = 30;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
             config.Slot0.kP = 0.6;
@@ -756,9 +756,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 55; // TODO: change this
+            config.MotionMagic.MotionMagicCruiseVelocity = 140; // TODO: change this
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
-            config.MotionMagic.MotionMagicAcceleration = 60;
+            config.MotionMagic.MotionMagicAcceleration = 140;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
@@ -878,9 +878,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 80;
+            config.MotionMagic.MotionMagicCruiseVelocity = 140;
             config.MotionMagic.MotionMagicExpo_kA = 0.3;
-            config.MotionMagic.MotionMagicAcceleration = 120;
+            config.MotionMagic.MotionMagicAcceleration = 140;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
