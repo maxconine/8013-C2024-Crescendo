@@ -15,8 +15,8 @@ public class VisionTab extends ShuffleboardTabBase {
 	private GenericEntry mLimelightOk;
 	private GenericEntry mLimelightLatency;
 	private GenericEntry mLimelightTanToSpeaker;
-	private GenericEntry mLimelightPosex;
-	private GenericEntry mLimelightPosey;
+	private GenericEntry mLimelightPosex, mLimelightPosexSmooth;
+	private GenericEntry mLimelightPosey, mLimelightPoseySmooth;
 
 	@Override
 	public void createEntries() {
@@ -54,6 +54,16 @@ public class VisionTab extends ShuffleboardTabBase {
 				.withPosition(1, 1)
 				.withSize(1, 1)
 				.getEntry();
+		mLimelightPosexSmooth = mTab
+				.add("Limelight Bot Pose X Smooth", 0.0)
+				.withPosition(2, 1)
+				.withSize(1, 1)
+				.getEntry();
+		mLimelightPoseySmooth = mTab
+				.add("Limelight Bot Pose Y Smooth", 0.0)
+				.withPosition(3, 1)
+				.withSize(1, 1)
+				.getEntry();
 	}
 
 	@Override
@@ -64,6 +74,8 @@ public class VisionTab extends ShuffleboardTabBase {
 		mLimelightTanToSpeaker.setDouble(mLimelight.getTanLineToSpeaker());
 		mLimelightPosex.setDouble(mLimelight.limelightBotPose2d().getX());
 		mLimelightPosey.setDouble(mLimelight.limelightBotPose2d().getY());
+		mLimelightPosexSmooth.setDouble(mLimelight.limelightBotPose2dSmooth().getX());
+		mLimelightPoseySmooth.setDouble(mLimelight.limelightBotPose2dSmooth().getY());
 		// mLimelightDt.setDouble(mLimelight.getDt());
 		// mLimelightTx.setDouble(mLimelight.getOffset()[0]);
 		// mLimelightTy.setDouble(mLimelight.getOffset()[1]);

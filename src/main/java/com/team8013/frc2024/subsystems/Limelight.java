@@ -1,5 +1,7 @@
 package com.team8013.frc2024.subsystems;
 
+import java.util.ArrayList;
+
 import com.team254.lib.util.Util;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.controlboard.ControlBoard;
@@ -37,6 +39,12 @@ public class Limelight extends Subsystem {
     private boolean wantNoteChase = false;
     private boolean gottenNotePose = false;
     private boolean cantFindTargetOnInitialSnap = false;
+    private int smoothCounter = 0;
+    private double sumx = 0;
+    private double sumy = 0;
+    private double pastPosex = 0;
+    private ArrayList<Double> smoothXs = new ArrayList<Double>();
+    private ArrayList<Double> smoothYs = new ArrayList<Double>();
     private Pose2d notePose = new Pose2d(0,0, new edu.wpi.first.math.geometry.Rotation2d(0));
 
     private int mLatencyCounter = 0;
@@ -55,6 +63,10 @@ public class Limelight extends Subsystem {
 
     private Limelight() {
         //initializeNoteChase();
+        for (int i = 0; i<5;i++){
+            smoothXs.add(0.0);
+            smoothYs.add(0.0);
+        }
     }
 
     public static Limelight getInstance() {
@@ -122,7 +134,9 @@ public class Limelight extends Subsystem {
         public double noteY;
 
         public double botPosex;
+        public double botPosexSmooth;
         public double botPosey;
+        public double botPoseySmooth;
         public double botPosez;
         public double botPoseRoll;
         public double botPosePitch;
@@ -366,6 +380,12 @@ public class Limelight extends Subsystem {
     public Pose2d limelightBotPose2d(){
         return new Pose2d(mPeriodicIO.botPosex,mPeriodicIO.botPosey, new edu.wpi.first.math.geometry.Rotation2d(mPeriodicIO.botPoseYaw * (Math.PI/180)));
     }
+
+    public Pose2d limelightBotPose2dSmooth() {
+        return new Pose2d(mPeriodicIO.botPosexSmooth, mPeriodicIO.botPoseySmooth,
+                edu.wpi.first.math.geometry.Rotation2d.fromDegrees(mPeriodicIO.botPoseYaw));
+    }
+
     public Pose2d speakerPoseOnField(){
         return new Pose2d(0,2.58,new edu.wpi.first.math.geometry.Rotation2d(0));
     }
@@ -421,6 +441,37 @@ public class Limelight extends Subsystem {
         }
 
         mPeriodicIO.tagInView = tTargetID.getDouble(0.0);
+
+        if (cantFindTargetOnInitialSnap && mPeriodicIO.sees_target){
+            mPeriodicIO.botPosexSmooth = mPeriodicIO.botPosex; //don't smooth if searching
+            mPeriodicIO.botPoseySmooth = mPeriodicIO.botPosey;
+        }
+        else if (mPeriodicIO.sees_target && mPeriodicIO.botPosex != pastPosex){
+            pastPosex = mPeriodicIO.botPosex;
+            smoothXs.add(mPeriodicIO.botPosex);
+            if (smoothXs.size()>5){
+                smoothXs.remove(0);
+            }
+            smoothYs.add(mPeriodicIO.botPosey);
+            if (smoothYs.size()>5){
+                smoothYs.remove(0);
+            }
+            
+            for (int i = 0; i<smoothXs.size();i++){
+                sumx = smoothXs.get(i);
+            }
+            for (int i = 0; i<smoothYs.size();i++){
+                sumy = smoothYs.get(i);
+            }
+            mPeriodicIO.botPosexSmooth = sumx/smoothXs.size();
+            mPeriodicIO.botPoseySmooth = sumy/smoothYs.size();
+        }
+
+        if (!mControlBoard.snapToTarget() && smoothXs.size()>0){ //could be in a new position so clear the old one to clean up confusion with old values
+            smoothXs.clear();
+            smoothYs.clear();
+        }
+
 
         // mPeriodicIO.tanLineToSpeaker = Math
         //         .sqrt(mPeriodicIO.botPosex * mPeriodicIO.botPosex + Math.pow(mPeriodicIO.botPosey - 2.61, 2));

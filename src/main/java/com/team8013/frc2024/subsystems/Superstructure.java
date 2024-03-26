@@ -432,7 +432,7 @@ public class Superstructure extends Subsystem {
     }
 
     public void setSuperstuctureTransferToShooter() {
-        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER && (mShooter.getBeamBreak()||mEndEffector.hasGamePiece())) {
+        if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER) {
             mSuperstructureState = SuperstructureState.TRANSFER_TO_SHOOTER;
 
             if (!mShooter.getBeamBreak()) {
@@ -585,12 +585,20 @@ public class Superstructure extends Subsystem {
                  * 1:
                  */
 
-                if (transfterToShooterTracker == -1) {
+                if (transfterToShooterTracker == -1 && (mShooter.getBeamBreak()||mEndEffector.hasGamePiece())) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
-                    mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
+                    if (!mShooter.getBeamBreak()){
+                        mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
+                    }
+                    else{
+                        transfterToShooterTracker = 1;
+                    }
                     transfterToShooterTracker = 0;
+                }
+                else if (transfterToShooterTracker == -1){
+                    mShooter.setOpenLoopDemand(-0.5);
                 }
 
                 if ((transfterToShooterTracker == 0)
@@ -648,7 +656,7 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)
-                         && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() //TODO: RE ENABLE THIS
+                         && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle()
                                  - Constants.PivotConstants.kPositionError)) && (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
