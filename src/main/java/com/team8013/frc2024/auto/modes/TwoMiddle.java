@@ -66,7 +66,7 @@ public class TwoMiddle extends AutoModeBase {
                 // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_B);
 
                 drive_to_first_note_path_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(4.5, 2.25, 0.0, 0));
+                                Constants.AutoConstants.createConfig(4.8, 2.25, 0.0, 0));
                 driveToFirstNote_C = new SwerveTrajectoryAction(drive_to_first_note_path_C,
                                 Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path_C);
@@ -129,7 +129,7 @@ public class TwoMiddle extends AutoModeBase {
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-135))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-145))),
                                                 new WaitAction(2),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
@@ -137,7 +137,9 @@ public class TwoMiddle extends AutoModeBase {
                                                         .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction(() -> mSuperstructure
-                                                                .setSuperstuctureTransferToShooter())                  
+                                                                .setSuperstuctureTransferToShooter()),
+                                                new WaitAction(0.2),
+                                                new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true))
                                                 )))));
 
                 mControlBoard.setAutoSnapToTarget(true);
