@@ -40,6 +40,7 @@ public class Limelight extends Subsystem {
     private boolean gottenNotePose = false;
     private boolean cantFindTargetOnInitialSnap = false;
     private int smoothCounter = 0;
+    private double degreesToSnap = 180;
     private double sumx = 0;
     private double sumy = 0;
     private double pastPosex = 0;
@@ -320,7 +321,7 @@ public class Limelight extends Subsystem {
 
     /** returns the degrees the robot should snap to in order to shoot in the speaker*/
     public double getTargetSnap() {
-        double degreesToSnap = 180;
+        degreesToSnap = 180;
         cantFindTargetOnInitialSnap = true;
 
         //instead of dead reckoning, this is using odometry
@@ -442,34 +443,39 @@ public class Limelight extends Subsystem {
 
         mPeriodicIO.tagInView = tTargetID.getDouble(0.0);
 
-        if (cantFindTargetOnInitialSnap && mPeriodicIO.sees_target){
-            mPeriodicIO.botPosexSmooth = mPeriodicIO.botPosex; //don't smooth if searching
-            mPeriodicIO.botPoseySmooth = mPeriodicIO.botPosey;
-        }
-        else if (mPeriodicIO.sees_target && mPeriodicIO.botPosex != pastPosex){
+        // if (cantFindTargetOnInitialSnap && mPeriodicIO.sees_target){
+        //     mPeriodicIO.botPosexSmooth = mPeriodicIO.botPosex; //don't smooth if searching
+        //     mPeriodicIO.botPoseySmooth = mPeriodicIO.botPosey;
+        // }
+        if (mPeriodicIO.sees_target && mPeriodicIO.botPosex != pastPosex){
             pastPosex = mPeriodicIO.botPosex;
             smoothXs.add(mPeriodicIO.botPosex);
-            if (smoothXs.size()>5){
+            if (smoothXs.size()>15){
                 smoothXs.remove(0);
             }
             smoothYs.add(mPeriodicIO.botPosey);
-            if (smoothYs.size()>5){
+            if (smoothYs.size()>15){
                 smoothYs.remove(0);
             }
             
             for (int i = 0; i<smoothXs.size();i++){
-                sumx = smoothXs.get(i);
+                sumx += smoothXs.get(i);
             }
             for (int i = 0; i<smoothYs.size();i++){
-                sumy = smoothYs.get(i);
+                sumy += smoothYs.get(i);
             }
             mPeriodicIO.botPosexSmooth = sumx/smoothXs.size();
             mPeriodicIO.botPoseySmooth = sumy/smoothYs.size();
+
+            sumx = 0;
+            sumy = 0;
         }
 
         if (!mControlBoard.snapToTarget() && smoothXs.size()>0){ //could be in a new position so clear the old one to clean up confusion with old values
             smoothXs.clear();
             smoothYs.clear();
+            sumx = 0;
+            sumy = 0;
         }
 
 

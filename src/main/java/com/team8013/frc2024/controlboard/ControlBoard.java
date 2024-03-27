@@ -24,6 +24,7 @@ public class ControlBoard {
     private boolean leftBumperBoolean = false;
 
     private boolean leftSwitchReset = true;
+    private boolean autoSnap = false;
 
     private static ControlBoard mInstance = null;
 
@@ -146,7 +147,7 @@ public class ControlBoard {
 
     /**far left switch */
     public boolean snapToTarget(){
-        return m_driver.getRawAxis(4)<-0.25;
+        return m_driver.getRawAxis(4)<-0.25 || autoSnap;
         // if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
         //     leftSwitchReset = false;
         //     return true;
@@ -155,6 +156,10 @@ public class ControlBoard {
         //     leftSwitchReset = true;
         // }
         //return false;
+    }
+
+    public void setAutoSnapToTarget(boolean snap){
+        autoSnap = snap;
     }
 
     public boolean farLeftSwitchUp(){

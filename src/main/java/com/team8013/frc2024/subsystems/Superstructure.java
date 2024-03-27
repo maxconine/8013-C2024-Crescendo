@@ -559,7 +559,14 @@ public class Superstructure extends Subsystem {
                 mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
 
                 mWrist.setSetpointMotionMagic(getPositionsGroundIntakeIn(mElevator.getElevatorUnits())[0]);
-                mPivot.setSetpointMotionMagic(getPositionsGroundIntakeIn(mElevator.getElevatorUnits())[1]);
+
+
+                if (mElevator.getElevatorUnits()<0.1){
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
+                }
+                else{
+                    mPivot.setSetpointMotionMagic(getPositionsGroundIntakeIn(mElevator.getElevatorUnits())[1]);
+                }
 
                 if (mWrist.getWristAngleDeg() < 320) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
@@ -656,8 +663,8 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kShootHeight
                                 - Constants.ElevatorConstants.kPositionError)
-                         && (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle()
-                                 - Constants.PivotConstants.kPositionError)) && (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
+                         && (Util.epsilonEquals(mPivot.getPivotAngleDeg(),mLimelight.getPivotShootingAngle(),Constants.PivotConstants.kPositionError)) && 
+                         (Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000))) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
@@ -669,7 +676,7 @@ public class Superstructure extends Subsystem {
                     transfterToShooterTracker = 4;
                 }
 
-                if ((transfterToShooterTracker == 4) && (shootingTimer.get() > 0.4)) {
+                if ((transfterToShooterTracker == 4) && (shootingTimer.get() > 0.2)) {
                     shootingTimer.stop();
                     shootingTimer.reset();
                     // done shooting
@@ -696,7 +703,7 @@ public class Superstructure extends Subsystem {
             } else if (mSuperstructureState == SuperstructureState.INTAKING_GROUND) {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "INTAKING GROUND");
 
-                if (mWrist.getWristAngleDeg() > 160) { // greater angle, furthur down 225
+                if (mWrist.getWristAngleDeg() > 13) { // greater angle, furthur down 225
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kFloorIntakeHeight);
 
                     mWrist.setSetpointMotionMagic(getPositionsGroundIntakeOut(mElevator.getElevatorUnits())[0]);
@@ -1076,7 +1083,7 @@ public class Superstructure extends Subsystem {
             autoShotTracker = 0;
         }
 
-        if (mEndEffector.getVelocityMaster() > 3800 && autoShotTracker == 0 &&
+        if ((Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000)) && autoShotTracker == 0 &&
                 (mPivot.getPivotAngleDeg() > (mLimelight.getPivotShootingAngle() - 1.5)) && mShooter.getBeamBreak() && autoShot) {
             setSuperstuctureShoot(true);
             autoShotTracker = 1;

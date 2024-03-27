@@ -72,10 +72,10 @@ public class VisionTab extends ShuffleboardTabBase {
 		mLimelightOk.setBoolean(mLimelight.limelightOK());
 		mLimelightLatency.setDouble(mLimelight.getLatency());
 		mLimelightTanToSpeaker.setDouble(mLimelight.getTanLineToSpeaker());
-		mLimelightPosex.setDouble(mLimelight.limelightBotPose2d().getX());
-		mLimelightPosey.setDouble(mLimelight.limelightBotPose2d().getY());
-		mLimelightPosexSmooth.setDouble(mLimelight.limelightBotPose2dSmooth().getX());
-		mLimelightPoseySmooth.setDouble(mLimelight.limelightBotPose2dSmooth().getY());
+		mLimelightPosex.setDouble(truncate(mLimelight.limelightBotPose2d().getX()));
+		mLimelightPosey.setDouble(truncate(mLimelight.limelightBotPose2d().getY()));
+		mLimelightPosexSmooth.setDouble(truncate(mLimelight.limelightBotPose2dSmooth().getX()));
+		mLimelightPoseySmooth.setDouble(truncate(mLimelight.limelightBotPose2dSmooth().getY()));
 		// mLimelightDt.setDouble(mLimelight.getDt());
 		// mLimelightTx.setDouble(mLimelight.getOffset()[0]);
 		// mLimelightTy.setDouble(mLimelight.getOffset()[1]);

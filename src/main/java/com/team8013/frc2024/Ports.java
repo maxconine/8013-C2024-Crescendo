@@ -20,8 +20,8 @@ public class Ports {
     public static final int WRIST = 18;
     public static final int WRIST_CANCODER = 22;
 
-    public static final int END_EFFECTOR_A = 2; // (Beam break side)
-    public static final int END_EFFECTOR_B = 42;
+    public static final int END_EFFECTOR_A = 1; // (Beam break side) //end effector 1 is (2, 42) #2 is (1,43)
+    public static final int END_EFFECTOR_B = 43;
     public static final int END_EFFECTOR_BEAM_BREAK = 9;
     public static final int SHOOTER_BEAM_BREAK = 8;
 

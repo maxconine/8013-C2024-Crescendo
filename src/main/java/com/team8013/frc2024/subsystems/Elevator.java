@@ -88,6 +88,11 @@ public class Elevator extends Subsystem {
                 } else if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
                     setWantHome(false);
                 }
+
+            if (mPeriodicIO.position < 0.0){
+                zeroSensors();
+                setSetpointMotionMagic(0.01);
+            }
             }
 
             @Override
@@ -185,14 +190,14 @@ public class Elevator extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
 
-        if ((mPeriodicIO.torqueCurrent < -20) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position < 0) {
+        if ((Math.abs(mPeriodicIO.torqueCurrent) > 30) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position < 0) {
             mHoming = false;
             zeroSensors();
             setSetpointMotionMagic(0.01);
         }
 
         if (mHoming) { // sets it moving backward until velocity slows down
-            mMaster.setControl(new VoltageOut(-3));
+            mMaster.setControl(new VoltageOut(-4));
             if (mHomingDelay.update(Timer.getFPGATimestamp(),
                     Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { // is this motor velocity or elevator
                                                                            // velocity
@@ -211,10 +216,11 @@ public class Elevator extends Subsystem {
             mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         }
 
-        if (mPeriodicIO.position < 0.03 && mPeriodicIO.torqueCurrent < -90) {
+        if (mPeriodicIO.position < 0.02 && Math.abs(mPeriodicIO.torqueCurrent) > 50) {
             zeroSensors();
-            setSetpointMotionMagic(0.01);
+            setSetpointMotionMagic(0.015);
         }
+
     }
 
     public void zeroSensors() {
@@ -230,7 +236,7 @@ public class Elevator extends Subsystem {
 
     public boolean atHomingLocation() {
         return mPeriodicIO.position < 0.0
-                || Util.epsilonEquals(mPeriodicIO.position, 0.0, 0.05);
+                || Util.epsilonEquals(mPeriodicIO.position, 0.0, 0.02);
     }
 
     public void setMotorConfig(TalonFXConfiguration config) {

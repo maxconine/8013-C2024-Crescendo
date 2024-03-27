@@ -132,6 +132,7 @@ public class Robot extends TimedRobot {
 			mEnabledLooper.start();
 			mAutoModeExecutor.start();
 			// mLoggingLooper.start();
+			mControlBoard.setAutoSnapToTarget(false);
 
 			mDrive.setNeutralBrake(true);
 
@@ -169,6 +170,8 @@ public class Robot extends TimedRobot {
 			mSuperstructure.stop();
 
 			mDrive.setAutoSpinFast(false);
+
+			mControlBoard.setAutoSnapToTarget(false);
 
 			mDrive.setNeutralBrake(true);
 			mClimberHook.setWantNeutralBrake(true);
@@ -247,10 +250,10 @@ public class Robot extends TimedRobot {
 				}
 			}
 
-			if (mControlBoard.snapToTarget() != autoAllignBoolean && mControlBoard.snapToTarget()){
+			if (!mLimelight.cantFindTargetOnInitialSnap() && mControlBoard.snapToTarget()){
 				System.out.println("Snapping to target" + mLimelight.getTargetSnap());
 				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
-				autoAllignBoolean = true; //take out this to make always auto aim
+				//autoAllignBoolean = true; //take out this to make always auto aim
 			}
 
 			if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
