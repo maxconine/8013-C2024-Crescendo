@@ -447,7 +447,7 @@ public class Limelight extends Subsystem {
         //     mPeriodicIO.botPosexSmooth = mPeriodicIO.botPosex; //don't smooth if searching
         //     mPeriodicIO.botPoseySmooth = mPeriodicIO.botPosey;
         // }
-        if (mPeriodicIO.sees_target && mPeriodicIO.botPosex != pastPosex){
+        if (mPeriodicIO.sees_target && mPeriodicIO.botPosex != pastPosex && mPeriodicIO.botPosex != 0.0){
             pastPosex = mPeriodicIO.botPosex;
             smoothXs.add(mPeriodicIO.botPosex);
             if (smoothXs.size()>15){

@@ -58,7 +58,7 @@ public class TwoStageSide extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(3.5, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(4, 2, 0.0, 0));
                 driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(240));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -71,7 +71,7 @@ public class TwoStageSide extends AutoModeBase {
 
                 System.out.println("Running 2 note auto");
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1.3));
+                runAction(new WaitAction(1));
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -103,23 +103,30 @@ public class TwoStageSide extends AutoModeBase {
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.4));
                 runAction(new ParallelAction(List.of(
+                                driveToThirdNote,
+                                new SeriesAction(List.of(
                                                 new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction((() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(-135))),
-                                                new WaitAction(2),
+                                                new WaitAction(1.9),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(180))),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new LambdaAction(() -> Drive.getInstance()
-                                                        .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitToPassXCoordinateAction(11),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
+                                                new WaitAction(0.3),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                        .setAutoHeading(Rotation2d.fromDegrees(220))),
                                                 new WaitAction(0.2),
-                                                new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true)))));
-
+                                                new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true)))))));
+                mControlBoard.setAutoSnapToTarget(true);
+                runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
 
         }

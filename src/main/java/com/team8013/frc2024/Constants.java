@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 290.1 - 5.2; // -5.2 so it never gets to -360 and breaks
+        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.33; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
