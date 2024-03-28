@@ -23,7 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class ThreePieceMiddleStart extends AutoModeBase {
+public class FourPieceMiddleStart extends AutoModeBase {
 
         private Superstructure mSuperstructure;
         private ControlBoard mControlBoard;
@@ -52,28 +52,28 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         // SwerveTrajectoryAction driveOut;
         // final Trajectory drivePath_E;
 
-        public ThreePieceMiddleStart() {
+        public FourPieceMiddleStart() {
                 mSuperstructure = Superstructure.getInstance();
                 mControlBoard = ControlBoard.getInstance();
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                                Constants.AutoConstants.createConfig(0.8, 1.3, 0.0, 0));
+                                Constants.AutoConstants.createConfig(0.6, 1.2, 0.0, 0));
                 pathA = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
                 drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.1, 1.5, 0.0, 0));
                 pathB = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(1.4, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.5, 1.5, 0.0, 0));
                 pathC = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(20));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                                Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(4.8, 2.25, 0.0, 0));
                 pathD = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
         }
@@ -109,7 +109,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.4));
+                runAction(new WaitAction(0.45));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
 
@@ -136,11 +136,11 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                         () -> mSuperstructure.setSuperstuctureStow()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                                                new WaitAction(0.6),
+                                                new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.4));
+                runAction(new WaitAction(0.45));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
 
