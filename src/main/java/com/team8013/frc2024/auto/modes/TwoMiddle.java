@@ -130,7 +130,7 @@ public class TwoMiddle extends AutoModeBase {
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(-145))),
-                                                new WaitAction(2),
+                                                new WaitAction(1.9),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
                                                 new LambdaAction(() -> Drive.getInstance()

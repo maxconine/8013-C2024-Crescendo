@@ -24,13 +24,13 @@ public class ShooterRegression {
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.25),
                                 new Vector2(58, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.5),
-                                new Vector2(54, 6000));
+                                new Vector2(53, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.75),
-                                new Vector2(51.25, 6000));
+                                new Vector2(50.5, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.0),
-                                new Vector2(48, 6000));
+                                new Vector2(47, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.25),
-                                new Vector2(44, 6000));
+                                new Vector2(43.5, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.5),
                                 new Vector2(42.75, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.75),

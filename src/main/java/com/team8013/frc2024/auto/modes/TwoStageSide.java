@@ -92,7 +92,7 @@ public class TwoStageSide extends AutoModeBase {
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(3.2),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(220.0))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(230.0))),
                                                 new WaitAction(0.5),
                                                 // new WaitForHeadingAction(220,260),
                                                 new LambdaAction(() -> mSuperstructure
@@ -110,23 +110,23 @@ public class TwoStageSide extends AutoModeBase {
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-135))),
-                                                new WaitAction(1.9),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-125))),
+                                                new WaitAction(1.8),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.3),
+                                                new WaitAction(0.7),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
                                                 new WaitAction(0.3),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                        .setAutoHeading(Rotation2d.fromDegrees(220))),
+                                                        .setAutoHeading(Rotation2d.fromDegrees(230))),
                                                 new WaitAction(0.2),
                                                 new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true)))))));
                 mControlBoard.setAutoSnapToTarget(true);
-                runAction(new WaitAction(0.2));
+                runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
 
         }

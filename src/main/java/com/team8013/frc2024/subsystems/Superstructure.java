@@ -1079,8 +1079,11 @@ public class Superstructure extends Subsystem {
         if (autoShot && autoShotTracker == -1) {
             if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER && (mEndEffector.hasGamePiece()||mShooter.getBeamBreak())) {
                 setSuperstuctureTransferToShooter();
+
             }
-            autoShotTracker = 0;
+            else if (mEndEffector.hasGamePiece()||mShooter.getBeamBreak()){
+                autoShotTracker = 0;
+            }
         }
 
         if ((Util.epsilonEquals(mEndEffector.getVelocityMaster(),mLimelight.getEndEffectorShootingVelocity(),1000)) && autoShotTracker == 0 &&
