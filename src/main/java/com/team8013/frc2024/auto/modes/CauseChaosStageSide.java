@@ -36,7 +36,7 @@ public class CauseChaosStageSide extends AutoModeBase {
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
-                Constants.AutoConstants.createConfig(4, 1.5, 0.0, 0.0));
+                Constants.AutoConstants.createConfig(4, 2.5, 0.0, 0.0));
         driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(240.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }
@@ -47,7 +47,7 @@ public class CauseChaosStageSide extends AutoModeBase {
 
         System.out.println("Running cause chaos auto");
         mSuperstructure.autoShot();
-        runAction(new WaitAction(1.2));
+        runAction(new WaitAction(1));
         mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(
@@ -55,22 +55,28 @@ public class CauseChaosStageSide extends AutoModeBase {
                 new SeriesAction(List.of(
                         new WaitAction(3),
                         new LambdaAction(() -> Drive.getInstance()
-                                .setAutoHeading(Rotation2d.fromDegrees(140))))))));
-                        // new WaitAction(1),
-                        // new LambdaAction(() -> Drive.getInstance()
-                        //         .setAutoHeading(Rotation2d.fromDegrees(30))),
-                        //         new WaitAction(1),
-                        // new LambdaAction(() -> Drive.getInstance()
-                        //         .setAutoHeading(Rotation2d.fromDegrees(230))),
-                        //         new WaitAction(1),
-                        // new LambdaAction(() -> Drive.getInstance()
-                        //         .setAutoHeading(Rotation2d.fromDegrees(70))),
-                        //         new WaitAction(1),
-                        // new LambdaAction(() -> Drive.getInstance()
-                        //         .setAutoHeading(Rotation2d.fromDegrees(270))),
-                        //         new WaitAction(1),
-                        // new LambdaAction(() -> Drive.getInstance()
-                        //         .setAutoHeading(Rotation2d.fromDegrees(110))))));
+                                .setAutoHeading(Rotation2d.fromDegrees(140))),
+                        new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(30))),
+                                new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(230))),
+                                new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(70))),
+                                new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(270))),
+                                new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(110))),
+                        new WaitAction(2),
+                        new LambdaAction(() -> Drive.getInstance()
+                                .setAutoHeading(Rotation2d.fromDegrees(310)))
+                                )))));
+
+        
 
         // mSuperstructure.setSuperstuctureIntakingGround();
 
