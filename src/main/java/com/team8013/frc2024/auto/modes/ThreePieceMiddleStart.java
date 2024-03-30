@@ -100,17 +100,17 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.35),
+                                                new WaitAction(1.7), //change back to 1.5 if it spins late
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.4));
+                runAction(new WaitAction(0.6)); //0.4 before wpi
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
                 mSuperstructure.disableAutoShot();

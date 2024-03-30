@@ -461,6 +461,9 @@ public class Superstructure extends Subsystem {
         if (mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE) {
             mSuperstructureState = SuperstructureState.INTAKING_SHOOTER_SOURCE;
             intakingShooterSourceTracker = -1;
+            if (mEndEffector.hasGamePiece()){
+                intakingShooterSourceTracker = 2;
+            }
         }
 
     }
@@ -732,7 +735,7 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setOpenLoopDemand(0.35); /// .48 seemed to work //.41 last comp
+                    mEndEffector.setOpenLoopDemand(Constants.EndEffectorConstants.kSourceIntakeDemand); /// .48 seemed to work //.41 last comp
                     // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece()) {
                     mEndEffector.setOpenLoopDemand(0.0);
@@ -981,7 +984,7 @@ public class Superstructure extends Subsystem {
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260
                         && intakingShooterSourceTracker == 1) {
-                    mEndEffector.setOpenLoopDemand(0.41);
+                    mEndEffector.setOpenLoopDemand(Constants.EndEffectorConstants.kSourceIntakeDemand);
                     intakingShooterSourceTracker = 2;
                     // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece() && intakingShooterSourceTracker == 2) {
@@ -1010,7 +1013,7 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setOpenLoopDemand(-0.15, -0.18);
+                    mEndEffector.setOpenLoopDemand(-0.13, -0.15);
                     // change this too
 
                 }

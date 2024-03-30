@@ -16,6 +16,7 @@ import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
+import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Superstructure;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,7 +26,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 public class TwoStageSide extends AutoModeBase {
 
         private Superstructure mSuperstructure;
-        private ControlBoard mControlBoard;
+       // private ControlBoard mControlBoard;
+        private Limelight mLimelight;
 
         // required PathWeaver trajectory paths
         String path_A = "paths/2024Paths/LeftRed_A.path";
@@ -44,7 +46,8 @@ public class TwoStageSide extends AutoModeBase {
 
         public TwoStageSide() {
                 mSuperstructure = Superstructure.getInstance();
-                mControlBoard = ControlBoard.getInstance();
+                // mControlBoard = ControlBoard.getInstance();
+                mLimelight = Limelight.getInstance();
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
@@ -127,8 +130,8 @@ public class TwoStageSide extends AutoModeBase {
                                                 new LambdaAction(() -> Drive.getInstance()
                                                         .setAutoHeading(Rotation2d.fromDegrees(230))),
                                                 new WaitAction(0.2),
-                                                new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true)))))));
-                mControlBoard.setAutoSnapToTarget(true);
+                                                new LambdaAction(() -> mLimelight.setShootingFromStage2Piece(true)))))));
+                mLimelight.setShootingFromStage2Piece(true);
                 runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
 

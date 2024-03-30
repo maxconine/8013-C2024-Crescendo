@@ -16,6 +16,7 @@ import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
+import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Superstructure;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -25,7 +26,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 public class TwoMiddle extends AutoModeBase {
 
         private Superstructure mSuperstructure;
-        private ControlBoard mControlBoard;
+        // private ControlBoard mControlBoard;
+        private Limelight mLimelight;
 
         // required PathWeaver trajectory paths
         // String path_A = "paths/2024Paths/TwoMiddle_A.path";
@@ -45,7 +47,8 @@ public class TwoMiddle extends AutoModeBase {
 
         public TwoMiddle() {
                 mSuperstructure = Superstructure.getInstance();
-                mControlBoard = ControlBoard.getInstance();
+                //mControlBoard = ControlBoard.getInstance();
+                mLimelight = Limelight.getInstance();
 
                 // read trajectories from PathWeaver and generate trajectory actions
 
@@ -93,7 +96,7 @@ public class TwoMiddle extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.5),
+                                                new WaitAction(1.7), // 1.5 before wpi
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
                                                 new WaitAction(0.05),
@@ -115,7 +118,7 @@ public class TwoMiddle extends AutoModeBase {
                 //                                 new LambdaAction(() -> mSuperstructure
                 //                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.45));
+                runAction(new WaitAction(0.65)); //0.45 before wpi
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
                 mSuperstructure.disableAutoShot();
@@ -141,10 +144,10 @@ public class TwoMiddle extends AutoModeBase {
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
                                                 new WaitAction(0.2),
-                                                new LambdaAction(() -> mControlBoard.setAutoSnapToTarget(true))
+                                                new LambdaAction(() -> mLimelight.setShootingFromMid2Piece(true))
                                                 )))));
 
-                mControlBoard.setAutoSnapToTarget(true);
+                mLimelight.setShootingFromMid2Piece(true);
                 runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
 

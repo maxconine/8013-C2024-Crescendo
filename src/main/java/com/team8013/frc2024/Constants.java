@@ -469,8 +469,12 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
+
+        //Autos
+        public static final double kStage2PieceAngle = 43.5 - 4.5;
+        public static final double kMid2PieceAngle = 53 - 4.5;
 
         public static final double kShootLoadAngle = 56; // changed from 54
 
@@ -809,6 +813,7 @@ public class Constants {
 
     public static final class EndEffectorConstants {
         public static final double kSubwooferRPM = 5000;
+        public static final double kSourceIntakeDemand = 0.35;
 
         // public static final double kP = .000094;
         // public static final double kPSlave = 0.000098;
