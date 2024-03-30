@@ -618,8 +618,8 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 0)
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
                     // mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootAgainstSubwooferAngle);
 
                     transfterToShooterTracker = 1;
@@ -627,9 +627,9 @@ public class Superstructure extends Subsystem {
 
                 // mShooterLoaded = mShooter.getBeamBreak();
 
-                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kShootHeight+Constants.ElevatorConstants.kPositionError)
+                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kloadShooterFinalHeight+Constants.ElevatorConstants.kPositionError)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setOpenLoopDemand(-0.13, -0.15);
+                    mEndEffector.setOpenLoopDemand(-0.15, -0.17);
 
                     // mEndEffector.setState(State.OUTTAKING);
 
@@ -641,7 +641,7 @@ public class Superstructure extends Subsystem {
 
                 if (mShooter.getBeamBreak() && transfterToShooterTracker == 1) {
                     mShooter.setOpenLoopDemand(-0.01);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle-0.5);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kShootHeight);
                     // mEndEffector.setOpenLoopDemand(0.95); //HERE DO RPM
 
@@ -1011,9 +1011,9 @@ public class Superstructure extends Subsystem {
                     transfterToShooterTracker = 1;
                 }
 
-                if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < 0.26)
+                if ((transfterToShooterTracker == 1) &&  (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kloadShooterFinalHeight+Constants.ElevatorConstants.kPositionError)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setOpenLoopDemand(-0.13, -0.15);
+                    mEndEffector.setOpenLoopDemand(-0.15, -0.17);
                     // change this too
 
                 }

@@ -670,7 +670,7 @@ public class Constants {
 
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1.7);
-        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(6);
         public static final double kShootHeight = 0.26;
 
         /* INTAKING */
