@@ -223,8 +223,8 @@ public class EndEffectorREV extends Subsystem {
                 mPeriodicIO.demandSlave = 0;
                 SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
             } else if (mState == State.INTAKING) {
-                mPeriodicIO.demandMaster = 0.64; // 0.605 //.68 BEFORE WPI
-                mPeriodicIO.demandSlave = 0.64; // 0.615
+                mPeriodicIO.demandMaster = 0.58; // 0.605 //.68 BEFORE WPI
+                mPeriodicIO.demandSlave = 0.58; // 0.615
                 SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
             } else if (mState == State.OUTTAKING) {
                 mPeriodicIO.demandMaster = -0.50; // was 0.35

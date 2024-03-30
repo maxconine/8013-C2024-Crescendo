@@ -335,6 +335,9 @@ public class Limelight extends Subsystem {
         if (mControlBoard.snapToTarget()){
             vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
         }
+        if (mid2Piece || stage2Piece){
+            vel = 6000;
+        }
         vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6600);
         SmartDashboard.putNumber("Limelight Generated RPM", vel);
         return vel;

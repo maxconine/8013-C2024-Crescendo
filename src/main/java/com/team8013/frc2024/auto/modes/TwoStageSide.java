@@ -61,7 +61,7 @@ public class TwoStageSide extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(4, 2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(4.5, 2, 0.0, 0));
                 driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(240));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -130,10 +130,10 @@ public class TwoStageSide extends AutoModeBase {
                                                 new WaitAction(0.3),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                         .setAutoHeading(Rotation2d.fromDegrees(230))),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.01),
                                                 new LambdaAction(() -> mLimelight.setShootingFromStage2Piece(true)))))));
                 mLimelight.setShootingFromStage2Piece(true);
-                runAction(new WaitAction(0.1));
+                //runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
 
         }

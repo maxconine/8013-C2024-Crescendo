@@ -473,8 +473,8 @@ public class Constants {
         public static final double kShootAgainstPodiumAngle = 45;
 
         //Autos
-        public static final double kStage2PieceAngle = 43.5 - 4.5;
-        public static final double kMid2PieceAngle = 53 - 4.5;
+        public static final double kStage2PieceAngle = 43.5 - 1;
+        public static final double kMid2PieceAngle = 53 - 1;
 
         public static final double kShootLoadAngle = 56; // changed from 54
 
@@ -691,7 +691,7 @@ public class Constants {
         public static final double kExtendOffChain2 = 0.126;
         public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
                                                                                             // limits
-        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1.5); // height of the
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(2); // height of the
                                                                                                      // elvator when
                                                                                                      // scoring in the
                                                                                                      // trap

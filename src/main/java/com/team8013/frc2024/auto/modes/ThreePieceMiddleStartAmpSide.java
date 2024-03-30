@@ -90,7 +90,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 // mSuperstructure.setSuperstuctureTransferToShooter();
                 // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1.2));
+                runAction(new WaitAction(1.4));
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 

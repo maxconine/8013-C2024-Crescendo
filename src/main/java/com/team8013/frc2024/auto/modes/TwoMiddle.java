@@ -82,7 +82,7 @@ public class TwoMiddle extends AutoModeBase {
 
                 System.out.println("Running 2 note middle auto");
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1));
+                runAction(new WaitAction(1.4));
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 
