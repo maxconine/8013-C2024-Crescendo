@@ -87,6 +87,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1));
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 pathA,
@@ -112,6 +113,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 runAction(new WaitAction(0.4));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 pathB,
@@ -141,6 +143,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.4));
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 pathD,

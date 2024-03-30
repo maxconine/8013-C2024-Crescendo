@@ -80,6 +80,7 @@ public class TwoMiddle extends AutoModeBase {
                 System.out.println("Running 2 note middle auto");
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1));
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -117,6 +118,7 @@ public class TwoMiddle extends AutoModeBase {
                 runAction(new WaitAction(0.45));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote_C,

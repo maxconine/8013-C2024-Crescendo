@@ -469,7 +469,7 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+0.75; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
         public static final double kShootLoadAngle = 56; // changed from 54
@@ -678,7 +678,7 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4); // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.5); // initial height going up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
@@ -687,7 +687,7 @@ public class Constants {
         public static final double kExtendOffChain2 = 0.126;
         public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
                                                                                             // limits
-        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1); // height of the
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1.5); // height of the
                                                                                                      // elvator when
                                                                                                      // scoring in the
                                                                                                      // trap
@@ -696,7 +696,7 @@ public class Constants {
         public static final double kDeclimbHeight1 = 0.267;
         public static final double kDeclimbHeight2 = 0.06;
         public static final double kDeclimbHeight3 = 0.02;
-        public static final double kDeclimbHeight4 = 0.32;
+        public static final double kDeclimbHeight4 = 0.32 + Conversions.inchesToMeters(2);
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();

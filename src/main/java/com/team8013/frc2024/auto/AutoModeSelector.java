@@ -31,13 +31,13 @@ public class AutoModeSelector {
     public AutoModeSelector() {
         mModeChooser.setDefaultOption("Do Nothing", DesiredMode.DO_NOTHING);
         mModeChooser.setDefaultOption("One Note", DesiredMode.ONE_NOTE);
-        mModeChooser.setDefaultOption("Test Auto Note Pickup", DesiredMode.TEST_AUTO_NOTE_PICKUP);
+        //mModeChooser.setDefaultOption("Test Auto Note Pickup", DesiredMode.TEST_AUTO_NOTE_PICKUP);
         mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_AMP_SIDE);
-        mModeChooser.setDefaultOption("Two Stage Side", DesiredMode.TWO_STAGE_SIDE);
+        mModeChooser.setDefaultOption("Two Stage Side starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE);
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
-        mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
-        mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
+        //mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
+        //mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Stage Side", DesiredMode.MID_START_3_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Amp Side", DesiredMode.MID_START_3_PIECE_AMP_SIDE);
         SmartDashboard.putData("Auto Mode", mModeChooser);

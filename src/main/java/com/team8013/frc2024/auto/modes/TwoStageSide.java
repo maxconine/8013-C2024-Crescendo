@@ -72,6 +72,7 @@ public class TwoStageSide extends AutoModeBase {
                 System.out.println("Running 2 note auto");
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1));
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -102,6 +103,8 @@ public class TwoStageSide extends AutoModeBase {
                                 )))));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.4));
+                mSuperstructure.disableAutoShot();
+
                 runAction(new ParallelAction(List.of(
                                 driveToThirdNote,
                                 new SeriesAction(List.of(

@@ -175,6 +175,7 @@ public class Robot extends TimedRobot {
 
 			mDrive.setNeutralBrake(true);
 			mClimberHook.setWantNeutralBrake(true);
+			mSuperstructure.disableAutoShot();
 
 			mSuperstructure.setSuperstuctureShoot(false); // prevents robot from catching note after 1st shot
 
