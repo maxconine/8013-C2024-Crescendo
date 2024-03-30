@@ -36,7 +36,7 @@ public class CauseChaosStageSide extends AutoModeBase {
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
-                Constants.AutoConstants.createConfig(4, 2.5, 0.0, 0.0));
+                Constants.AutoConstants.createConfig(4.5, 2.5, 0.0, 0.0));
         driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(240.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }

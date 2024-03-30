@@ -38,7 +38,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = false;
+    public static final boolean disableExtraTelemetry = true;
 
     public static final boolean isManualControlMode = false;
 
@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.33; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
+        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.23; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -469,7 +469,7 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56 + 4.5; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+0.75; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
         public static final double kShootLoadAngle = 56; // changed from 54
@@ -665,7 +665,7 @@ public class Constants {
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
-        public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1);
+        public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1.7);
         public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5);
         public static final double kShootHeight = 0.26;
 
@@ -678,7 +678,7 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(2); // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4); // initial height going up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
@@ -808,7 +808,7 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        public static final double kSubwooferRPM = 4400;
+        public static final double kSubwooferRPM = 5000;
 
         // public static final double kP = .000094;
         // public static final double kPSlave = 0.000098;

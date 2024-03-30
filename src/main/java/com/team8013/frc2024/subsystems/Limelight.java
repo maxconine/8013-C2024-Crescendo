@@ -336,6 +336,7 @@ public class Limelight extends Subsystem {
         // }
 
         if (mPeriodicIO.botPosey < 2.58) { //this equation needs to be worked out
+            
             degreesToSnap = 180 - (Math.atan((2.58-mPeriodicIO.botPosey)/mPeriodicIO.botPosex)*(180 / Math.PI));
             
             // 90

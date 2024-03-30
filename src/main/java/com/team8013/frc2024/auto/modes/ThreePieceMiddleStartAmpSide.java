@@ -175,7 +175,8 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 // new WaitAction(0.1),
                                                 // new LambdaAction(() -> Drive.getInstance()
                                                 // .setAutoHeading(Rotation2d.fromDegrees(-2))),
-                                                new WaitToPassXCoordinateAction(13),
+                                                new WaitAction(3),
+                                                //new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction((() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
@@ -186,7 +187,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                                 .setSuperstuctureStow()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitToPassXCoordinateAction(13),
+                                                new WaitAction(4),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
                                                 new WaitAction(0.2),

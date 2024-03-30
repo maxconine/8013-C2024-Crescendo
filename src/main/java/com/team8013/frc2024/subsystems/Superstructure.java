@@ -622,7 +622,7 @@ public class Superstructure extends Subsystem {
 
                 if ((transfterToShooterTracker == 1) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kShootHeight+Constants.ElevatorConstants.kPositionError)
                         && (!mShooter.getBeamBreak())) {
-                    mEndEffector.setOpenLoopDemand(-0.15, -0.18);
+                    mEndEffector.setOpenLoopDemand(-0.13, -0.15);
 
                     // mEndEffector.setState(State.OUTTAKING);
 
@@ -728,7 +728,7 @@ public class Superstructure extends Subsystem {
                 }
 
                 if (!mEndEffector.hasGamePiece() && mWrist.getWristAngleDeg() > 260) {
-                    mEndEffector.setOpenLoopDemand(0.41); /// .48 seemed to work
+                    mEndEffector.setOpenLoopDemand(0.35); /// .48 seemed to work //.41 last comp
                     // mEndEffector.setEndEffectorClosedLoop(3018, 3018);
                 } else if (mEndEffector.hasGamePiece()) {
                     mEndEffector.setOpenLoopDemand(0.0);

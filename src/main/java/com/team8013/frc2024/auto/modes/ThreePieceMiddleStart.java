@@ -141,13 +141,13 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.4));
-                mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.setSuperstuctureShoot(false);
 
                 runAction(new ParallelAction(List.of(
                                 pathD,
                                 new SeriesAction(List.of(
-                                                // new WaitAction(0.1),
+                                                new WaitAction(0.3),
+                                                new LambdaAction(
+                                                        () -> mSuperstructure.setSuperstuctureStow()),
                                                 // new LambdaAction(() -> Drive.getInstance()
                                                 // .setAutoHeading(Rotation2d.fromDegrees(-2))),
                                                 new WaitToPassXCoordinateAction(13),

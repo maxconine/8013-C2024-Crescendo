@@ -22,14 +22,14 @@ public class ShooterRegression {
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.0),
                                 new Vector2(60, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.25),
-                                new Vector2(58, 6000));
+                                new Vector2(57.5, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.5),
                                 new Vector2(53, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(1.75),
-                                new Vector2(50.5, 6000));
+                                new Vector2(49.5, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.0),
-                                new Vector2(47, 6000));
-                SHOOTER_TUNING.put(new InterpolatingDouble(2.25),
+                                new Vector2(45, 6000));
+                SHOOTER_TUNING.put(new InterpolatingDouble(2.22),
                                 new Vector2(43.5, 6000));
                 SHOOTER_TUNING.put(new InterpolatingDouble(2.5),
                                 new Vector2(42.75, 6000));
@@ -57,7 +57,7 @@ public class ShooterRegression {
 
         public double getAngle(double distance) {
                 Vector2 angleAndSpeed = SHOOTER_TUNING.getInterpolated(new InterpolatingDouble(distance));
-                return angleAndSpeed.x - 2.5;
+                return angleAndSpeed.x - 2.5 - 2;
         }
 
         public double getRPM(double distance) {
