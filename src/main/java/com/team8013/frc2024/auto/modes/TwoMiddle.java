@@ -84,6 +84,7 @@ public class TwoMiddle extends AutoModeBase {
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1));
                 mSuperstructure.disableAutoShot();
+                mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -96,7 +97,7 @@ public class TwoMiddle extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.7), // 1.5 before wpi
+                                                new WaitAction(1.6), // 1.5 before wpi
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
                                                 new WaitAction(0.05),

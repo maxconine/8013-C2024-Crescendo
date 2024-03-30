@@ -46,8 +46,8 @@ public class CauseChaosStageSide extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
         System.out.println("Running cause chaos auto");
-        mSuperstructure.autoShot();
-        runAction(new WaitAction(1));
+        //mSuperstructure.autoShot();
+        runAction(new WaitAction(0.1));
         mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(

@@ -92,11 +92,11 @@ public class EndEffectorREV extends Subsystem {
         kIz = 0.00;
 
         kFFMasterSubWof = 0.000155;
-        kFFSlaveSubWof = 0.000155;
+        kFFSlaveSubWof = 0.000153;
 
         //won't spin until this value is tuned
         kFFMasterPodium = 0.000155; //this value tunes subwoofer now
-        kFFSlavePodium = 0.000155;
+        kFFSlavePodium = 0.000153;
 
         kMaxOutput = 1;
         kMinOutput = -1;
@@ -223,8 +223,8 @@ public class EndEffectorREV extends Subsystem {
                 mPeriodicIO.demandSlave = 0;
                 SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
             } else if (mState == State.INTAKING) {
-                mPeriodicIO.demandMaster = 0.68; // 0.605
-                mPeriodicIO.demandSlave = 0.68; // 0.615
+                mPeriodicIO.demandMaster = 0.64; // 0.605 //.68 BEFORE WPI
+                mPeriodicIO.demandSlave = 0.64; // 0.615
                 SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
             } else if (mState == State.OUTTAKING) {
                 mPeriodicIO.demandMaster = -0.50; // was 0.35
