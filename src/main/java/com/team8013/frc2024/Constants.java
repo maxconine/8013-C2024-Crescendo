@@ -469,7 +469,7 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
 
         //Autos
@@ -670,7 +670,7 @@ public class Constants {
 
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1.7);
-        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(6);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5.5);
         public static final double kShootHeight = 0.26;
 
         /* INTAKING */

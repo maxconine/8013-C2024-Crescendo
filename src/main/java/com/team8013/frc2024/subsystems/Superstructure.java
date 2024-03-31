@@ -1023,15 +1023,16 @@ public class Superstructure extends Subsystem {
                 if ((transfterToShooterTracker == 0)
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight- Conversions
+                            .inchesToMeters(2));
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 0.5);
 
                     transfterToShooterTracker = 1;
                 }
 
                 if ((transfterToShooterTracker == 1)
-                        && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kloadShooterFinalHeight
-                                + Constants.ElevatorConstants.kPositionError)
+                        && (mElevator.getElevatorUnits() < (Constants.ElevatorConstants.kloadShooterFinalHeight - Conversions.inchesToMeters(2)
+                                + Constants.ElevatorConstants.kPositionError))
                         && (!mShooter.getBeamBreak())) {
                     mEndEffector.setOpenLoopDemand(-0.15, -0.17);
                     // change this too

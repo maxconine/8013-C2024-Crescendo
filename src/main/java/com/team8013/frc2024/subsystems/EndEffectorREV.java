@@ -95,8 +95,8 @@ public class EndEffectorREV extends Subsystem {
         kFFSlaveSubWof = 0.000153;
 
         //won't spin until this value is tuned
-        kFFMasterPodium = 0.000155; //this value tunes subwoofer now
-        kFFSlavePodium = 0.000153;
+        kFFMasterPodium = 0.000154; //this value tunes subwoofer now
+        kFFSlavePodium = 0.000151;
 
         kMaxOutput = 1;
         kMinOutput = -1;
