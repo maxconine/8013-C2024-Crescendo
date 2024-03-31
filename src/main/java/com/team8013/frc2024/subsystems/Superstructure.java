@@ -1024,14 +1024,14 @@ public class Superstructure extends Subsystem {
                         && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
                                 - Constants.ElevatorConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight- Conversions
-                            .inchesToMeters(2));
+                            .inchesToMeters(1));
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 0.5);
 
                     transfterToShooterTracker = 1;
                 }
 
                 if ((transfterToShooterTracker == 1)
-                        && (mElevator.getElevatorUnits() < (Constants.ElevatorConstants.kloadShooterFinalHeight - Conversions.inchesToMeters(2)
+                        && (mElevator.getElevatorUnits() < (Constants.ElevatorConstants.kloadShooterFinalHeight - Conversions.inchesToMeters(1)
                                 + Constants.ElevatorConstants.kPositionError))
                         && (!mShooter.getBeamBreak())) {
                     mEndEffector.setOpenLoopDemand(-0.15, -0.17);
