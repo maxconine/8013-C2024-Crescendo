@@ -14,6 +14,7 @@ public class AutoModeSelector {
         TEST_AUTO_NOTE_PICKUP,
         TWO_AMP_SIDE,
         TWO_STAGE_SIDE,
+        TWO_STAGE_SIDE_RED,
         TWO_MIDDLE,
         CAUSE_CHAOS_STAGE_SIDE,
         MIDDLE_AROUND,
@@ -34,6 +35,7 @@ public class AutoModeSelector {
         //mModeChooser.setDefaultOption("Test Auto Note Pickup", DesiredMode.TEST_AUTO_NOTE_PICKUP);
         mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_AMP_SIDE);
         mModeChooser.setDefaultOption("Two Stage Side starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE);
+        mModeChooser.setDefaultOption("Two Stage Side RED starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE_RED);
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
         //mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
@@ -67,6 +69,8 @@ public class AutoModeSelector {
                 return Optional.of(new TwoAmpSide());
             case TWO_STAGE_SIDE:
                 return Optional.of(new TwoStageSide());
+            case TWO_STAGE_SIDE_RED:
+                return Optional.of(new TwoStageSideRed());
             case TWO_MIDDLE:
                 return Optional.of(new TwoMiddle());
             case CAUSE_CHAOS_STAGE_SIDE:
