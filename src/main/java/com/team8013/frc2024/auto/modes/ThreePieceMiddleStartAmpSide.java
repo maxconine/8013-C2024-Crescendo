@@ -33,7 +33,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
         String path_B = "paths/2024Paths/TwoMiddle_B.path";
         String path_C = "paths/2024Paths/3PieceMiddleStartAmpSide_C.path";
         String path_D = "paths/2024Paths/3PieceMiddleStartAmpSide_D.path";
-        String path_E = "paths/2024Paths/TwoMiddle_C.path";
+        String path_E = "paths/2024Paths/3PieceMiddleStartAmpSide_E.path";
 
         // trajectories
         SwerveTrajectoryAction driveToFirstNote;
@@ -77,7 +77,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
 
                 drivePath_E = AutoTrajectoryReader.generateTrajectoryFromFile(path_E,
-                                Constants.AutoConstants.createConfig(5, 2.3, 0.0, 0));
+                                Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
                 driveOut = new SwerveTrajectoryAction(drivePath_E, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_E);
         }

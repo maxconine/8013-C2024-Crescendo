@@ -403,12 +403,12 @@ public class Robot extends TimedRobot {
 				}
 
 				if (mSuperstructure.isDeclimbing()) {
-					if (mControlBoard.operator.getButton(Button.X)) {
-						mSuperstructure.setDeClimbUnhook();
-					}
-					if (mControlBoard.operator.getButton(Button.Y)) {
-						mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
-					}
+					// if (mControlBoard.operator.getButton(Button.X)) {
+					// 	mSuperstructure.setDeClimbUnhook();
+					// }
+					// if (mControlBoard.operator.getButton(Button.Y)) {
+					// 	mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
+					// }
 				}
 
 				// mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV()

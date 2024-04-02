@@ -29,12 +29,12 @@ public class FourPieceMiddleStart extends AutoModeBase {
         private ControlBoard mControlBoard;
 
         // required PathWeaver trajectory paths
-        String path_B = "paths/2024Paths/3PieceMiddleStart_C.path";
-        String path_C = "paths/2024Paths/3PieceMiddleStart_D.path";
+        String path_C = "paths/2024Paths/3PieceMiddleStart_C.path";
+        String path_D = "paths/2024Paths/3PieceMiddleStart_D.path";
         String path_A = "paths/2024Paths/TwoMiddleSmooth.path";
         // String path_C = "paths/2024Paths/3PieceMiddleStart_A.path";
         // String path_D = "paths/2024Paths/3PieceMiddleStart_B.path";
-        String path_D = "paths/2024Paths/TwoMiddle_C.path";
+        String path_B = "paths/2024Paths/AmpSideSmooth.path";
 
         // trajectories
         SwerveTrajectoryAction pathA;
@@ -58,22 +58,22 @@ public class FourPieceMiddleStart extends AutoModeBase {
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                                Constants.AutoConstants.createConfig(0.6, 1.2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(0.7, 1.2, 0.0, 0));
                 pathA = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
                 drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(1.1, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(2, 1.2, 0.0, 0));
                 pathB = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(1.5, 1.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(0.6, 1.2, 0.0, 0));
                 pathC = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(20));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                                Constants.AutoConstants.createConfig(4.8, 2.25, 0.0, 0));
+                                Constants.AutoConstants.createConfig(0.6, 1.2, 0.0, 0));
                 pathD = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
         }
@@ -99,7 +99,33 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.35),
+                                                new WaitAction(1.65),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureStow()),
+                                                new WaitAction(0.2),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(180))),
+                                                new WaitAction(0.4),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureTransferToShooter()))))));
+                mSuperstructure.autoShot();
+                runAction(new WaitAction(0.45));
+                mSuperstructure.setSuperstuctureStow();
+                mSuperstructure.disableAutoShot();
+
+                
+                runAction(new ParallelAction(List.of(
+                                pathB,
+                                new SeriesAction(List.of(
+                                                // new WaitToPassXCoordinateAction(15.62),
+                                                new WaitAction(0.1),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(270))),
+                                                // new WaitForHeadingAction(160,200),
+                                                new WaitAction(0.25),
+                                                new LambdaAction(() -> mSuperstructure
+                                                                .setSuperstuctureIntakingGround()),
+                                                new WaitAction(1.6),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
                                                 new WaitAction(0.2),
@@ -108,13 +134,14 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
+
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.45));
                 mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.setSuperstuctureShoot(false);
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
-                                pathB,
+                                pathC,
                                 new SeriesAction(List.of(
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()

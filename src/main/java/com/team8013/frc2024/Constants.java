@@ -492,7 +492,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 8.2;
+        public static final double kDeclimbAngle3 = 6.5; //was 8.2
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -577,7 +577,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 327.06-0.68;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+        public static final double CANCODER_OFFSET = 31.28;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
                                                                       // there
 
         public static final double kGearRatio = 25; // radians per rotation
@@ -873,7 +873,7 @@ public class Constants {
 
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimitEnable = false;
             config.CurrentLimits.SupplyCurrentLimit = 10; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;

@@ -18,7 +18,7 @@ public class AutoModeSelector {
         TWO_MIDDLE,
         CAUSE_CHAOS_STAGE_SIDE,
         MIDDLE_AROUND,
-        CW_FOUR_PIECE,
+        FOUR_PIECE,
         MID_START_3_PIECE,
         MID_START_3_PIECE_AMP_SIDE
     }
@@ -39,7 +39,7 @@ public class AutoModeSelector {
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
         //mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
-        //mModeChooser.setDefaultOption("CW FOUR PIECE", DesiredMode.CW_FOUR_PIECE);
+        mModeChooser.setDefaultOption("FOUR PIECE Amp side first", DesiredMode.FOUR_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Stage Side", DesiredMode.MID_START_3_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Amp Side", DesiredMode.MID_START_3_PIECE_AMP_SIDE);
         SmartDashboard.putData("Auto Mode", mModeChooser);
@@ -77,8 +77,8 @@ public class AutoModeSelector {
                 return Optional.of(new CauseChaosStageSide());
             case MIDDLE_AROUND:
                 return Optional.of(new TwoAround());
-            case CW_FOUR_PIECE:
-                return Optional.of(new CWFourPiece());
+            case FOUR_PIECE:
+                return Optional.of(new FourPieceMiddleStart());
             case MID_START_3_PIECE:
                 return Optional.of(new ThreePieceMiddleStart());
             case MID_START_3_PIECE_AMP_SIDE:

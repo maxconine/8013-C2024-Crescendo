@@ -70,7 +70,7 @@ public class ClimberHook extends Subsystem {
     public synchronized void writePeriodicOutputs() {
         if (mPeriodicIO.mControlModeState == ControlModeState.MOTION_MAGIC) {
 
-            mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand));
+            mMotor.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             mMotor.setControl(new DutyCycleOut(mPeriodicIO.demand));
         }

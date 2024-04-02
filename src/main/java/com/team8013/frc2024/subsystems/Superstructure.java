@@ -7,6 +7,7 @@ import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.FieldLayout;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.controlboard.CustomXboxController.Button;
+import com.team8013.frc2024.controlboard.CustomXboxController.Side;
 import com.team8013.frc2024.loops.CrashTracker;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
@@ -57,7 +58,7 @@ public class Superstructure extends Subsystem {
     private int climbingTracker = -1;
     private int transfterToShooterTracker = -1;
     private int shootingTracker = -1;
-    private int deClimbTracker = -1;
+    private double deClimbTracker = -1;
     private int autoShotTracker = -1;
     private int intakingShooterSourceTracker = -1;
     private int shooterToEndEffectorTracker = -1;
@@ -837,11 +838,11 @@ public class Superstructure extends Subsystem {
 
                 if (climbingTracker == 2 && mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
                         + 1) {
-                    mClimberHook.setSetpointMotionMagic(82);
+                    mClimberHook.setSetpointMotionMagic(85);
                     climbingTracker = 3;
                 }
 
-                if (climbingTracker == 3 && climbModeStage3 && mClimberHook.getAngleDeg() > 82 - 2.5) {
+                if (climbingTracker == 3 && (mControlBoard.operator.getTrigger(Side.LEFT) && mControlBoard.operator.getTrigger(Side.RIGHT)) && mClimberHook.getAngleDeg() > 84 - 1) {
                     mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
                     mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle2);
@@ -915,31 +916,33 @@ public class Superstructure extends Subsystem {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "DECLIMB");
 
                 if (deClimbTracker == -1) {
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle1);
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight1);
-                    deClimbTracker = 0;
-                }
-
-                if ((deClimbTracker == 0) && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle1
-                        + Constants.PivotConstants.kPositionError)
-                        &&
-                        (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight1
-                                + Constants.ElevatorConstants.kPositionError)) {
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle2);
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight2);
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle3); //1
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight3); //1
                     deClimbTracker = 1;
                 }
 
-                if ((deClimbTracker == 1) && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle2
-                        + Constants.PivotConstants.kPositionError)
-                        &&
-                        (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight2
-                                + Constants.ElevatorConstants.kPositionError)) {
+                // if ((deClimbTracker == 0) && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle1
+                //         + Constants.PivotConstants.kPositionError)) {
+                    
+                //     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight2);
+                //     deClimbTracker = 0.5;
+                // }
 
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle3);
+                // if ((deClimbTracker == 0.5) &&(mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight1
+                //                 + Constants.ElevatorConstants.kPositionError)){
+                //     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle2);
+                //     deClimbTracker = 1;
+                // }
+
+                if ((deClimbTracker == 1) && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle2
+                        + Constants.PivotConstants.kPositionError)) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
                     mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kDeclimb1Angle);
+                }
 
+                if ((deClimbTracker == 1) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kDeclimbHeight2
+                                + Constants.ElevatorConstants.kPositionError)){
+                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kDeclimbAngle3);
                 }
 
                 if ((deClimbTracker == 1)
@@ -948,7 +951,7 @@ public class Superstructure extends Subsystem {
                     deClimbTracker = 2;
                 }
 
-                if ((deClimbUnhook) && (deClimbTracker == 2)) {
+                if ((mControlBoard.operator.getButton(Button.X)) && (deClimbTracker == 2)) {
                     mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kUnhookAngle);
                     deClimbTracker = 3;
                 }
@@ -961,12 +964,22 @@ public class Superstructure extends Subsystem {
 
                 if (deClimbTracker == 4 && mPivot.getPivotAngleDeg() > 25) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kDeclimbHeight4);
+                    manualControClimbHeight = Constants.ElevatorConstants.kDeclimbHeight4;
                     deClimbTracker = 5;
                 }
 
-                if (deClimbTracker == 5 && decClimbWantsElevatorDown
-                        && mElevator.getElevatorUnits() > Constants.ElevatorConstants.kDeclimbHeight4
-                                - Constants.ElevatorConstants.kPositionError) {
+                if (deClimbTracker == 5){
+                    if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                        manualControClimbHeight += 0.0020;
+                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                        manualControClimbHeight -= 0.0020;
+                    }
+                    manualControClimbHeight = Util.limit(manualControClimbHeight,
+                            Constants.ElevatorConstants.kMaxClimbInitHeight);
+                    mElevator.setSetpointMotionMagic(manualControClimbHeight);
+                }
+
+                if (deClimbTracker == 5 && mControlBoard.operator.getController().getPOV() == 270) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
                     deClimbTracker = 6;
                 }
