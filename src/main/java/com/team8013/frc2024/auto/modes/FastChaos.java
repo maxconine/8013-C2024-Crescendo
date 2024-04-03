@@ -20,23 +20,23 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class CauseChaosStageSide extends AutoModeBase {
+public class FastChaos extends AutoModeBase {
 
     private Superstructure mSuperstructure;
 
     // required PathWeaver trajectory paths
-    String path = "paths/2024Paths/Cause_Chaos_StageSide.path";
+    String path = "paths/2024Paths/FastChaos.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;
     final Trajectory drive_to_first_note_path;
 
-    public CauseChaosStageSide() {
+    public FastChaos() {
         mSuperstructure = Superstructure.getInstance();
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
-                Constants.AutoConstants.createConfig(4.5, 2.5, 0.0, 0.0));
+                Constants.AutoConstants.createConfig(6, 3, 0.0, 0.0));
         driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(240.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }
@@ -45,7 +45,7 @@ public class CauseChaosStageSide extends AutoModeBase {
     protected void routine() throws AutoModeEndedException {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
-        System.out.println("Running cause chaos auto");
+        System.out.println("Running FAST chaos auto");
         mSuperstructure.autoShot();
         runAction(new WaitAction(1.3));
         mSuperstructure.disableAutoShot();
