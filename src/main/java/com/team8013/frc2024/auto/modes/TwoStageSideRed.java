@@ -23,7 +23,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
-public class TwoStageSide extends AutoModeBase {
+public class TwoStageSideRed extends AutoModeBase { //this was working for red side at wpi
 
         private Superstructure mSuperstructure;
        // private ControlBoard mControlBoard;
@@ -32,7 +32,7 @@ public class TwoStageSide extends AutoModeBase {
         // required PathWeaver trajectory paths
         String path_A = "paths/2024Paths/LeftRed_A.path";
         String path_B = "paths/2024Paths/LeftRed_B.path";
-        String path_C = "paths/2024Paths/LeftRed_C.path";
+        String path_C = "paths/2024Paths/LeftRed_C_0.path";
 
         // trajectories
         SwerveTrajectoryAction driveToFirstNote;
@@ -44,7 +44,7 @@ public class TwoStageSide extends AutoModeBase {
         SwerveTrajectoryAction driveToThirdNote;
         final Trajectory drivePath_C;
 
-        public TwoStageSide() {
+        public TwoStageSideRed() {
                 mSuperstructure = Superstructure.getInstance();
                 // mControlBoard = ControlBoard.getInstance();
                 mLimelight = Limelight.getInstance();

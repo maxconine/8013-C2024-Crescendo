@@ -57,6 +57,8 @@ public class Limelight extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private boolean mOutputsHaveChanged = true;
     private boolean shootFromPodium = false;
+    private boolean mid2Piece = false;
+    private boolean stage2Piece = false;
 
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
     private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
@@ -282,6 +284,18 @@ public class Limelight extends Subsystem {
         }
     }
 
+    public void setShootingFromMid2Piece(boolean shootingFromMid2Piece){
+        if (mid2Piece != shootingFromMid2Piece){
+            mid2Piece = shootingFromMid2Piece;
+        }
+    }
+
+    public void setShootingFromStage2Piece(boolean shootingFromStage2Piece){
+        if (stage2Piece != shootingFromStage2Piece){
+            stage2Piece = shootingFromStage2Piece;
+        }
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
@@ -292,6 +306,13 @@ public class Limelight extends Subsystem {
 
         if (mPeriodicIO.sees_target && mControlBoard.snapToTarget()){
             pivAngle = mRegression.getAngle(mPeriodicIO.tanLineToSpeaker);
+        }
+
+        if (stage2Piece){
+            pivAngle = Constants.PivotConstants.kStage2PieceAngle;
+        }
+        if (mid2Piece){
+            pivAngle = Constants.PivotConstants.kMid2PieceAngle;
         }
 
         // if (shootAgainstSubwooferSide){
@@ -313,6 +334,9 @@ public class Limelight extends Subsystem {
         double vel = Constants.EndEffectorConstants.kSubwooferRPM;
         if (mControlBoard.snapToTarget()){
             vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
+        }
+        if (mid2Piece || stage2Piece){
+            vel = 6000;
         }
         vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6600);
         SmartDashboard.putNumber("Limelight Generated RPM", vel);
@@ -336,6 +360,7 @@ public class Limelight extends Subsystem {
         // }
 
         if (mPeriodicIO.botPosey < 2.58) { //this equation needs to be worked out
+            
             degreesToSnap = 180 - (Math.atan((2.58-mPeriodicIO.botPosey)/mPeriodicIO.botPosex)*(180 / Math.PI));
             
             // 90

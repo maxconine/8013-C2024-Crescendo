@@ -58,7 +58,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                                Constants.AutoConstants.createConfig(0.8, 1.3, 0.0, 0));
+                                Constants.AutoConstants.createConfig(0.7, 1.2, 0.0, 0));
                 pathA = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
@@ -86,7 +86,9 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 // mSuperstructure.setSuperstuctureTransferToShooter();
                 // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1));
+                runAction(new WaitAction(1.4));
+                mSuperstructure.disableAutoShot();
+                mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 pathA,
@@ -99,19 +101,50 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.35),
+                                                new WaitAction(1.6), // 1.5 before wpi
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
+                //mSuperstructure.setSuperstuctureStow();
+
+                // runAction(new ParallelAction(List.of(
+                //                 pathA,
+                //                 new SeriesAction(List.of(
+                //                                 // new WaitToPassXCoordinateAction(15.62),
+                //                                 new WaitAction(0.1),
+                //                                 new LambdaAction(() -> mSuperstructure.disableAutoShot()),
+                //                                 new LambdaAction(() -> mSuperstructure.setSuperstuctureStow()),
+                //                                 new LambdaAction(() -> Drive.getInstance()
+                //                                                 .setAutoHeading(Rotation2d.fromDegrees(-2))),
+                //                                 // new WaitForHeadingAction(160,200),
+                //                                 new WaitAction(0.25),
+                //                                 new LambdaAction(() -> mSuperstructure
+                //                                                 .setSuperstuctureIntakingGround()),
+                //                                 new WaitAction(1.6), // change back to 1.5 if it spins late
+                //                                 new LambdaAction(() -> mSuperstructure
+                //                                                 .setSuperstuctureStow()),
+                //                                 new WaitAction(0.05),
+                //                                 new LambdaAction(() -> Drive.getInstance()
+                //                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
+                //                                 new WaitAction(0.8),
+                //                                 new LambdaAction(() -> mSuperstructure
+                //                                                 .setSuperstuctureTransferToShooter()))))));
+                // mSuperstructure.autoShot();
+                // runAction(new WaitAction(0.5)); // 0.4 before wpi
+                // mSuperstructure.setSuperstuctureStow();
+                // //mSuperstructure.setSuperstuctureShoot(false);
+                // mSuperstructure.disableAutoShot();
+                //mSuperstructure.setSuperstuctureStow();
+
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.4));
+                runAction(new WaitAction(0.5));
+                mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.setSuperstuctureShoot(false);
 
                 runAction(new ParallelAction(List.of(
                                 pathB,
@@ -126,14 +159,14 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(8))))))));
 
-                //mSuperstructure.setSuperstuctureStow();
+                // mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 pathC,
                                 new SeriesAction(List.of(
                                                 new WaitAction(0.2),
                                                 new LambdaAction(
-                                                        () -> mSuperstructure.setSuperstuctureStow()),
+                                                () -> mSuperstructure.setSuperstuctureStow()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
                                                 new WaitAction(0.6),
@@ -141,13 +174,14 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.4));
-                mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.setSuperstuctureShoot(false);
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 pathD,
                                 new SeriesAction(List.of(
-                                                // new WaitAction(0.1),
+                                                new WaitAction(0.3),
+                                                new LambdaAction(
+                                                                () -> mSuperstructure.setSuperstuctureStow()),
                                                 // new LambdaAction(() -> Drive.getInstance()
                                                 // .setAutoHeading(Rotation2d.fromDegrees(-2))),
                                                 new WaitToPassXCoordinateAction(13),

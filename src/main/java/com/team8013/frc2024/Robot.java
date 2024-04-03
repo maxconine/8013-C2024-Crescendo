@@ -175,6 +175,10 @@ public class Robot extends TimedRobot {
 
 			mDrive.setNeutralBrake(true);
 			mClimberHook.setWantNeutralBrake(true);
+			mSuperstructure.disableAutoShot();
+
+			mLimelight.setShootingFromMid2Piece(false);
+			mLimelight.setShootingFromStage2Piece(false);
 
 			mSuperstructure.setSuperstuctureShoot(false); // prevents robot from catching note after 1st shot
 
@@ -399,12 +403,12 @@ public class Robot extends TimedRobot {
 				}
 
 				if (mSuperstructure.isDeclimbing()) {
-					if (mControlBoard.operator.getButton(Button.X)) {
-						mSuperstructure.setDeClimbUnhook();
-					}
-					if (mControlBoard.operator.getButton(Button.Y)) {
-						mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
-					}
+					// if (mControlBoard.operator.getButton(Button.X)) {
+					// 	mSuperstructure.setDeClimbUnhook();
+					// }
+					// if (mControlBoard.operator.getButton(Button.Y)) {
+					// 	mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
+					// }
 				}
 
 				// mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV()

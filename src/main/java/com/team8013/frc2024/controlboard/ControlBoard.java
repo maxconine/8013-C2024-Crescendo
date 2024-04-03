@@ -146,8 +146,10 @@ public class ControlBoard {
     }
 
     /**far left switch */
-    public boolean snapToTarget(){
-        return m_driver.getRawAxis(4)<-0.25 || autoSnap;
+    public boolean snapToTarget(){ //DISABLED
+        return false;//m_driver.getRawAxis(4)<-0.25 || autoSnap;
+
+
         // if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
         //     leftSwitchReset = false;
         //     return true;
@@ -162,9 +164,9 @@ public class ControlBoard {
         autoSnap = snap;
     }
 
-    public boolean farLeftSwitchUp(){
-        return m_driver.getRawAxis(4)<-0.25;
-    }
+    //public boolean farLeftSwitchUp(){//DISABLED
+    //     return false; //m_driver.getRawAxis(4)<-0.25;
+    // }
 
     /**right bumper */
     public boolean allignWithHumanPlayer(){

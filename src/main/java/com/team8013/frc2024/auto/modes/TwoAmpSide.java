@@ -72,6 +72,7 @@ public class TwoAmpSide extends AutoModeBase {
                 System.out.println("Running 2 note BLUE RIGHT auto");
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1.35));
+                mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
@@ -101,6 +102,7 @@ public class TwoAmpSide extends AutoModeBase {
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.5));
                 mSuperstructure.setSuperstuctureStow();
+                mSuperstructure.disableAutoShot();
                 // mLimelight.shootAgainstSubwooferSideAngle(false);
 
                 runAction(new ParallelAction(List.of(

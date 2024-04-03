@@ -38,7 +38,7 @@ public class Constants {
     }
 
     // Disables extra smart dashboard outputs that slow down the robot
-    public static final boolean disableExtraTelemetry = false;
+    public static final boolean disableExtraTelemetry = true;
 
     public static final boolean isManualControlMode = false;
 
@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.33; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
+        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.23; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -469,8 +469,12 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
-        public static final double kShootAgainstSubwooferAngle = 56 + 4.5; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
+
+        //Autos
+        public static final double kStage2PieceAngle = 43.5 +1.5;
+        public static final double kMid2PieceAngle = 55; //53 - 1;
 
         public static final double kShootLoadAngle = 56; // changed from 54
 
@@ -488,7 +492,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 8.2;
+        public static final double kDeclimbAngle3 = 6.5; //was 8.2
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -573,7 +577,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 327.06;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+        public static final double CANCODER_OFFSET = 31.28;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
                                                                       // there
 
         public static final double kGearRatio = 25; // radians per rotation
@@ -665,8 +669,8 @@ public class Constants {
         public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
 
         /* SHOOTING */
-        public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1);
-        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5);
+        public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1.7);
+        public static final double kloadShooterFinalHeight = 0.034 + Conversions.inchesToMeters(5.5);
         public static final double kShootHeight = 0.26;
 
         /* INTAKING */
@@ -678,7 +682,7 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(2); // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.5); // initial height going up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
@@ -687,7 +691,7 @@ public class Constants {
         public static final double kExtendOffChain2 = 0.126;
         public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
                                                                                             // limits
-        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(1); // height of the
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(2.5); // height of the
                                                                                                      // elvator when
                                                                                                      // scoring in the
                                                                                                      // trap
@@ -696,7 +700,7 @@ public class Constants {
         public static final double kDeclimbHeight1 = 0.267;
         public static final double kDeclimbHeight2 = 0.06;
         public static final double kDeclimbHeight3 = 0.02;
-        public static final double kDeclimbHeight4 = 0.32;
+        public static final double kDeclimbHeight4 = 0.32 + Conversions.inchesToMeters(2);
 
         public static TalonFXConfiguration elevatorFastMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -808,7 +812,8 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        public static final double kSubwooferRPM = 4400;
+        public static final double kSubwooferRPM = 5000;
+        public static final double kSourceIntakeDemand = 0.35;
 
         // public static final double kP = .000094;
         // public static final double kPSlave = 0.000098;
@@ -868,7 +873,7 @@ public class Constants {
 
         public static TalonFXConfiguration climberHookMotorConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+            config.CurrentLimits.SupplyCurrentLimitEnable = false;
             config.CurrentLimits.SupplyCurrentLimit = 10; // start off pretty low
             config.CurrentLimits.SupplyCurrentThreshold = 20;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;

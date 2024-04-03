@@ -36,7 +36,7 @@ public class CauseChaosStageSide extends AutoModeBase {
 
         // read trajectories from PathWeaver and generate trajectory actions
         drive_to_first_note_path = AutoTrajectoryReader.generateTrajectoryFromFile(path,
-                Constants.AutoConstants.createConfig(4, 2.5, 0.0, 0.0));
+                Constants.AutoConstants.createConfig(4.5, 2.5, 0.0, 0.0));
         driveToFirstNote = new SwerveTrajectoryAction(drive_to_first_note_path, Rotation2d.fromDegrees(240.0));
         ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drive_to_first_note_path);
     }
@@ -46,8 +46,8 @@ public class CauseChaosStageSide extends AutoModeBase {
         runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
         System.out.println("Running cause chaos auto");
-        mSuperstructure.autoShot();
-        runAction(new WaitAction(1));
+        //mSuperstructure.autoShot();
+        runAction(new WaitAction(0.1));
         mSuperstructure.setSuperstuctureStow();
 
         runAction(new ParallelAction(List.of(
