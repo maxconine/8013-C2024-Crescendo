@@ -469,8 +469,10 @@ public class Constants {
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88;
 
+        //SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
+        public static final double kPassNoteFromMidAngle = 58;
 
         //Autos
         public static final double kStage2PieceAngle = 43.5 +1.5;
@@ -812,33 +814,31 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
+        //SHOOTING RPM's
         public static final double kSubwooferRPM = 5000;
+        public static final double kShootFastRPM = 6100; //rpm for passing and shooting from furthur away
+
+        //INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35;
+        public static final double kGroundIntakeDemand = 0.58;
+        public static final double kOuttakingDemandTop = -0.50;
+        public static final double kOuttakingDemandBottom = -0.55;
 
-        // public static final double kP = .000094;
-        // public static final double kPSlave = 0.000098;
-        // public static final double kI = 0;
-        // public static final double kD = 0.000012;
-        // public static final double Ff = 0;
-        // public static final double Izone = 0.01;
-        // public static final double minOut = -1;
-        // public static final double maxOut = 1;
-        // public static final double openLoopRamp = 0;
-        // public static final double closedLoopRamp = 0;
 
-        // public static TalonFXConfiguration endEffectorMotorConfig() {
-        // TalonFXConfiguration config = new TalonFXConfiguration();
+        //PID TUNING
+        //SUBWOOFER
+        public static final double kFFTopSubwoofer = 0.000153; //this value tunes the subwoofer shot
+        public static final double kFFBottomSubwoofer = 0.000152; //this value tunes the subwoofer shot
+        //FAST
+        public static final double kFFTopFast = 0.000163; //this value tunes the note passing
+        public static final double kFFBottomFast = 0.000162; //this value tunes the note passing
 
-        // config.CurrentLimits.SupplyCurrentLimitEnable = false;
-        // config.CurrentLimits.SupplyCurrentLimit = 30; // start off pretty low
-        // config.CurrentLimits.SupplyCurrentThreshold = 20;
-        // config.CurrentLimits.SupplyTimeThreshold = 0.1;
+        public static final double kMaxOutput = 1;
+        public static final double kMinOutput = -1;
 
-        // config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        // config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        public static final double kPSubWof = 0.00022;
+        public static final double kPFast = 0.00022;
 
-        // return config;
-        // }
     }
 
     public static final class ShooterConstants {

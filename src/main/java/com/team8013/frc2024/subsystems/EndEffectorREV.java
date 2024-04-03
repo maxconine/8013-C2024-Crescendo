@@ -1,5 +1,6 @@
 package com.team8013.frc2024.subsystems;
 
+import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
 import com.team8013.frc2024.loops.Loop;
@@ -19,52 +20,53 @@ public class EndEffectorREV extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
     private DigitalInput mBeamBreak;
 
-    private RelativeEncoder m_encoderMaster;
-    private RelativeEncoder m_encoderSlave;
+    private RelativeEncoder mEncoderTop;
+    private RelativeEncoder mEncoderBottom;
 
-    private CANSparkFlex mMaster;
-    private CANSparkFlex mSlave;
+    private CANSparkFlex mTopMotor;
+    private CANSparkFlex mBottomMotor;
 
-    private SparkPIDController pidMaster;
-    private SparkPIDController pidSlave;
+    private SparkPIDController pidTopRoller;
+    private SparkPIDController pidBottomRoller;
 
-    private double kPSubWof, kPPodium, kI, kD, kIz, kFFMasterSubWof, kFFSlaveSubWof, kFFMasterPodium, kFFSlavePodium, kMaxOutput, kMinOutput;
+    //private double kPSubWof, kPPodium, kI, kD, kIz, kFFMasterSubWof, kFFSlaveSubWof, kFFMasterPodium, kFFSlavePodium, kMaxOutput, kMinOutput;
     private int slotID;
 
     private EndEffectorREV() {
-        mMaster = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless); //top
-        mSlave = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless); //bottom
+        mTopMotor = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless); //top
+        mBottomMotor = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless); //bottom
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);
 
-        mMaster.clearFaults();
-        mSlave.clearFaults();
+        mTopMotor.clearFaults();
+        mBottomMotor.clearFaults();
 
-        // mMaster.enableVoltageCompensation(12);
-        // mSlave.enableVoltageCompensation(12);
+        //doesn't seem to do anything
+        // mTopMotor.enableVoltageCompensation(12);
+        // mBottomMotor.enableVoltageCompensation(12);
 
-        mSlave.setIdleMode(IdleMode.kCoast);
-        mMaster.setIdleMode(IdleMode.kBrake);
+        mBottomMotor.setIdleMode(IdleMode.kCoast);
+        mTopMotor.setIdleMode(IdleMode.kBrake);
 
-        // mMaster.setInverted(false);
-        // mSlave.setInverted(false);
+        // mTopMotor.setInverted(false);
+        // mBottomMotor.setInverted(false);
 
         // Customize these configs from constants in the future
 
-        pidMaster = mMaster.getPIDController();
-        pidSlave = mSlave.getPIDController();
+        pidTopRoller = mTopMotor.getPIDController();
+        pidBottomRoller = mBottomMotor.getPIDController();
 
-        // pidMaster.setIZone(0.01);
-        // pidSlave.setIZone(0.01);
+        // pidTopRoller.setIZone(0.01);
+        // pidBottomRoller.setIZone(0.01);
 
-        // pidMaster = new PIDController(Constants.EndEffectorConstants.kP,
+        // pidTopRoller = new PIDController(Constants.EndEffectorConstants.kP,
         // Constants.EndEffectorConstants.kI,
         // Constants.EndEffectorConstants.kD);
-        // pidSlave = new PIDController(Constants.EndEffectorConstants.kPSlave,
+        // pidBottomRoller = new PIDController(Constants.EndEffectorConstants.kPSlave,
         // Constants.EndEffectorConstants.kI,
         // Constants.EndEffectorConstants.kD);
 
-        m_encoderMaster = mMaster.getEncoder();
-        m_encoderSlave = mSlave.getEncoder();
+        mEncoderTop = mTopMotor.getEncoder();
+        mEncoderBottom = mBottomMotor.getEncoder();
 
         /*
          * Slot 1: Subwoofer (4500 RPM)
@@ -84,41 +86,25 @@ public class EndEffectorREV extends Subsystem {
          * spool up pid values for 5700 rpm for a podium shot
          */
 
-        // PID coefficients for fine targeting
-        kPSubWof = 0.00022;
-        kPPodium = 0.00022;
-        kI = 0;
-        kD = 0;
-        kIz = 0.00;
-
-        kFFMasterSubWof = 0.000155;
-        kFFSlaveSubWof = 0.0001535;
-
-        //won't spin until this value is tuned
-        kFFMasterPodium = 0.000153; //this value tunes subwoofer now
-        kFFSlavePodium = 0.000152;
-
-        kMaxOutput = 1;
-        kMinOutput = -1;
 
         // set PID coefficients
-        pidMaster.setP(kPSubWof,0);
-        pidMaster.setP(kPPodium,1);
-        pidMaster.setI(kI);
-        pidMaster.setD(kD);
-        pidMaster.setIZone(kIz);
-        pidMaster.setFF(kFFMasterSubWof,0);
-        pidMaster.setFF(kFFMasterPodium,1);
-        pidMaster.setOutputRange(kMinOutput, kMaxOutput);
+        pidTopRoller.setP(Constants.EndEffectorConstants.kPSubWof,0);
+        pidTopRoller.setP(Constants.EndEffectorConstants.kPFast,1);
+        pidTopRoller.setI(0);
+        pidTopRoller.setD(0);
+        pidTopRoller.setIZone(0);
+        pidTopRoller.setFF(Constants.EndEffectorConstants.kFFTopSubwoofer,0);
+        pidTopRoller.setFF(Constants.EndEffectorConstants.kFFTopFast,1);
+        pidTopRoller.setOutputRange(Constants.EndEffectorConstants.kMinOutput, Constants.EndEffectorConstants.kMaxOutput);
 
-        pidSlave.setP(kPSubWof,0);
-        pidMaster.setP(kPPodium,1);
-        pidSlave.setI(kI);
-        pidSlave.setD(kD);
-        pidSlave.setIZone(kIz);
-        pidSlave.setFF(kFFSlaveSubWof,0);
-        pidSlave.setFF(kFFSlavePodium, 1);
-        pidSlave.setOutputRange(kMinOutput, kMaxOutput);
+        pidBottomRoller.setP(Constants.EndEffectorConstants.kPSubWof,0);
+        pidTopRoller.setP(Constants.EndEffectorConstants.kPFast,1);
+        pidBottomRoller.setI(0);
+        pidBottomRoller.setD(0);
+        pidBottomRoller.setIZone(0);
+        pidBottomRoller.setFF(Constants.EndEffectorConstants.kFFBottomSubwoofer,0);
+        pidBottomRoller.setFF(Constants.EndEffectorConstants.kFFBottomFast, 1);
+        pidBottomRoller.setOutputRange(Constants.EndEffectorConstants.kMinOutput, Constants.EndEffectorConstants.kMaxOutput);
 
     }
 
@@ -209,11 +195,11 @@ public class EndEffectorREV extends Subsystem {
     public void writePeriodicOutputs() {
 
         if (mState == State.CLOSED_LOOP) {
-            pidMaster.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity,slotID);
-            pidSlave.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity,slotID);
-            // mPeriodicIO.demandMaster = pidMaster.calculate(mPeriodicIO.velocityMaster,
+            pidTopRoller.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity,slotID);
+            pidBottomRoller.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity,slotID);
+            // mPeriodicIO.demandMaster = pidTopRoller.calculate(mPeriodicIO.velocityMaster,
             // mPeriodicIO.demandMaster);
-            // mPeriodicIO.demandSlave = pidSlave.calculate(mPeriodicIO.velocitySlave,
+            // mPeriodicIO.demandSlave = pidBottomRoller.calculate(mPeriodicIO.velocitySlave,
             // mPeriodicIO.demandSlave);
             SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
         } else {
@@ -223,36 +209,36 @@ public class EndEffectorREV extends Subsystem {
                 mPeriodicIO.demandSlave = 0;
                 SmartDashboard.putString("END EFFECTOR STATE", "IDLE");
             } else if (mState == State.INTAKING) {
-                mPeriodicIO.demandMaster = 0.58; // 0.605 //.68 BEFORE WPI
-                mPeriodicIO.demandSlave = 0.58; // 0.615
+                mPeriodicIO.demandMaster = Constants.EndEffectorConstants.kGroundIntakeDemand; // 0.605 //.68 BEFORE WPI
+                mPeriodicIO.demandSlave = Constants.EndEffectorConstants.kGroundIntakeDemand; // 0.615
                 SmartDashboard.putString("END EFFECTOR STATE", "INTAKING");
             } else if (mState == State.OUTTAKING) {
-                mPeriodicIO.demandMaster = -0.50; // was 0.35
-                mPeriodicIO.demandSlave = -0.55; // was 0.35
+                mPeriodicIO.demandMaster = Constants.EndEffectorConstants.kOuttakingDemandTop; // was 0.35
+                mPeriodicIO.demandSlave = Constants.EndEffectorConstants.kOuttakingDemandBottom; // was 0.35
                 SmartDashboard.putString("END EFFECTOR STATE", "OUTTAKING");
             } else if (mState == State.OPEN_LOOP) {
                 SmartDashboard.putString("END EFFECTOR STATE", "OPEN LOOP");
             }
 
-            mMaster.set(mPeriodicIO.demandMaster);
-            mSlave.set(mPeriodicIO.demandSlave);
+            mTopMotor.set(mPeriodicIO.demandMaster);
+            mBottomMotor.set(mPeriodicIO.demandSlave);
         }
     }
 
-    public void setEndEffectorClosedLoop(double rpmMaster, double rpmSlave) {
+    public void setEndEffectorClosedLoop(double rpmTopMotor, double rpmBottomMotor) {
         if (mState != State.CLOSED_LOOP) {
             mState = State.CLOSED_LOOP;
         }
         
         //set slot id
-        if (rpmMaster <5000){
+        if (rpmTopMotor <5500){
             slotID = 0;
         }
         else {
             slotID = 1;
         }
-        mPeriodicIO.demandMaster = rpmMaster;
-        mPeriodicIO.demandSlave = rpmSlave;
+        mPeriodicIO.demandMaster = rpmTopMotor;
+        mPeriodicIO.demandSlave = rpmBottomMotor;
 
     }
 
@@ -286,7 +272,7 @@ public class EndEffectorREV extends Subsystem {
 
     // @Log
     // public double getMainMotorBusVolts() {
-    // return mMaster.getBusVoltage();
+    // return mTopMotor.getBusVoltage();
     // }
 
     @Override
@@ -301,10 +287,10 @@ public class EndEffectorREV extends Subsystem {
 
     @Override
     public void readPeriodicInputs() {
-        mPeriodicIO.voltage = mMaster.getBusVoltage();
-        mPeriodicIO.current = mMaster.getOutputCurrent();
-        mPeriodicIO.velocityMaster = m_encoderMaster.getVelocity();
-        mPeriodicIO.velocitySlave = m_encoderSlave.getVelocity();
+        mPeriodicIO.voltage = mTopMotor.getBusVoltage();
+        mPeriodicIO.current = mTopMotor.getOutputCurrent();
+        mPeriodicIO.velocityMaster = mEncoderTop.getVelocity();
+        mPeriodicIO.velocitySlave = mEncoderBottom.getVelocity();
         mPeriodicIO.beamBreak = !mBeamBreak.get();
     }
 }

@@ -608,7 +608,7 @@ public class Superstructure extends Subsystem {
                 if (transfterToShooterTracker == -1 && (mShooter.getBeamBreak() || mEndEffector.hasGamePiece())) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
-                    mPivot.setSetpointMotionMagic(Constants.PivotConstants.kShootLoadAngle);
+                    mPivot.setSetpointMotionMagic(Util.limit(Constants.PivotConstants.kShootLoadAngle-5, Constants.PivotConstants.kShootLoadAngle+8, mLimelight.getPivotShootingAngle()));
                     if (!mShooter.getBeamBreak()) {
                         mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
                     } else {

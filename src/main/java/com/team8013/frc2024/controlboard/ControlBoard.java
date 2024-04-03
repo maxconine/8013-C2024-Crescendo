@@ -22,6 +22,7 @@ public class ControlBoard {
     private final int kDpadLeft = 270;
 
     private boolean leftBumperBoolean = false;
+    private boolean passNoteAllignBoolean = false;
 
     private boolean leftSwitchReset = true;
     private boolean autoSnap = false;
@@ -177,6 +178,21 @@ public class ControlBoard {
 
         return false;
         //;
+    }
+
+    public boolean passNoteFromMidAllign(){ //triggers once every click up
+        if (!(m_driver.getRawAxis(4)<-0.25)){
+            passNoteAllignBoolean = true;
+        }
+        else if (m_driver.getRawAxis(4)<-0.25 && passNoteAllignBoolean){
+            passNoteAllignBoolean = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean passNoteFromMid(){
+        return (m_driver.getRawAxis(4)<-0.25);
     }
 
     public double pivotPercentOutput(){

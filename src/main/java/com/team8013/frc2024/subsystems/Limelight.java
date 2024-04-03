@@ -307,12 +307,14 @@ public class Limelight extends Subsystem {
         if (mPeriodicIO.sees_target && mControlBoard.snapToTarget()){
             pivAngle = mRegression.getAngle(mPeriodicIO.tanLineToSpeaker);
         }
-
-        if (stage2Piece){
+        else if (stage2Piece){
             pivAngle = Constants.PivotConstants.kStage2PieceAngle;
         }
-        if (mid2Piece){
+        else if (mid2Piece){
             pivAngle = Constants.PivotConstants.kMid2PieceAngle;
+        }
+        else if (mControlBoard.passNoteFromMid()){
+            pivAngle = Constants.PivotConstants.kPassNoteFromMidAngle;
         }
 
         // if (shootAgainstSubwooferSide){
@@ -335,8 +337,8 @@ public class Limelight extends Subsystem {
         if (mControlBoard.snapToTarget()){
             vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
         }
-        if (mid2Piece || stage2Piece){
-            vel = 6000;
+        if (mid2Piece || stage2Piece || mControlBoard.passNoteFromMid()){
+            vel = Constants.EndEffectorConstants.kShootFastRPM;
         }
         vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6600);
         SmartDashboard.putNumber("Limelight Generated RPM", vel);

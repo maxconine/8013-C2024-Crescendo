@@ -182,6 +182,7 @@ public class Robot extends TimedRobot {
 
 			mSuperstructure.setSuperstuctureShoot(false); // prevents robot from catching note after 1st shot
 
+			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
 			throw t;
@@ -247,28 +248,34 @@ public class Robot extends TimedRobot {
 			// }
 
 			if (mControlBoard.allignWithHumanPlayer()) {
-				if (!is_red_alliance) {
+				if (!is_red_alliance) { //keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(45);
 				} else {
 					mDrive.setHeadingControlTarget(-45);
 				}
 			}
-
-			if (!mLimelight.cantFindTargetOnInitialSnap() && mControlBoard.snapToTarget()){
-				System.out.println("Snapping to target" + mLimelight.getTargetSnap());
-				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
-				//autoAllignBoolean = true; //take out this to make always auto aim
+			else if (mControlBoard.passNoteFromMidAllign()){
+				if (!is_red_alliance) { //keep in mind the alliance is flipped
+					mDrive.setHeadingControlTarget(-135);
+				} else {
+					mDrive.setHeadingControlTarget(135);
+				}
 			}
 
-			if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
-				mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
-			} //flip 180 if no tag seen, and continue searching for tag until tag seen and then snap to correct angle (2 snaps total)
+			// if (!mLimelight.cantFindTargetOnInitialSnap() && mControlBoard.snapToTarget()){
+			// 	System.out.println("Snapping to target" + mLimelight.getTargetSnap());
+			// 	mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
+			// 	//autoAllignBoolean = true; //take out this to make always auto aim
+			// }
 
-			if (!mControlBoard.snapToTarget()){
-				autoAllignBoolean = false;
-			}
+			// if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
+			// 	mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
+			// } //flip 180 if no tag seen, and continue searching for tag until tag seen and then snap to correct angle (2 snaps total)
 
-			mSuperstructure.setManualControlMode(Constants.isManualControlMode);
+			// if (!mControlBoard.snapToTarget()){
+			// 	autoAllignBoolean = false;
+			// }
+
 			if (Constants.isManualControlMode) {
 				/* PIVOT */
 
