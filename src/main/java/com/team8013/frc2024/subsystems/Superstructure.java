@@ -407,7 +407,8 @@ public class Superstructure extends Subsystem {
         STOW,
         CLIMB,
         DECLIMB,
-        SHOOTER_TO_END_EFFECTOR
+        SHOOTER_TO_END_EFFECTOR,
+        SHOOTER_TO_AMP
     }
 
     public void setSuperstuctureIntakingGround() {
@@ -429,8 +430,12 @@ public class Superstructure extends Subsystem {
     }
 
     public void setSuperstuctureScoreAmp() {
-        if (mSuperstructureState != SuperstructureState.SCORE_AMP) {
+        if (mSuperstructureState != SuperstructureState.SCORE_AMP && mSuperstructureState != SuperstructureState.SHOOTER_TO_AMP && !mShooter.getBeamBreak()) {
             mSuperstructureState = SuperstructureState.SCORE_AMP;
+        }
+        else if (mSuperstructureState != SuperstructureState.SHOOTER_TO_AMP && mShooter.getBeamBreak()){
+            mSuperstructureState = SuperstructureState.SHOOTER_TO_AMP;
+            shooterToEndEffectorTracker = -1;
         }
     }
 
@@ -1080,6 +1085,26 @@ public class Superstructure extends Subsystem {
                     mSuperstructureState = SuperstructureState.STOW;
                 }
 
+            } else if (mSuperstructureState == SuperstructureState.SHOOTER_TO_AMP){
+                if (shooterToEndEffectorTracker == -1) {
+                    mElevator.setSetpointMotionMagic(Conversions.inchesToMeters(6));
+                    mPivot.setSetpointMotionMagic(15);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
+                    shooterToEndEffectorTracker = 0;
+                }
+                if ((mElevator.getElevatorUnits() > Conversions.inchesToMeters(6)
+                        - Constants.ElevatorConstants.kPositionError) &&
+                        (mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 2)
+                        && shooterToEndEffectorTracker == 0) {
+                    mShooter.setOpenLoopDemand(0.95);
+                    mEndEffector.setOpenLoopDemand(0.7);
+                    shooterToEndEffectorTracker = 1;
+                }
+                if (shooterToEndEffectorTracker == 1 && !mShooter.getBeamBreak()) {
+                    mShooter.setOpenLoopDemand(0);
+                    mEndEffector.setOpenLoopDemand(0);
+                    mSuperstructureState = SuperstructureState.SCORE_AMP;
+                }
             }
 
             if ((mSuperstructureState == SuperstructureState.CLIMB
