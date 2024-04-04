@@ -1036,7 +1036,7 @@ public class Superstructure extends Subsystem {
                     // Once game piece aquired, then stow
                 }
                 if (transfterToShooterTracker == -1 && intakingShooterSourceTracker == 3) {
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 2);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
                     mPivot.setSetpointMotionMagic(60);
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
@@ -1048,7 +1048,7 @@ public class Superstructure extends Subsystem {
                                 - Constants.ElevatorConstants.kPositionError)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight- Conversions
                             .inchesToMeters(1));
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 0.5);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
 
                     transfterToShooterTracker = 1;
                 }
