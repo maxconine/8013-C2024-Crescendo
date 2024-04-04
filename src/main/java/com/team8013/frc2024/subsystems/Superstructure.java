@@ -500,6 +500,7 @@ public class Superstructure extends Subsystem {
             climbModeStage2 = false;
             climbModeStage3 = false;
             climbFinished = false;
+            manualControClimbHeight = Constants.ElevatorConstants.kClimbInitHeight;
         }
     }
 
@@ -828,9 +829,9 @@ public class Superstructure extends Subsystem {
                     climbingTracker = 1;
                 } else if (climbingTracker == 0) { // manual control height
                     if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                        manualControClimbHeight += 0.0015;
+                        manualControClimbHeight += 0.0025;
                     } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                        manualControClimbHeight -= 0.0015;
+                        manualControClimbHeight -= 0.0025;
                     }
                     manualControClimbHeight = Util.limit(manualControClimbHeight,
                             Constants.ElevatorConstants.kMaxClimbInitHeight);
@@ -979,16 +980,16 @@ public class Superstructure extends Subsystem {
 
                 if (deClimbTracker == 5){
                     if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                        manualControClimbHeight += 0.0020;
+                        manualControClimbHeight += 0.0025;
                     } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                        manualControClimbHeight -= 0.0020;
+                        manualControClimbHeight -= 0.0025;
                     }
                     manualControClimbHeight = Util.limit(manualControClimbHeight,
                             Constants.ElevatorConstants.kMaxClimbInitHeight);
                     mElevator.setSetpointMotionMagic(manualControClimbHeight);
                 }
 
-                if (deClimbTracker == 5 && mControlBoard.operator.getController().getPOV() == 270) {
+                if (deClimbTracker == 5 && (mControlBoard.operator.getController().getPOV() == 270 || mControlBoard.operator.getButton(Button.Y))) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight);
                     deClimbTracker = 6;
                 }

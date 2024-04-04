@@ -3,13 +3,14 @@ package com.team8013.frc2024.subsystems;
 import com.team8013.frc2024.Constants;
 import com.team8013.frc2024.Ports;
 import com.team8013.frc2024.loops.ILooper;
+// import revrobotics.RelativeEncoder;
 import com.team8013.frc2024.loops.Loop;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +33,7 @@ public class EndEffectorREV extends Subsystem {
     //private double kPSubWof, kPPodium, kI, kD, kIz, kFFMasterSubWof, kFFSlaveSubWof, kFFMasterPodium, kFFSlavePodium, kMaxOutput, kMinOutput;
     private int slotID;
 
-    private EndEffectorREV() {
+    private EndEffectorREV(){
         mTopMotor = new CANSparkFlex(Ports.END_EFFECTOR_A, MotorType.kBrushless); //top
         mBottomMotor = new CANSparkFlex(Ports.END_EFFECTOR_B, MotorType.kBrushless); //bottom
         mBeamBreak = new DigitalInput(Ports.END_EFFECTOR_BEAM_BREAK);

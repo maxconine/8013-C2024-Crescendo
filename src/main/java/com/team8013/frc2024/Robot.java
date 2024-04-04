@@ -256,9 +256,9 @@ public class Robot extends TimedRobot {
 			}
 			else if (mControlBoard.passNoteFromMidAllign()){
 				if (!is_red_alliance) { //keep in mind the alliance is flipped
-					mDrive.setHeadingControlTarget(-135);
+					mDrive.setHeadingControlTarget(-140);
 				} else {
-					mDrive.setHeadingControlTarget(135);
+					mDrive.setHeadingControlTarget(140);
 				}
 			}
 

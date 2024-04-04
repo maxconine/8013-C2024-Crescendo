@@ -138,8 +138,9 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 // new WaitAction(0.3),
                 // new LambdaAction(() -> mSuperstructure
                 // .setSuperstuctureTransferToShooter()))))));
+                runAction(new WaitAction(0.15));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.5)); // used to use 0.4 before wpi
+                runAction(new WaitAction(0.3)); // used to use 0.4 before wpi
                 mSuperstructure.setSuperstuctureShoot(false);
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
@@ -169,8 +170,10 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
+                
+                runAction(new WaitAction(0.15));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(0.5));
+                runAction(new WaitAction(0.3));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.disableAutoShot();
 
