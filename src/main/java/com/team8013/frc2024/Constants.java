@@ -472,7 +472,7 @@ public class Constants {
         //SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
-        public static final double kPassNoteFromMidAngle = 50;
+        public static final double kPassNoteFromMidAngle = 56;
 
         //Autos
         public static final double kStage2PieceAngle = 43.5 +1.5;

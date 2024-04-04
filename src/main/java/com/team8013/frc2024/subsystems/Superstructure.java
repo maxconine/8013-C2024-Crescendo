@@ -75,7 +75,7 @@ public class Superstructure extends Subsystem {
     private Timer shootingTimer = new Timer();
     // private Timer autoShootingTimer = new Timer();
 
-    private double manualControlPivotShootMode = Constants.PivotConstants.kShootAgainstSubwooferAngle;
+    private double manualControlPivotShootMode = Constants.PivotConstants.kPassNoteFromMidAngle;
 
     public boolean requestsCompleted() {
         return allRequestsComplete;
@@ -663,15 +663,19 @@ public class Superstructure extends Subsystem {
 
                 if (transfterToShooterTracker == 2) {
                     /* Manual control here */
-                    // if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                    // manualControlPivotShootMode += 0.05;
-                    // } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                    // manualControlPivotShootMode -= 0.05;
-                    // }
-                    // manualControlPivotShootMode = Util.limit(manualControlPivotShootMode,
-                    // Constants.PivotConstants.kMinAngle,Constants.PivotConstants.kMaxAngle);
-                    // mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
-                    mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
+                    if (mControlBoard.passNoteFromMid()){
+                        if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                        manualControlPivotShootMode += 0.085;
+                        } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                        manualControlPivotShootMode -= 0.085;
+                        }
+                        manualControlPivotShootMode = Util.limit(manualControlPivotShootMode,
+                        30,Constants.PivotConstants.kMaxAngle);
+                        mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
+                    }
+                    else{
+                        mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
+                    }
                 }
 
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
