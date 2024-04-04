@@ -1134,7 +1134,8 @@ public class Superstructure extends Subsystem {
 
             if (mSuperstructureState != SuperstructureState.TRANSFER_TO_SHOOTER
                     && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE
-                    && mSuperstructureState != SuperstructureState.SHOOTER_TO_END_EFFECTOR) {
+                    && mSuperstructureState != SuperstructureState.SHOOTER_TO_END_EFFECTOR
+                    &&mSuperstructureState != SuperstructureState.SHOOTER_TO_AMP) {
                 mShooter.setOpenLoopDemand(0);
             }
         }

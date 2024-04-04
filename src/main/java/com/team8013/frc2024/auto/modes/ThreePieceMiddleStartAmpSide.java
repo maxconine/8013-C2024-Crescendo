@@ -61,23 +61,23 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
-                drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(0.8, 1.2, 0.0, 0));
+                drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B, //not used
+                                Constants.AutoConstants.createConfig(1, 1.3, 0.0, 0));
                 driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(0));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(1.3, 1, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.4, 1.3, 0.0, 0));
                 driveToPickupSecondNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                                Constants.AutoConstants.createConfig(1.5, 1.2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.6, 1.5, 0.0, 0));
                 driveToShootSecondNote = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(270));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
 
                 drivePath_E = AutoTrajectoryReader.generateTrajectoryFromFile(path_E,
-                                Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(5, 3, 0.0, 0));
                 driveOut = new SwerveTrajectoryAction(drivePath_E, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_E);
         }

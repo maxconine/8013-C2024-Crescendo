@@ -53,7 +53,7 @@ public class TwoAmpSide extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
                 drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(0.85, 1.5, 0.0, 0)); // 0.95 also works
+                                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0)); // 0.95 also works
                 driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(120.0));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 

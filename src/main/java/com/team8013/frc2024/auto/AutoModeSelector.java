@@ -20,7 +20,8 @@ public class AutoModeSelector {
         MIDDLE_AROUND,
         FOUR_PIECE,
         MID_START_3_PIECE,
-        MID_START_3_PIECE_AMP_SIDE
+        MID_START_3_PIECE_AMP_SIDE,
+        FAST_CHAOS
     }
 
     private DesiredMode mCachedDesiredMode = DesiredMode.DO_NOTHING;
@@ -35,10 +36,10 @@ public class AutoModeSelector {
         //mModeChooser.setDefaultOption("Test Auto Note Pickup", DesiredMode.TEST_AUTO_NOTE_PICKUP);
         mModeChooser.setDefaultOption("Two Amp Side starting on side of subwoofer", DesiredMode.TWO_AMP_SIDE);
         mModeChooser.setDefaultOption("Two Stage Side starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE);
-        mModeChooser.setDefaultOption("Two Stage Side RED starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE_RED);
+        //mModeChooser.setDefaultOption("Two Stage Side RED starting on side of subwoofer", DesiredMode.TWO_STAGE_SIDE_RED);
         mModeChooser.setDefaultOption("Two Middle", DesiredMode.TWO_MIDDLE);
         mModeChooser.setDefaultOption("Cause Chaos Stage Side", DesiredMode.CAUSE_CHAOS_STAGE_SIDE);
-        //mModeChooser.setDefaultOption("Two Around Middle", DesiredMode.MIDDLE_AROUND);
+        mModeChooser.setDefaultOption("Fast Chaos", DesiredMode.FAST_CHAOS);
         mModeChooser.setDefaultOption("FOUR PIECE Amp side first", DesiredMode.FOUR_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Stage Side", DesiredMode.MID_START_3_PIECE);
         mModeChooser.setDefaultOption("Middle Start 3 Piece Amp Side", DesiredMode.MID_START_3_PIECE_AMP_SIDE);
@@ -69,8 +70,8 @@ public class AutoModeSelector {
                 return Optional.of(new TwoAmpSide());
             case TWO_STAGE_SIDE:
                 return Optional.of(new TwoStageSide());
-            case TWO_STAGE_SIDE_RED:
-                return Optional.of(new TwoStageSideRed());
+            // case TWO_STAGE_SIDE_RED:
+            //     return Optional.of(new TwoStageSideRed());
             case TWO_MIDDLE:
                 return Optional.of(new TwoMiddle());
             case CAUSE_CHAOS_STAGE_SIDE:
@@ -83,6 +84,8 @@ public class AutoModeSelector {
                 return Optional.of(new ThreePieceMiddleStart());
             case MID_START_3_PIECE_AMP_SIDE:
                 return Optional.of(new ThreePieceMiddleStartAmpSide());
+            case FAST_CHAOS:
+                return Optional.of(new FastChaos());
 
             default:
                 System.out.println("ERROR: unexpected auto mode: " + mode);

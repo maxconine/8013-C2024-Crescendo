@@ -73,7 +73,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                                Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(5, 3, 0.0, 0));
                 pathD = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
         }

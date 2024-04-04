@@ -472,7 +472,7 @@ public class Constants {
         //SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
-        public static final double kPassNoteFromMidAngle = 58;
+        public static final double kPassNoteFromMidAngle = 50;
 
         //Autos
         public static final double kStage2PieceAngle = 43.5 +1.5;
@@ -815,8 +815,8 @@ public class Constants {
 
     public static final class EndEffectorConstants {
         //SHOOTING RPM's
-        public static final double kSubwooferRPM = 5000;
-        public static final double kShootFastRPM = 6100; //rpm for passing and shooting from furthur away
+        public static final double kSubwooferRPM = 6300; //5000
+        public static final double kShootFastRPM = 6300; //rpm for passing and shooting from furthur away
 
         //INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35;
@@ -830,8 +830,8 @@ public class Constants {
         public static final double kFFTopSubwoofer = 0.000153; //this value tunes the subwoofer shot
         public static final double kFFBottomSubwoofer = 0.000152; //this value tunes the subwoofer shot
         //FAST
-        public static final double kFFTopFast = 0.000163; //this value tunes the note passing
-        public static final double kFFBottomFast = 0.000162; //this value tunes the note passing
+        public static final double kFFTopFast = 0.000156; //this value tunes the note passing
+        public static final double kFFBottomFast = 0.000155; //this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
