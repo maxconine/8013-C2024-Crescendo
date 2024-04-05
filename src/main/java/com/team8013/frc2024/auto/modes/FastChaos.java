@@ -25,7 +25,7 @@ public class FastChaos extends AutoModeBase {
     private Superstructure mSuperstructure;
 
     // required PathWeaver trajectory paths
-    String path = "paths/2024Paths/FastChaos.path";
+    String path = "paths/2024Paths/FastChaos_0.path";
 
     // trajectories
     SwerveTrajectoryAction driveToFirstNote;

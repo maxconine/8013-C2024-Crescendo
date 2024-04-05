@@ -1037,15 +1037,15 @@ public class Superstructure extends Subsystem {
                 }
                 if (transfterToShooterTracker == -1 && intakingShooterSourceTracker == 3) {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight);
+                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterInitialHeight+Conversions.inchesToMeters(0.5));
                     mPivot.setSetpointMotionMagic(60);
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kLoadShooterDemand);
                     transfterToShooterTracker = 0;
                 }
 
                 if ((transfterToShooterTracker == 0)
-                        && (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kloadShooterInitialHeight
-                                - Constants.ElevatorConstants.kPositionError)) {
+                        && (mElevator.getElevatorUnits() > (Constants.ElevatorConstants.kloadShooterInitialHeight + Conversions.inchesToMeters(0.5)
+                                - Constants.ElevatorConstants.kPositionError))) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kloadShooterFinalHeight- Conversions
                             .inchesToMeters(1));
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle);

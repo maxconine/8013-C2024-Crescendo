@@ -250,9 +250,9 @@ public class Robot extends TimedRobot {
 
 			if (mControlBoard.allignWithHumanPlayer()) {
 				if (!is_red_alliance) { //keep in mind the alliance is flipped
-					mDrive.setHeadingControlTarget(45);
+					mDrive.setHeadingControlTarget(60);
 				} else {
-					mDrive.setHeadingControlTarget(-45);
+					mDrive.setHeadingControlTarget(-60);
 				}
 			}
 			else if (mControlBoard.passNoteFromMidAllign()){

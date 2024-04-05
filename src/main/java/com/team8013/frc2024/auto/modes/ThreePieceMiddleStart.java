@@ -74,7 +74,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_D = AutoTrajectoryReader.generateTrajectoryFromFile(path_D,
-                                Constants.AutoConstants.createConfig(5, 3, 0.0, 0));
+                                Constants.AutoConstants.createConfig(5.5, 3, 0.0, 0));
                 pathD = new SwerveTrajectoryAction(drivePath_D, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_D);
         }
@@ -182,6 +182,8 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 runAction(new WaitAction(0.3));
                 mSuperstructure.disableAutoShot();
 
+                //TODO: RE ENABLE THIS
+
                 runAction(new ParallelAction(List.of(
                                 pathD,
                                 new SeriesAction(List.of(
@@ -210,6 +212,8 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 mControlBoard.setAutoSnapToTarget(true);
                 runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
+
+
                 // runAction(new ParallelAction(List.of(
                 // driveToFirstNote,
                 // new LambdaAction(() -> Drive.getInstance()
