@@ -467,7 +467,7 @@ public class Constants {
         public static final double kSourceIntakeAngle = 68;
         public static final double kSourceLoadShooterAngle = 41; // if anything, lower
         public static final double kStowAngle = 4.8;
-        public static final double kAmpScoreAngle = 88;
+        public static final double kAmpScoreAngle = 88; //was 88
 
         //SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15+0.25; // changed from 55
@@ -475,8 +475,9 @@ public class Constants {
         public static final double kPassNoteFromMidAngle = 56;
 
         //Autos
-        public static final double kStage2PieceAngle = 43.5 +1.5;
+        public static final double kStage2PieceAngle = 46;
         public static final double kMid2PieceAngle = 55; //53 - 1;
+        public static final double kAmp2PieceAngle = 46;
 
         public static final double kShootLoadAngle = 56; // changed from 54
 
@@ -589,7 +590,7 @@ public class Constants {
 
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 155;
-        public static final double kAmpScoreAngle = 169;
+        public static final double kAmpScoreAngle = 164; //was 169
         public static final double kloadShooterAngle = 118;//118.8;
 
         public static final double kShootAngle = 118.8;
@@ -668,7 +669,7 @@ public class Constants {
         public static final double kMaxHeight = 0.7;
 
         public static final double kStowHeight = 0.018;
-        public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(3);
+        public static final double kAmpScoreHeight = 0.22 + Conversions.inchesToMeters(1);
 
         /* SHOOTING */
         public static final double kloadShooterInitialHeight = 0.32 + Conversions.inchesToMeters(1.7);

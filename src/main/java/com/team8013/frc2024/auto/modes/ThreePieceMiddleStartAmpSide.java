@@ -27,6 +27,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
 
         private Superstructure mSuperstructure;
         private ControlBoard mControlBoard;
+        private double degreesToSpin = 2;
 
         // required PathWeaver trajectory paths
         String path_A = "paths/2024Paths/TwoMiddleSmooth.path";
@@ -94,13 +95,18 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 
+                if (Robot.is_red_alliance){
+                        degreesToSpin = -2;
+                }
+
+
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-2))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(degreesToSpin))),
                                                 // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.25), // used to be 0.15 before wpi
                                                 new LambdaAction(() -> mSuperstructure

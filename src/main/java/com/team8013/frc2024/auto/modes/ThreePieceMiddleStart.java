@@ -27,6 +27,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
 
         private Superstructure mSuperstructure;
         private ControlBoard mControlBoard;
+        private double degreeToTurn = 2;
 
         // required PathWeaver trajectory paths
         String path_B = "paths/2024Paths/3PieceMiddleStart_C.path";
@@ -90,13 +91,17 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 
+                if (Robot.is_red_alliance){ //if blue spin towards stage
+                        degreeToTurn = -2;
+                }
+
                 runAction(new ParallelAction(List.of(
                                 pathA,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-2))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(degreeToTurn))), //originally turned ccw
                                                 // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.35),
                                                 new LambdaAction(() -> mSuperstructure

@@ -59,6 +59,7 @@ public class Limelight extends Subsystem {
     private boolean shootFromPodium = false;
     private boolean mid2Piece = false;
     private boolean stage2Piece = false;
+    private boolean amp2Piece = false;
 
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
     private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
@@ -296,6 +297,12 @@ public class Limelight extends Subsystem {
         }
     }
 
+    public void setShootingFromAmp2Piece(boolean shootingFromAmp2Piece){
+        if (amp2Piece != shootingFromAmp2Piece){
+            amp2Piece = shootingFromAmp2Piece;
+        }
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
@@ -312,6 +319,9 @@ public class Limelight extends Subsystem {
         }
         else if (mid2Piece){
             pivAngle = Constants.PivotConstants.kMid2PieceAngle;
+        }
+        else if (amp2Piece){
+            pivAngle = Constants.PivotConstants.kAmp2PieceAngle;
         }
         else if (mControlBoard.passNoteFromMid()){
             pivAngle = Constants.PivotConstants.kPassNoteFromMidAngle;
@@ -337,7 +347,7 @@ public class Limelight extends Subsystem {
         if (mControlBoard.snapToTarget()){
             vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
         }
-        if (mid2Piece || stage2Piece || mControlBoard.passNoteFromMid()){
+        if (mid2Piece || stage2Piece || amp2Piece|| mControlBoard.passNoteFromMid()){
             vel = Constants.EndEffectorConstants.kShootFastRPM;
         }
         vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6600);
