@@ -198,10 +198,10 @@ public class ControlBoard {
 
     //Far right switch
     public boolean shootFromPodiumAllign(){ //triggers once every click up
-        if (!(m_driver.getRawAxis()<-0.25)){
+        if (!(m_driver.getRawAxis(6)<-0.25)){
             podiumAllignBoolean = true;
         }
-        else if (m_driver.getRawAxis()<-0.25 && podiumAllignBoolean){
+        else if (m_driver.getRawAxis(6)<-0.25 && podiumAllignBoolean){
             podiumAllignBoolean = false;
             return true;
         }
@@ -209,7 +209,7 @@ public class ControlBoard {
     }
 
     public boolean shootFromPodium(){
-        return (m_driver.getRawAxis()<-0.25);
+        return (m_driver.getRawAxis(6)<-0.25);
     }
 
     public double pivotPercentOutput(){

@@ -451,7 +451,8 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.23+61.15; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
+        public static final double CANCODER_OFFSET = 106.1; // -4.9 so it never gets to -360 and breaks now it's 4.8 on
+                                                            // 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -467,16 +468,17 @@ public class Constants {
         public static final double kSourceIntakeAngle = 68;
         public static final double kSourceLoadShooterAngle = 41; // if anything, lower
         public static final double kStowAngle = 4.8;
-        public static final double kAmpScoreAngle = 88; //was 88
+        public static final double kAmpScoreAngle = 88; // was 88
 
-        //SHOOTING ANGLES
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15+0.25+0.3+0.75; // changed from 55
-        public static final double kShootAgainstPodiumAngle = 45;
+        // SHOOTING ANGLES
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75; // changed
+                                                                                                            // from 55
+        public static final double kShootAgainstPodiumAngle = 39;
         public static final double kPassNoteFromMidAngle = 56;
 
-        //Autos
+        // Autos
         public static final double kStage2PieceAngle = 46;
-        public static final double kMid2PieceAngle = 55; //53 - 1;
+        public static final double kMid2PieceAngle = 55; // 53 - 1;
         public static final double kAmp2PieceAngle = 46;
 
         public static final double kShootLoadAngle = 56; // changed from 54
@@ -495,7 +497,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 6.5; //was 8.2
+        public static final double kDeclimbAngle3 = 6.5; // was 8.2
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -580,8 +582,8 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = 31.28-1.31;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
-                                                                      // there
+        public static final double CANCODER_OFFSET = -91.56;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+                                                            // there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -590,8 +592,8 @@ public class Constants {
 
         public static final double kSourceIntakeAngle = 294;
         public static final double kStowAngle = 155;
-        public static final double kAmpScoreAngle = 164; //was 169
-        public static final double kloadShooterAngle = 118;//118.8;
+        public static final double kAmpScoreAngle = 164; // was 169
+        public static final double kloadShooterAngle = 118;// 118.8;
 
         public static final double kShootAngle = 118.8;
 
@@ -685,7 +687,8 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.75); // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.75); // initial height going
+                                                                                               // up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
@@ -695,9 +698,9 @@ public class Constants {
         public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
                                                                                             // limits
         public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(2.5); // height of the
-                                                                                                     // elvator when
-                                                                                                     // scoring in the
-                                                                                                     // trap
+                                                                                                       // elvator when
+                                                                                                       // scoring in the
+                                                                                                       // trap
 
         /* De Climb */
         public static final double kDeclimbHeight1 = 0.267;
@@ -740,7 +743,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 140; //was 50 for 1st comp
+            config.MotionMagic.MotionMagicCruiseVelocity = 140; // was 50 for 1st comp
             config.MotionMagic.MotionMagicExpo_kA = 0.2;
             config.MotionMagic.MotionMagicAcceleration = 140;
 
@@ -815,24 +818,23 @@ public class Constants {
     }
 
     public static final class EndEffectorConstants {
-        //SHOOTING RPM's
-        public static final double kSubwooferRPM = 5000; //5000
-        public static final double kShootFastRPM = 6300; //rpm for passing and shooting from furthur away
+        // SHOOTING RPM's
+        public static final double kSubwooferRPM = 5000; // 5000
+        public static final double kShootFastRPM = 6300; // rpm for passing and shooting from furthur away
 
-        //INTAKE/OUTTAKE DEMANDS
+        // INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35;
         public static final double kGroundIntakeDemand = 0.58;
         public static final double kOuttakingDemandTop = -0.50;
         public static final double kOuttakingDemandBottom = -0.55;
 
-
-        //PID TUNING
-        //SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.000156; //this value tunes the subwoofer shot
-        public static final double kFFBottomSubwoofer = 0.0001565; //this value tunes the subwoofer shot
-        //FAST
-        public static final double kFFTopFast = 0.000159; //this value tunes the note passing
-        public static final double kFFBottomFast = 0.000159; //this value tunes the note passing
+        // PID TUNING
+        // SUBWOOFER
+        public static final double kFFTopSubwoofer = 0.000156; // this value tunes the subwoofer shot
+        public static final double kFFBottomSubwoofer = 0.0001565; // this value tunes the subwoofer shot
+        // FAST
+        public static final double kFFTopFast = 0.000159; // this value tunes the note passing
+        public static final double kFFBottomFast = 0.000159; // this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
