@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.23; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
+        public static final double CANCODER_OFFSET = 290.1 - 5.2 + 0.23+61.15; // -5.2 so it never gets to -360 and breaks now it's 4.8 on 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
         public static final double gravityFeedforward = 0.0; // idk how this works
@@ -470,7 +470,7 @@ public class Constants {
         public static final double kAmpScoreAngle = 88; //was 88
 
         //SHOOTING ANGLES
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15+0.25+0.3; // changed from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5+1.25+.15+0.25+0.3+0.75; // changed from 55
         public static final double kShootAgainstPodiumAngle = 45;
         public static final double kPassNoteFromMidAngle = 56;
 
@@ -685,7 +685,7 @@ public class Constants {
         public static final double kSourceLoadShooterHeight = 0.22;
 
         /* CLIMB */
-        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.5); // initial height going up
+        public static final double kClimbInitHeight = 0.32 + Conversions.inchesToMeters(4.75); // initial height going up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
         public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
@@ -864,8 +864,8 @@ public class Constants {
     }
 
     public static final class ClimberHookConstants {
-        public static final double kHookAngle = 85; // degrees
-        public static final double kDeclimb1Angle = 85;
+        public static final double kHookAngle = 88; // degrees
+        public static final double kDeclimb1Angle = 88;
         public static final double kUnhookAngle = 0; // makes it so we don't have to worry about resetting it while
                                                      // practicing
         public static final double kMaxAngle = 131;

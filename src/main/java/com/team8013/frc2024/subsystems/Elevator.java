@@ -89,10 +89,10 @@ public class Elevator extends Subsystem {
                     setWantHome(false);
                 }
 
-            if (mPeriodicIO.position < 0.0){
-                zeroSensors();
-                setSetpointMotionMagic(0.01);
-            }
+                if (mPeriodicIO.position < 0.0) {
+                    zeroSensors();
+                    setSetpointMotionMagic(0.01);
+                }
             }
 
             @Override
@@ -190,22 +190,25 @@ public class Elevator extends Subsystem {
     @Override
     public synchronized void writePeriodicOutputs() {
 
-        if ((Math.abs(mPeriodicIO.torqueCurrent) > 30) && mPeriodicIO.velocity < 0.1 && mPeriodicIO.position < 0) {
-            mHoming = false;
-            zeroSensors();
-            setSetpointMotionMagic(0.01);
-        }
+        // if ((Math.abs(mPeriodicIO.torqueCurrent) > 30) && mPeriodicIO.velocity < 0.1
+        // && mPeriodicIO.position < 0) {
+        // mHoming = false;
+        // zeroSensors();
+        // setSetpointMotionMagic(0.01);
+        // }
 
-        if (mHoming) { // sets it moving backward until velocity slows down
-            mMaster.setControl(new VoltageOut(-4));
-            if (mHomingDelay.update(Timer.getFPGATimestamp(),
-                    Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { // is this motor velocity or elevator
-                                                                           // velocity
-                zeroSensors();
-                setSetpointMotionMagic(0.01);
-                mHoming = false;
-            }
-        } else if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
+        // if (mHoming) { // sets it moving backward until velocity slows down
+        // mMaster.setControl(new VoltageOut(-4));
+        // if (mHomingDelay.update(Timer.getFPGATimestamp(),
+        // Util.epsilonEquals(mPeriodicIO.velocity, 0.0, 0.1))) { // is this motor
+        // velocity or elevator
+        // // velocity
+        // zeroSensors();
+        // setSetpointMotionMagic(0.01);
+        // mHoming = false;
+        // }
+        // } else
+        if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
                 mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?
             } else {
@@ -216,10 +219,11 @@ public class Elevator extends Subsystem {
             mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         }
 
-        if (mPeriodicIO.position < 0.02 && Math.abs(mPeriodicIO.torqueCurrent) > 50) {
-            zeroSensors();
-            setSetpointMotionMagic(0.015);
-        }
+        // if (mPeriodicIO.position < 0.02 && Math.abs(mPeriodicIO.torqueCurrent) > 50)
+        // {
+        // zeroSensors();
+        // setSetpointMotionMagic(0.015);
+        // }
 
     }
 

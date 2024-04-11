@@ -23,6 +23,7 @@ public class ControlBoard {
 
     private boolean leftBumperBoolean = false;
     private boolean passNoteAllignBoolean = false;
+    private boolean podiumAllignBoolean = false;
 
     private boolean leftSwitchReset = true;
     private boolean autoSnap = false;
@@ -146,7 +147,7 @@ public class ControlBoard {
             
     }
 
-    /**far left switch */
+    /**far right switch */
     public boolean snapToTarget(){ //DISABLED
         return false;//m_driver.getRawAxis(4)<-0.25 || autoSnap;
 
@@ -193,6 +194,22 @@ public class ControlBoard {
 
     public boolean passNoteFromMid(){
         return (m_driver.getRawAxis(4)<-0.25);
+    }
+
+    //Far right switch
+    public boolean shootFromPodiumAllign(){ //triggers once every click up
+        if (!(m_driver.getRawAxis()<-0.25)){
+            podiumAllignBoolean = true;
+        }
+        else if (m_driver.getRawAxis()<-0.25 && podiumAllignBoolean){
+            podiumAllignBoolean = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean shootFromPodium(){
+        return (m_driver.getRawAxis()<-0.25);
     }
 
     public double pivotPercentOutput(){

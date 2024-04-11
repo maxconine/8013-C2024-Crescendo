@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.team254.lib.util.Util;
 import com.team8013.frc2024.auto.AutoModeBase;
 import com.team8013.frc2024.auto.AutoModeExecutor;
 import com.team8013.frc2024.auto.AutoModeSelector;
@@ -260,6 +261,20 @@ public class Robot extends TimedRobot {
 					mDrive.setHeadingControlTarget(-140);
 				} else {
 					mDrive.setHeadingControlTarget(140);
+				}
+			}
+			else if(mControlBoard.shootFromPodiumAllign()){
+				if (!is_red_alliance) { //keep in mind the alliance is flipped
+					mDrive.setHeadingControlTarget(210);
+				} else {
+					mDrive.setHeadingControlTarget(-210);
+				}
+			}
+			else if (mControlBoard.shootFromPodium()&&(!Util.epsilonEquals(210, mDrive.getHeading().getDegrees(), 5))){ //extra check to make sure it stays the right angle
+				if (!is_red_alliance) { //keep in mind the alliance is flipped
+					mDrive.setHeadingControlTarget(210);
+				} else {
+					mDrive.setHeadingControlTarget(-210);
 				}
 			}
 

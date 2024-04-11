@@ -35,7 +35,7 @@ public class ThreePieceMiddleStart extends AutoModeBase {
         String path_A = "paths/2024Paths/TwoMiddleSmooth.path";
         // String path_C = "paths/2024Paths/3PieceMiddleStart_A.path";
         // String path_D = "paths/2024Paths/3PieceMiddleStart_B.path";
-        String path_D = "paths/2024Paths/TwoMiddle_C.path";
+        String path_D = "paths/2024Paths/TwoMiddle_C_0.path";
 
         // trajectories
         SwerveTrajectoryAction pathA;
@@ -197,10 +197,10 @@ public class ThreePieceMiddleStart extends AutoModeBase {
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-160))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-180))), //changed during districts
                                                 new WaitAction(1.9),
-                                                new LambdaAction(() -> mSuperstructure
-                                                                .setSuperstuctureStow()),
+                                                // new LambdaAction(() -> mSuperstructure
+                                                //                 .setSuperstuctureStow()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitToPassXCoordinateAction(13),
