@@ -598,7 +598,8 @@ public class Constants {
         public static final double kShootAngle = 118.8;
 
         public static final double kClimbAngle1 = 140;
-        public static final double kClimbAngle2 = 165;
+        public static final double kClimbFirstPressAngle = 192; //lowered from 200
+        public static final double kClimbSecondPressAngle = 218; //lowered from 225
         // public static final double kClimbAngle3 = 165;
         public static final double kClimbScoreInTrapAngle = 160; // ~200?
 
@@ -886,9 +887,9 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 140;
+            config.MotionMagic.MotionMagicCruiseVelocity = 160;
             config.MotionMagic.MotionMagicExpo_kA = 0.3;
-            config.MotionMagic.MotionMagicAcceleration = 140;
+            config.MotionMagic.MotionMagicAcceleration = 250;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
