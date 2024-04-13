@@ -831,11 +831,11 @@ public class Constants {
 
         // PID TUNING
         // SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.000156; // this value tunes the subwoofer shot
-        public static final double kFFBottomSubwoofer = 0.0001565; // this value tunes the subwoofer shot
+        public static final double kFFTopSubwoofer = 0.000157; // this value tunes the subwoofer shot
+        public static final double kFFBottomSubwoofer = 0.0001566; // this value tunes the subwoofer shot
         // FAST
-        public static final double kFFTopFast = 0.000159; // this value tunes the note passing
-        public static final double kFFBottomFast = 0.000159; // this value tunes the note passing
+        public static final double kFFTopFast = 0.000162; // this value tunes the note passing
+        public static final double kFFBottomFast = 0.000162; // this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;

@@ -45,7 +45,7 @@ public class Shooter extends Subsystem {
         mSlave.getConfigurator().apply(Constants.ShooterConstants.shooterMotorConfig());
 
         mSlave.setControl(new Follower(Ports.Shooter_A, true));
-        setWantNeutralBrake(false);
+        setWantNeutralBrake(true);
     }
 
     public static Shooter mInstance;
