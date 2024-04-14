@@ -451,7 +451,7 @@ public class Constants {
 
     public static final class PivotConstants {
         public static final double kStatorCurrentLimit = 80.0;
-        public static final double CANCODER_OFFSET = 106.1; // -4.9 so it never gets to -360 and breaks now it's 4.8 on
+        public static final double CANCODER_OFFSET = 106.1; // -4.8 so it never gets to -360 and breaks now it's 4.8 on
                                                             // 3/27
         public static final double kPositionError = 2; // 2 degrees of error
 
@@ -473,7 +473,7 @@ public class Constants {
         // SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75; // changed
                                                                                                             // from 55
-        public static final double kShootAgainstPodiumAngle = 39;
+        public static final double kShootAgainstPodiumAngle = 36.5;
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
@@ -487,7 +487,7 @@ public class Constants {
         public static final double kClimbInitAngle1 = 63; // deg
         public static final double kClimbInitAngle2 = 68; // deg
         public static final double kPullOntoChainAngle1 = 20;
-        public static final double kPullOntoChainAngle2 = 6.5; // once elevator is down, goto this angle
+        public static final double kPullOntoChainAngle2 = 6.75; // once elevator is down, goto this angle
         public static final double kExtendOffChainAngle1 = 16.8; // Once chain hooked go up to this angle and wait for
                                                                  // release
         public static final double kExtendOffChainAngle2 = 32; // Angle before abrupt flip over to trap
@@ -497,7 +497,7 @@ public class Constants {
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
         public static final double kDeclimbAngle2 = 31.7;
-        public static final double kDeclimbAngle3 = 6.5; // was 8.2
+        public static final double kDeclimbAngle3 = 7.5; // was 8.2
         public static final double kDeclimbAngle4 = 78;
 
         public static final double kIntakeCruiseVelocity = 40;
@@ -595,7 +595,7 @@ public class Constants {
         public static final double kAmpScoreAngle = 164; // was 169
         public static final double kloadShooterAngle = 118;// 118.8;
 
-        public static final double kShootAngle = 118.8;
+        public static final double kShootAngle = 118; //cancoder should rest at 118.8, so that when shooting the wrist is pulled down against elevator
 
         public static final double kClimbAngle1 = 140;
         public static final double kClimbFirstPressAngle = 192; //lowered from 200
@@ -692,7 +692,7 @@ public class Constants {
                                                                                                // up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
-        public static final double kPullOntoChainHeight = 0.01; // height of the elevator when transfering chain
+        public static final double kPullOntoChainHeight = Conversions.inchesToMeters(0.25); // height of the elevator when transfering chain
 
         public static final double kExtendOffChain1 = 0.054;
         public static final double kExtendOffChain2 = 0.126;
@@ -834,8 +834,8 @@ public class Constants {
         public static final double kFFTopSubwoofer = 0.000157; // this value tunes the subwoofer shot
         public static final double kFFBottomSubwoofer = 0.0001566; // this value tunes the subwoofer shot
         // FAST
-        public static final double kFFTopFast = 0.000162; // this value tunes the note passing
-        public static final double kFFBottomFast = 0.000162; // this value tunes the note passing
+        public static final double kFFTopFast = 0.0001564; // this value tunes the note passing
+        public static final double kFFBottomFast = 0.000156; // this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
@@ -889,7 +889,7 @@ public class Constants {
 
             config.MotionMagic.MotionMagicCruiseVelocity = 160;
             config.MotionMagic.MotionMagicExpo_kA = 0.3;
-            config.MotionMagic.MotionMagicAcceleration = 250;
+            config.MotionMagic.MotionMagicAcceleration = 400;
 
             config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;

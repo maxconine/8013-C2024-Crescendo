@@ -49,6 +49,7 @@ public class ClimberHook extends Subsystem {
             @Override
             public void onStart(double timestamp) {
                 // resetToAbsolute();
+                
             }
 
             @Override

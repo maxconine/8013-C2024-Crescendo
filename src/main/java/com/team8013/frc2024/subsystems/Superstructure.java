@@ -62,6 +62,7 @@ public class Superstructure extends Subsystem {
     private int autoShotTracker = -1;
     private int intakingShooterSourceTracker = -1;
     private int shooterToEndEffectorTracker = -1;
+    private int lowPassTracker = -1;
     private boolean climbModeStage2 = false;
     private boolean climbModeStage3 = false;
     private boolean climbFinished = false;
@@ -409,7 +410,8 @@ public class Superstructure extends Subsystem {
         CLIMB,
         DECLIMB,
         SHOOTER_TO_END_EFFECTOR,
-        SHOOTER_TO_AMP
+        SHOOTER_TO_AMP,
+        LOW_PASS
     }
 
     public void setSuperstuctureIntakingGround() {
@@ -439,6 +441,14 @@ public class Superstructure extends Subsystem {
         } else if (mSuperstructureState != SuperstructureState.SHOOTER_TO_AMP && mShooter.getBeamBreak()) {
             mSuperstructureState = SuperstructureState.SHOOTER_TO_AMP;
             shooterToEndEffectorTracker = -1;
+        }
+    }
+
+    public void setSuperstuctureLowPass() {
+        if (mSuperstructureState == SuperstructureState.STOW && mShooter.getBeamBreak()) {
+            mSuperstructureState = SuperstructureState.LOW_PASS;
+            lowPassTracker = -1;
+            shootingTimer.reset();
         }
     }
 
@@ -576,11 +586,11 @@ public class Superstructure extends Subsystem {
             if (mSuperstructureState == SuperstructureState.STOW) {
                 SmartDashboard.putString("SUPERSTRUCTURE STATE: ", "STOW");
 
-
                 mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
                 if (mShooter.getBeamBreak()) {
-                    mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kStowHeight+Conversions.inchesToMeters(0.25));
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 0.8);
+                    mElevator.setSetpointMotionMagic(
+                            Constants.ElevatorConstants.kStowHeight + Conversions.inchesToMeters(0.25));
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kloadShooterAngle + 1.5);
                     mShooter.setOpenLoopDemand(-0.03);
                 } else {
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
@@ -710,8 +720,7 @@ public class Superstructure extends Subsystem {
                         && (Util.epsilonEquals(mPivot.getPivotAngleDeg(), mLimelight.getPivotShootingAngle(),
                                 Constants.PivotConstants.kPositionError))
                         &&
-                        (Util.epsilonEquals(mEndEffector.getVelocityMaster(),
-                                mLimelight.getEndEffectorShootingVelocity(), 600))) {
+                        ((mEndEffector.getVelocityMaster()-mLimelight.getEndEffectorShootingVelocity())>-600)) {
                     mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
                     transfterToShooterTracker = 3;
                 }
@@ -818,7 +827,7 @@ public class Superstructure extends Subsystem {
                     // manual control of
                     // height using
                     // joystick
-                    mElevator.setSetpointMotionMagic(0.001);
+                    mElevator.setSetpointMotionMagic(Conversions.inchesToMeters(0.5));
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle1);
                     mWrist.setSetpointMotionMagic(Constants.WristConstants.kClimbAngle1);
 
@@ -828,6 +837,7 @@ public class Superstructure extends Subsystem {
                         && mControlBoard.operator.getButton(Button.X)) {
                     mElevator.setSetpointMotionMagic(Constants.ElevatorConstants.kClimbInitHeight);
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kClimbInitAngle2);
+                    mClimberHook.setSetpointMotionMagic(50);
                     climbingTracker = 0;
                 }
 
@@ -941,11 +951,9 @@ public class Superstructure extends Subsystem {
                 }
 
                 if ((climbingTracker == 8) && (Util.epsilonEquals(mWrist.getWristAngleDeg(),
-                        Constants.WristConstants.kClimbScoreInTrapAngle, 4)))
-                // (mElevator.getElevatorUnits() >
-                // Constants.ElevatorConstants.kExtendToScoreTrapHeight
-                // - Constants.ElevatorConstants.kPositionError))
-                {
+                        Constants.WristConstants.kClimbScoreInTrapAngle, 4) || (mElevator.getElevatorUnits() >
+                Constants.ElevatorConstants.kExtendToScoreTrapHeight
+                - Constants.ElevatorConstants.kPositionError))){
                     // mEndEffector.setState(State.OUTTAKING); // does nothing. overriden down below
                     climbFinished = true;
                 }
@@ -976,7 +984,7 @@ public class Superstructure extends Subsystem {
 
                 if ((deClimbTracker == 1) && (mPivot.getPivotAngleDeg() < Constants.PivotConstants.kDeclimbAngle2
                         + Constants.PivotConstants.kPositionError)) {
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle+1.5);
                     mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kDeclimb1Angle);
                 }
 
@@ -1028,7 +1036,7 @@ public class Superstructure extends Subsystem {
                 if ((deClimbTracker == 6) && (mElevator.getElevatorUnits() < Constants.ElevatorConstants.kStowHeight
                         + Constants.ElevatorConstants.kPositionError)) {
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kStowAngle);
-                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
+                    //mWrist.setSetpointMotionMagic(Constants.WristConstants.kStowAngle);
                     deClimbTracker = 7;
                 }
 
@@ -1156,10 +1164,39 @@ public class Superstructure extends Subsystem {
                     mEndEffector.setOpenLoopDemand(0);
                     mSuperstructureState = SuperstructureState.SCORE_AMP;
                 }
+            } else if (mSuperstructureState == SuperstructureState.LOW_PASS) {
+                if (lowPassTracker == -1) {
+                    mElevator.setSetpointMotionMagic(
+                            Constants.ElevatorConstants.kStowHeight + Conversions.inchesToMeters(1.5));
+                    mWrist.setSetpointMotionMagic(Constants.WristConstants.kShootAngle);
+                    mPivot.setSetpointMotionMagic(10);
+                    lowPassTracker = 0;
+                }
+                if (mElevator.getElevatorUnits() > Constants.ElevatorConstants.kStowHeight
+                        + Conversions.inchesToMeters(1)) {
+                    mEndEffector.setOpenLoopDemand(0.95);
+                }
+                if (mEndEffector.getVelocityMaster() > 4000 && lowPassTracker == 0) {
+                    mShooter.setOpenLoopDemand(Constants.ShooterConstants.kSlingshotDemand);
+                    shootingTimer.stop();
+                    shootingTimer.reset();
+                    shootingTimer.start();
+                    lowPassTracker = 1;
+                } else if (lowPassTracker == 0) {
+                    mShooter.setOpenLoopDemand(-0.01);
+                }
+                if (!mShooter.getBeamBreak() && lowPassTracker == 1 && shootingTimer.get() > 0.2) {
+                    mShooter.setOpenLoopDemand(0);
+                    mSuperstructureState = SuperstructureState.STOW;
+                }
             }
 
-            if (((mSuperstructureState == SuperstructureState.CLIMB && climbFinished) // not allowed to eject until
-                                                                                      // climb is done
+            if (mSuperstructureState == SuperstructureState.STOW && mShooter.getBeamBreak()
+                    && (mControlBoard.operator.getController().getPOV() == 0)) {
+                setSuperstuctureLowPass();
+            } else if (((mSuperstructureState == SuperstructureState.CLIMB && climbFinished) // not allowed to eject
+                                                                                             // until
+                    // climb is done
                     || mSuperstructureState == SuperstructureState.SCORE_AMP
                     || mSuperstructureState == SuperstructureState.STOW)
                     && (mControlBoard.operator.getController().getPOV() == 0)) {
@@ -1188,7 +1225,8 @@ public class Superstructure extends Subsystem {
                     && mSuperstructureState != SuperstructureState.INTAKING_SHOOTER_SOURCE
                     && mSuperstructureState != SuperstructureState.SHOOTER_TO_END_EFFECTOR
                     && mSuperstructureState != SuperstructureState.SHOOTER_TO_AMP
-                    && mSuperstructureState != SuperstructureState.STOW) {
+                    && mSuperstructureState != SuperstructureState.STOW
+                    && mSuperstructureState != SuperstructureState.LOW_PASS) {
                 mShooter.setOpenLoopDemand(0);
             }
         }

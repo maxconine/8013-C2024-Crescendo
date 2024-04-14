@@ -265,16 +265,16 @@ public class Robot extends TimedRobot {
 			}
 			else if(mControlBoard.shootFromPodiumAllign()){
 				if (!is_red_alliance) { //keep in mind the alliance is flipped
-					mDrive.setHeadingControlTarget(210);
+					mDrive.setHeadingControlTarget(208.5);
 				} else {
-					mDrive.setHeadingControlTarget(-210);
+					mDrive.setHeadingControlTarget(-208.5);
 				}
 			}
 			else if (mControlBoard.shootFromPodium()&&(!Util.epsilonEquals(210, mDrive.getHeading().getDegrees(), 5))){ //extra check to make sure it stays the right angle
 				if (!is_red_alliance) { //keep in mind the alliance is flipped
-					mDrive.setHeadingControlTarget(210);
+					mDrive.setHeadingControlTarget(208.5);
 				} else {
-					mDrive.setHeadingControlTarget(-210);
+					mDrive.setHeadingControlTarget(-208.5);
 				}
 			}
 
@@ -562,6 +562,7 @@ public class Robot extends TimedRobot {
 			mDrive.resetModulesToAbsolute();
 			mPivot.resetToAbsolute();
 			mWrist.resetToAbsolute();
+			mElevator.zeroWhenDisabled();
 
 			// mDrive.outputTelemetryDisabled();
 

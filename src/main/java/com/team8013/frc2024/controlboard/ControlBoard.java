@@ -48,7 +48,6 @@ public class ControlBoard {
         leftBumperBoolean = m_driver.getRawButton(2);
     }
 
-    
     public void setOperatorRumble(boolean on) {
         operator.setRumble(on);
     }
@@ -57,11 +56,10 @@ public class ControlBoard {
     public Translation2d getSwerveTranslation() {
         double forwardAxis = 0;
         double strafeAxis = 0;
-        if (!Constants.ControllerConstants.isMamboController){ //NOT MAMBO
+        if (!Constants.ControllerConstants.isMamboController) { // NOT MAMBO
             forwardAxis = getRightThrottle();
             strafeAxis = getRightYaw();
-        }
-        else{
+        } else {
             forwardAxis = m_driver.getRawAxis(2);
             strafeAxis = m_driver.getRawAxis(1);
         }
@@ -71,7 +69,6 @@ public class ControlBoard {
 
         forwardAxis = Constants.SwerveConstants.invertYAxis ? forwardAxis : -forwardAxis;
         strafeAxis = Constants.SwerveConstants.invertXAxis ? strafeAxis : -strafeAxis;
-
 
         Translation2d tAxes = new Translation2d(forwardAxis, strafeAxis);
 
@@ -83,38 +80,38 @@ public class ControlBoard {
 
             double scaled_x = Util.scaledDeadband(forwardAxis, 1.0, Math.abs(deadband_vector.x()));
             double scaled_y = Util.scaledDeadband(strafeAxis, 1.0, Math.abs(deadband_vector.y()));
-            return new Translation2d(scaled_x, scaled_y).scale(Drive.getInstance().getKinematicLimits().kMaxDriveVelocity);
+            return new Translation2d(scaled_x, scaled_y)
+                    .scale(Drive.getInstance().getKinematicLimits().kMaxDriveVelocity);
         }
-        
 
     }
 
     public double getSwerveRotation() {
         double rotAxis = 0;
-        if (!Constants.ControllerConstants.isMamboController){
+        if (!Constants.ControllerConstants.isMamboController) {
             rotAxis = getLeftYaw();
-        }
-        else{
+        } else {
             rotAxis = m_driver.getRawAxis(3);
         }
-        
+
         rotAxis = Constants.SwerveConstants.invertRAxis ? rotAxis : -rotAxis;
-    
-            if (Math.abs(rotAxis) < kSwerveDeadband) {
-                return 0.0;
-            } else {
-                return Drive.getInstance().getKinematicLimits().kMaxAngularVelocity * (rotAxis - (Math.signum(rotAxis) * kSwerveDeadband))
-                        / (1 - kSwerveDeadband);
-            }
+
+        if (Math.abs(rotAxis) < kSwerveDeadband) {
+            return 0.0;
+        } else {
+            return Drive.getInstance().getKinematicLimits().kMaxAngularVelocity
+                    * (rotAxis - (Math.signum(rotAxis) * kSwerveDeadband))
+                    / (1 - kSwerveDeadband);
+        }
     }
 
-    /*right switch up */
+    /* right switch up */
     public boolean zeroGyro() {
-        //SmartDashboard.putBoolean("Zero Gyro", m_driver.getRawButton(2));
-        return m_driver.getRawButton(2);//(m_driver.getRawAxis(6)<-0.3);
+        // SmartDashboard.putBoolean("Zero Gyro", m_driver.getRawButton(2));
+        return m_driver.getRawButton(2);// (m_driver.getRawAxis(6)<-0.3);
     }
-    
-        public enum SwerveCardinal {
+
+    public enum SwerveCardinal {
         NONE(0),
 
         FORWARDS(0),
@@ -144,284 +141,284 @@ public class ControlBoard {
             default:
                 return SwerveCardinal.NONE;
         }
-            
+
     }
 
-    /**far right switch */
-    public boolean snapToTarget(){ //DISABLED
-        return false;//m_driver.getRawAxis(4)<-0.25 || autoSnap;
-
+    /** far right switch */
+    public boolean snapToTarget() { // DISABLED
+        return false;// m_driver.getRawAxis(4)<-0.25 || autoSnap;
 
         // if (m_driver.getRawAxis(4)<-0.25 && leftSwitchReset){
-        //     leftSwitchReset = false;
-        //     return true;
+        // leftSwitchReset = false;
+        // return true;
         // }
         // else if(!(m_driver.getRawAxis(4)<-0.25)){
-        //     leftSwitchReset = true;
+        // leftSwitchReset = true;
         // }
-        //return false;
+        // return false;
     }
 
-    public void setAutoSnapToTarget(boolean snap){
+    public void setAutoSnapToTarget(boolean snap) {
         autoSnap = snap;
     }
 
-    //public boolean farLeftSwitchUp(){//DISABLED
-    //     return false; //m_driver.getRawAxis(4)<-0.25;
+    // public boolean farLeftSwitchUp(){//DISABLED
+    // return false; //m_driver.getRawAxis(4)<-0.25;
     // }
 
-    /**right bumper */
-    public boolean allignWithHumanPlayer(){
-        if (leftBumperBoolean!=m_driver.getRawButton(1)){
+    /** right bumper */
+    public boolean allignWithHumanPlayer() {
+        if (leftBumperBoolean != m_driver.getRawButton(1)) {
             leftBumperBoolean = !leftBumperBoolean;
             return true;
         }
 
         return false;
-        //;
+        // ;
     }
 
-    public boolean passNoteFromMidAllign(){ //triggers once every click up
-        if (!(m_driver.getRawAxis(4)<-0.25)){
+    public boolean passNoteFromMidAllign() { // triggers once every click up
+        if (!(m_driver.getRawAxis(6) < -0.25)) {
             passNoteAllignBoolean = true;
-        }
-        else if (m_driver.getRawAxis(4)<-0.25 && passNoteAllignBoolean){
+        } else if (m_driver.getRawAxis(6) < -0.25 && passNoteAllignBoolean) {
             passNoteAllignBoolean = false;
             return true;
         }
         return false;
     }
 
-    public boolean passNoteFromMid(){
-        return (m_driver.getRawAxis(4)<-0.25);
+    public boolean passNoteFromMid() {
+        return (m_driver.getRawAxis(6) < -0.25);
     }
 
-    //Far right switch
-    public boolean shootFromPodiumAllign(){ //triggers once every click up
-        if (!(m_driver.getRawAxis(6)<-0.25)){
+    // Far right switch
+    public boolean shootFromPodiumAllign() { // triggers once every click up
+        if (!(m_driver.getRawAxis(4) < -0.25)) {
             podiumAllignBoolean = true;
-        }
-        else if (m_driver.getRawAxis(6)<-0.25 && podiumAllignBoolean){
+        } else if (m_driver.getRawAxis(4) < -0.25 && podiumAllignBoolean) {
             podiumAllignBoolean = false;
             return true;
         }
         return false;
     }
 
-    public boolean shootFromPodium(){
-        return (m_driver.getRawAxis(6)<-0.25);
+    public boolean shootFromPodium() {
+        return (m_driver.getRawAxis(4) < -0.25);
     }
 
-    public double pivotPercentOutput(){
+    public double pivotPercentOutput() {
         return operator.getAxis(Side.LEFT, Axis.Y);
     }
 
-
-    public boolean pivotUp(){
+    public boolean pivotUp() {
         return operator.getButton(Button.Y);
     }
 
-    public boolean pivotDown(){
+    public boolean pivotDown() {
         return operator.getButton(Button.A);
     }
-    
-    
-    public boolean elevatorUp(){
+
+    public boolean elevatorUp() {
         return operator.getButton(Button.RB);
     }
 
-    public boolean elevatorDown(){
+    public boolean elevatorDown() {
         return operator.getButton(Button.LB);
     }
 
-    public boolean zeroElevator(){
+    public boolean zeroElevator() {
         return operator.getButton(Button.START);
     }
 
-    public double elevatorPercentOutput(){
+    public double elevatorPercentOutput() {
         return operator.getAxis(Side.RIGHT, Axis.Y);
     }
 
-    public double wristPercentOutput(){
+    public double wristPercentOutput() {
         return operator.getAxis(Side.RIGHT, Axis.X);
     }
 
-    public boolean endEffectorIntake(){
+    public boolean endEffectorIntake() {
         return operator.getButton(Button.Y);
     }
-    public boolean endEffectorOuttake(){
+
+    public boolean endEffectorOuttake() {
         return operator.getButton(Button.A);
     }
 
-
     // Align swerve drive with target
     public boolean getWantChase() {
-        return false;//(m_driver.getRawButton(9)||(operator.getButton(Button.Y))||(operator.getButton(Button.B))||(operator.getButton(Button.A))||(operator.getButton(Button.X)));
+        return false;// (m_driver.getRawButton(9)||(operator.getButton(Button.Y))||(operator.getButton(Button.B))||(operator.getButton(Button.A))||(operator.getButton(Button.X)));
     }
 
-    public int tagToChase(){
-        if (chaseTag1()){
+    public int tagToChase() {
+        if (chaseTag1()) {
             tagLastChased = 1;
             return 1;
-        }
-        else if (chaseTag2()){
+        } else if (chaseTag2()) {
             tagLastChased = 2;
             return 2;
-        }
-        else if (chaseTag3()){
+        } else if (chaseTag3()) {
             tagLastChased = 3;
             return 3;
-        }
-        else if (chaseTag4()){
+        } else if (chaseTag4()) {
             tagLastChased = 4;
             return 4;
-        }
-        else{
+        } else {
             return tagLastChased;
         }
     }
 
-    public boolean chaseNearest(){
+    public boolean chaseNearest() {
         return m_driver.getRawButton(9);
     }
 
-    public boolean chaseTag1(){
+    public boolean chaseTag1() {
         return (operator.getButton(Button.Y));
     }
 
-    public boolean chaseTag2(){
+    public boolean chaseTag2() {
         return (operator.getButton(Button.B));
     }
-    
-    public boolean chaseTag3(){
+
+    public boolean chaseTag3() {
         return (operator.getButton(Button.A));
     }
 
-    public boolean chaseTag4(){
+    public boolean chaseTag4() {
         return (operator.getButton(Button.X));
     }
-
 
     // // Locks wheels in X formation
     public boolean getBrake() {
         SmartDashboard.putNumber("Get Brake", m_driver.getRawAxis(4));
-        return  false;//(m_driver.getRawAxis(4)<-0.3); //m_driver.getRawButton(4); //far left switch
+        return false;// (m_driver.getRawAxis(4)<-0.3); //m_driver.getRawButton(4); //far left switch
     }
 
     // // Intake Controls
     // public boolean getIntake() {
-    //     return operator.getTrigger(CustomXboxController.Side.RIGHT);
+    // return operator.getTrigger(CustomXboxController.Side.RIGHT);
     // }
 
     // public boolean getReject() {
-    //     return operator.getTrigger(CustomXboxController.Side.LEFT);
+    // return operator.getTrigger(CustomXboxController.Side.LEFT);
     // }
-    
-    
-    //Returns positions from -1 to 1 
+
+    // Returns positions from -1 to 1
     private double getLeftYaw() {
         double leftYaw = m_driver.getRawAxis(Constants.leftXAxis);
 
-        if (leftYaw != 0){
+        if (leftYaw != 0) {
             leftYaw = leftYaw - Constants.ControllerConstants.ControllerLeftYawZero;
         }
 
-        if (leftYaw > kSwerveDeadband){
-            leftYaw = (leftYaw / (Constants.ControllerConstants.ControllerLeftYawHigh + (Constants.ControllerConstants.isControllerOne ? -Constants.ControllerConstants.ControllerLeftYawZero : Constants.ControllerConstants.ControllerLeftYawZero)));
-        } 
-        else if (leftYaw < -kSwerveDeadband){
-            leftYaw = (leftYaw / (Constants.ControllerConstants.ControllerLeftYawLow + Constants.ControllerConstants.ControllerLeftYawZero));
+        if (leftYaw > kSwerveDeadband) {
+            leftYaw = (leftYaw / (Constants.ControllerConstants.ControllerLeftYawHigh
+                    + (Constants.ControllerConstants.isControllerOne
+                            ? -Constants.ControllerConstants.ControllerLeftYawZero
+                            : Constants.ControllerConstants.ControllerLeftYawZero)));
+        } else if (leftYaw < -kSwerveDeadband) {
+            leftYaw = (leftYaw / (Constants.ControllerConstants.ControllerLeftYawLow
+                    + Constants.ControllerConstants.ControllerLeftYawZero));
         }
 
-        if (leftYaw>1){
+        if (leftYaw > 1) {
             leftYaw = 1;
         }
-        
-        if (leftYaw<-1){
+
+        if (leftYaw < -1) {
             leftYaw = -1;
         }
 
-        //SmartDashboard.putNumber("remote leftYaw", leftYaw);
+        // SmartDashboard.putNumber("remote leftYaw", leftYaw);
         return leftYaw;
     }
 
-    //Returns positions from -1 to 1 
+    // Returns positions from -1 to 1
     // private double getLeftThrottle() {
-    //     double leftThrottle = m_driver.getRawAxis(Constants.leftYAxis);
+    // double leftThrottle = m_driver.getRawAxis(Constants.leftYAxis);
 
-    //     if (leftThrottle != 0){
-    //         leftThrottle = leftThrottle - Constants.ControllerConstants.ControllerLeftThrottleZero;
-    //     }
+    // if (leftThrottle != 0){
+    // leftThrottle = leftThrottle -
+    // Constants.ControllerConstants.ControllerLeftThrottleZero;
+    // }
 
-    //     if (leftThrottle > kSwerveDeadband){
-    //         leftThrottle = (leftThrottle / (Constants.ControllerConstants.ControllerLeftThrottleHigh + Constants.ControllerConstants.ControllerLeftThrottleZero));
-    //     } 
-    //     else if (leftThrottle < -kSwerveDeadband){
-    //         leftThrottle = (leftThrottle / (Constants.ControllerConstants.ControllerLeftThrottleLow + Constants.ControllerConstants.ControllerLeftThrottleZero));
-    //     }
+    // if (leftThrottle > kSwerveDeadband){
+    // leftThrottle = (leftThrottle /
+    // (Constants.ControllerConstants.ControllerLeftThrottleHigh +
+    // Constants.ControllerConstants.ControllerLeftThrottleZero));
+    // }
+    // else if (leftThrottle < -kSwerveDeadband){
+    // leftThrottle = (leftThrottle /
+    // (Constants.ControllerConstants.ControllerLeftThrottleLow +
+    // Constants.ControllerConstants.ControllerLeftThrottleZero));
+    // }
 
-    //     if (leftThrottle>1){
-    //         leftThrottle = 1;
-    //     }
-        
-    //     if (leftThrottle<-1){
-    //         leftThrottle = -1;
-    //     }
+    // if (leftThrottle>1){
+    // leftThrottle = 1;
+    // }
 
-    //     //SmartDashboard.putNumber("remote leftThrottle", leftThrottle);
-    //     return leftThrottle;
+    // if (leftThrottle<-1){
+    // leftThrottle = -1;
+    // }
+
+    // //SmartDashboard.putNumber("remote leftThrottle", leftThrottle);
+    // return leftThrottle;
     // }
 
     private double getRightThrottle() {
         double rightThrottle = m_driver.getRawAxis(Constants.rightYAxis);
 
-        if (rightThrottle != 0){
+        if (rightThrottle != 0) {
             rightThrottle = rightThrottle - Constants.ControllerConstants.ControllerRightThrottleZero;
         }
 
-        if (rightThrottle > (Constants.ControllerConstants.isControllerOne ? kSwerveDeadband : 0.102)){
-            rightThrottle = (rightThrottle / (Constants.ControllerConstants.ControllerRightThrottleHigh + (Constants.ControllerConstants.isControllerOne ? -Constants.ControllerConstants.ControllerRightThrottleZero : Constants.ControllerConstants.ControllerRightThrottleZero)));
-        } 
-        else if (rightThrottle < -kSwerveDeadband){
-            rightThrottle = (rightThrottle / (Constants.ControllerConstants.ControllerRightThrottleLow + Constants.ControllerConstants.ControllerRightThrottleZero));
+        if (rightThrottle > (Constants.ControllerConstants.isControllerOne ? kSwerveDeadband : 0.102)) {
+            rightThrottle = (rightThrottle / (Constants.ControllerConstants.ControllerRightThrottleHigh
+                    + (Constants.ControllerConstants.isControllerOne
+                            ? -Constants.ControllerConstants.ControllerRightThrottleZero
+                            : Constants.ControllerConstants.ControllerRightThrottleZero)));
+        } else if (rightThrottle < -kSwerveDeadband) {
+            rightThrottle = (rightThrottle / (Constants.ControllerConstants.ControllerRightThrottleLow
+                    + Constants.ControllerConstants.ControllerRightThrottleZero));
         }
 
-        if (rightThrottle>1){
+        if (rightThrottle > 1) {
             rightThrottle = 1;
         }
-        
-        if (rightThrottle<-1){
+
+        if (rightThrottle < -1) {
             rightThrottle = -1;
         }
 
-        //SmartDashboard.putNumber("remote rightThrottle", rightThrottle);
+        // SmartDashboard.putNumber("remote rightThrottle", rightThrottle);
         return rightThrottle;
     }
 
     private double getRightYaw() {
         double rightYaw = m_driver.getRawAxis(Constants.rightXAxis);
 
-        if (rightYaw != 0){
+        if (rightYaw != 0) {
             rightYaw = rightYaw - Constants.ControllerConstants.ControllerRightYawZero;
         }
 
-        if (rightYaw > kSwerveDeadband){
-            rightYaw = (rightYaw / (Constants.ControllerConstants.ControllerRightYawHigh + -Constants.ControllerConstants.ControllerRightYawZero));
-        } 
-        else if (rightYaw < -kSwerveDeadband){
-            rightYaw = (rightYaw / (Constants.ControllerConstants.ControllerRightYawLow + Constants.ControllerConstants.ControllerRightYawZero));
+        if (rightYaw > kSwerveDeadband) {
+            rightYaw = (rightYaw / (Constants.ControllerConstants.ControllerRightYawHigh
+                    + -Constants.ControllerConstants.ControllerRightYawZero));
+        } else if (rightYaw < -kSwerveDeadband) {
+            rightYaw = (rightYaw / (Constants.ControllerConstants.ControllerRightYawLow
+                    + Constants.ControllerConstants.ControllerRightYawZero));
         }
 
-        if (rightYaw>1){
+        if (rightYaw > 1) {
             rightYaw = 1;
         }
-        
-        if (rightYaw<-1){
+
+        if (rightYaw < -1) {
             rightYaw = -1;
         }
 
-        //SmartDashboard.putNumber("remote rightYaw", rightYaw);
+        // SmartDashboard.putNumber("remote rightYaw", rightYaw);
         return rightYaw;
     }
 }
-

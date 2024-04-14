@@ -83,12 +83,11 @@ public class Elevator extends Subsystem {
             public void onLoop(double timestamp) {
                 // constantly re-homing unless in open loop, so if it is disabled we can push it
                 // in and it will remember the most "in" spot
-                if (atHomingLocation() && mNeedsToHome) {
-                    setWantHome(true);
-                } else if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
-                    setWantHome(false);
-                }
-
+                // if (atHomingLocation() && mNeedsToHome) {
+                // setWantHome(true);
+                // } else if (mPeriodicIO.mControlModeState != ControlModeState.OPEN_LOOP) {
+                // setWantHome(false);
+                // }
                 if (mPeriodicIO.position < 0.0) {
                     zeroSensors();
                     setSetpointMotionMagic(0.01);
@@ -100,6 +99,13 @@ public class Elevator extends Subsystem {
                 setNeutralBrake(true);
             }
         });
+    }
+
+    public void zeroWhenDisabled() {
+        if (mPeriodicIO.position < 0.0) {
+            zeroSensors();
+            setSetpointMotionMagic(0.01);
+        }
     }
 
     public Request elevatorRequest(double length, boolean waitForPosition) {
@@ -219,11 +225,11 @@ public class Elevator extends Subsystem {
             mMaster.setControl(new MotionMagicDutyCycle(mPeriodicIO.demand, true, 0, 0, false, false, false));
         }
 
-        // if (mPeriodicIO.position < 0.02 && Math.abs(mPeriodicIO.torqueCurrent) > 50)
-        // {
-        // zeroSensors();
-        // setSetpointMotionMagic(0.015);
-        // }
+        if (mPeriodicIO.position < 0.025 && Math.abs(mPeriodicIO.torqueCurrent) > 60)
+        {
+        zeroSensors();
+        setSetpointMotionMagic(0.015);
+        }
 
     }
 
