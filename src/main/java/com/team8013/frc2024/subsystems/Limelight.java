@@ -342,11 +342,14 @@ public class Limelight extends Subsystem {
 
     public double getEndEffectorShootingVelocity(){
         double vel = Constants.EndEffectorConstants.kSubwooferRPM;
-        if (mControlBoard.snapToTarget()){
-            vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
-        }
-        if (mid2Piece || stage2Piece || amp2Piece|| mControlBoard.passNoteFromMid()||mControlBoard.shootFromPodium()){
+        // if (mControlBoard.snapToTarget()){
+        //     vel = mRegression.getRPM(mPeriodicIO.tanLineToSpeaker);
+        // }
+        if (mid2Piece || stage2Piece || amp2Piece||mControlBoard.shootFromPodium()){
             vel = Constants.EndEffectorConstants.kShootFastRPM;
+        }
+        else if (mControlBoard.passNoteFromMid()){
+            vel = Constants.EndEffectorConstants.kPassRPM;
         }
         vel = Util.limit(vel, Constants.EndEffectorConstants.kSubwooferRPM,6600);
         SmartDashboard.putNumber("Limelight Generated RPM", vel);

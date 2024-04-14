@@ -863,9 +863,9 @@ public class Superstructure extends Subsystem {
                     climbingTracker = 1;
                 } else if (climbingTracker == 0) { // manual control height
                     if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                        manualControClimbHeight += 0.0025;
-                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                         manualControClimbHeight -= 0.0025;
+                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                        manualControClimbHeight += 0.0025;
                     }
                     manualControClimbHeight = Util.limit(manualControClimbHeight,
                             Constants.ElevatorConstants.kMaxClimbInitHeight);
@@ -1018,9 +1018,9 @@ public class Superstructure extends Subsystem {
 
                 if (deClimbTracker == 5) {
                     if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                        manualControClimbHeight += 0.0025;
-                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                         manualControClimbHeight -= 0.0025;
+                    } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                        manualControClimbHeight += 0.0025;
                     }
                     manualControClimbHeight = Util.limit(manualControClimbHeight,
                             Constants.ElevatorConstants.kMaxClimbInitHeight);
@@ -1303,6 +1303,10 @@ public class Superstructure extends Subsystem {
     public void autoShot() {
         autoShot = true;
         autoShotTracker = -1;
+    }
+
+    public boolean hasGamePiece(){
+        return (mShooter.getBeamBreak() || mEndEffector.hasGamePiece());
     }
 
     // if (firstAutoShotTracker == -1) {

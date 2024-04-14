@@ -471,8 +471,8 @@ public class Constants {
         public static final double kAmpScoreAngle = 88; // was 88
 
         // SHOOTING ANGLES
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75; // changed
-                                                                                                            // from 55
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 1; // changed
+                                                                                                            // from 55 //TODO: UNDO THE -1 BEFORE HOUSTON!
         public static final double kShootAgainstPodiumAngle = 36.5;
         public static final double kPassNoteFromMidAngle = 56;
 
@@ -821,8 +821,8 @@ public class Constants {
     public static final class EndEffectorConstants {
         // SHOOTING RPM's
         public static final double kSubwooferRPM = 5000; // 5000
-        public static final double kShootFastRPM = 6300; // rpm for passing and shooting from furthur away
-
+        public static final double kShootFastRPM = 6500; // rpm for passing and shooting from furthur away
+        public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35;
         public static final double kGroundIntakeDemand = 0.58;

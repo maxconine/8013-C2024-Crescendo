@@ -52,21 +52,21 @@ public class FourPieceMiddleStart extends AutoModeBase {
 
         public FourPieceMiddleStart() {
                 mSuperstructure = Superstructure.getInstance();
-                //mControlBoard = ControlBoard.getInstance();
+                // mControlBoard = ControlBoard.getInstance();
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                                Constants.AutoConstants.createConfig(0.7, 1.2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.2, 1.3, 0.0, 0));
                 pathA = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
                 drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(2, 1.2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(3.2, 2, 0.0, 0));
                 pathB = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(0.9, 1.2, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.5, 1.35, 0.0, 0));
                 pathC = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -85,79 +85,83 @@ public class FourPieceMiddleStart extends AutoModeBase {
                 // mSuperstructure.setSuperstuctureTransferToShooter();
                 // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1));
+                runAction(new WaitAction(1.15));
 
                 runAction(new ParallelAction(List.of(
                                 pathA,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
-                                                new WaitAction(0.1),
+                                                new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(-2))),
                                                 // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.65),
+                                                new WaitAction(1.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.4),
+                                                new WaitAction(0.2),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
-                mSuperstructure.autoShot();
-                runAction(new WaitAction(0.45));
-                mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.disableAutoShot();
+                if (mSuperstructure.hasGamePiece()) {
+                        mSuperstructure.autoShot();
+                        runAction(new WaitAction(0.3));
+                }
+                // mSuperstructure.setSuperstuctureStow();
+                // mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
                                 pathB,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.1),
+                                                new LambdaAction(() -> mSuperstructure.disableAutoShot()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(270))),
                                                 // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.6),
+                                                new WaitAction(1.5),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
                                                 new WaitAction(0.2),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.8),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
-
-                mSuperstructure.autoShot();
-                runAction(new WaitAction(0.45));
-                mSuperstructure.setSuperstuctureStow();
-                mSuperstructure.disableAutoShot();
-
+                if (mSuperstructure.hasGamePiece()) {
+                        mSuperstructure.autoShot();
+                        runAction(new WaitAction(0.45));
+                        mSuperstructure.setSuperstuctureStow();
+                        mSuperstructure.disableAutoShot();
+                }
                 runAction(new ParallelAction(List.of(
                                 pathC,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
-                                                new WaitAction(0.1),
+                                                new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(30))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(20))),
                                                 // new WaitForHeadingAction(160,200),
-                                                new WaitAction(0.35),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.2),
-                                                new LambdaAction(() -> Drive.getInstance().setAutoHeading(Rotation2d.fromDegrees(20))),
-                                                new WaitAction(0.4),
+                                                new WaitAction(1),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(12))),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.6),
+                                                new WaitAction(0.2),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
 
