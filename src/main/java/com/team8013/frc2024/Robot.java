@@ -181,6 +181,7 @@ public class Robot extends TimedRobot {
 			mLimelight.setShootingFromMid2Piece(false);
 			mLimelight.setShootingFromStage2Piece(false);
 			mLimelight.setShootingFromAmp2Piece(false);
+			mLimelight.setShootingSideOfSubwoofer(false);
 
 			mSuperstructure.setSuperstuctureShoot(false); // prevents robot from catching note after 1st shot
 

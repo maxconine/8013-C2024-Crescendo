@@ -54,7 +54,7 @@ public class TwoStageSide extends AutoModeBase {
 
         SwerveTrajectoryAction driveToThirdNote2;
         final Trajectory drivePath_C2;
-        
+
         SwerveTrajectoryAction driveToThirdNote3;
         final Trajectory drivePath_C3;
 
@@ -87,12 +87,12 @@ public class TwoStageSide extends AutoModeBase {
 
                 drivePath_C2 = AutoTrajectoryReader.generateTrajectoryFromFile(path_C2,
                                 Constants.AutoConstants.createConfig(4.5, 3, 0, 0));
-                driveToThirdNote2 = new SwerveTrajectoryAction(drivePath_C2, Rotation2d.fromDegrees(240));
+                driveToThirdNote2 = new SwerveTrajectoryAction(drivePath_C2, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C2);
 
                 drivePath_C3 = AutoTrajectoryReader.generateTrajectoryFromFile(path_C3,
                                 Constants.AutoConstants.createConfig(3, 2, 0, 0));
-                driveToThirdNote3 = new SwerveTrajectoryAction(drivePath_C3, Rotation2d.fromDegrees(240));
+                driveToThirdNote3 = new SwerveTrajectoryAction(drivePath_C3, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C3);
 
         }
@@ -131,7 +131,8 @@ public class TwoStageSide extends AutoModeBase {
                                                 new WaitAction(0.4),
                                                 // new WaitForHeadingAction(220,260),
                                                 new LambdaAction(() -> mSuperstructure
-                                                                .setSuperstuctureTransferToShooter())
+                                                                .setSuperstuctureTransferToShooter()),
+                                                new LambdaAction(() -> mLimelight.setShootingSideOfSubwoofer(true))
                                 // new WaitToPassYCoordinateAction(6.7),
                                 // new LambdaAction(() -> mSuperstructure.autoShot())
                                 )))));
@@ -139,6 +140,7 @@ public class TwoStageSide extends AutoModeBase {
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.3));
                 mSuperstructure.disableAutoShot();
+                mLimelight.setShootingSideOfSubwoofer(false);
 
                 // runAction(new ParallelAction(List.of(
                 //                 driveToThirdNote,
@@ -176,8 +178,8 @@ public class TwoStageSide extends AutoModeBase {
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-125))),
-                                                new WaitAction(1.8),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-150))),
+                                                new WaitAction(1.6),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitAction(0.3),
@@ -207,7 +209,7 @@ public class TwoStageSide extends AutoModeBase {
                                         driveToThirdNote3,
                                         new SeriesAction(List.of(
                                                         new LambdaAction(() -> Drive.getInstance()
-                                                                        .setAutoHeading(Rotation2d.fromDegrees(180))),
+                                                                        .setAutoHeading(Rotation2d.fromDegrees(160))),
                                                         new WaitAction(0.4),
                                                         new LambdaAction(() -> mSuperstructure
                                                                         .setSuperstuctureIntakingGround()),

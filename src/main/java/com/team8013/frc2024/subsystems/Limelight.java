@@ -60,6 +60,7 @@ public class Limelight extends Subsystem {
     private boolean mid2Piece = false;
     private boolean stage2Piece = false;
     private boolean amp2Piece = false;
+    private boolean sideOfSubwoofer = false;
 
     private final NetworkTableEntry botpose_wpiblue = mNetworkTable.getEntry("botpose_wpiblue");
     private final NetworkTableEntry botpose_wpired = mNetworkTable.getEntry("botpose_wpired");
@@ -303,6 +304,10 @@ public class Limelight extends Subsystem {
         }
     }
 
+    public void setShootingSideOfSubwoofer(boolean shootingSideOfSubwoofer){
+        sideOfSubwoofer = shootingSideOfSubwoofer;
+    }
+
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
         double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
@@ -328,6 +333,9 @@ public class Limelight extends Subsystem {
         }
         else if (mControlBoard.shootFromPodium()){
             pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
+        }
+        else if(sideOfSubwoofer){
+            pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle-1;
         }
                 // if (shootAgainstSubwooferSide){
         //     pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;

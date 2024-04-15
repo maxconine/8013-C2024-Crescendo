@@ -124,7 +124,8 @@ public class TwoAmpSide extends AutoModeBase {
                                                                 .setAutoHeading(Rotation2d.fromDegrees(130.0))),
                                                 new WaitToPassXCoordinateAction(14.7),
                                                 new LambdaAction(() -> mSuperstructure
-                                                                .setSuperstuctureTransferToShooter())
+                                                                .setSuperstuctureTransferToShooter()),
+                                                new LambdaAction(() -> mLimelight.setShootingSideOfSubwoofer(true))
                                 // new WaitToPassYCoordinateAction(6.7),
                                 // new LambdaAction(() -> mSuperstructure.autoShot())
                                 )))));
@@ -133,6 +134,7 @@ public class TwoAmpSide extends AutoModeBase {
                 runAction(new WaitAction(0.3));
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.disableAutoShot();
+                mLimelight.setShootingSideOfSubwoofer(false);
                 // mLimelight.shootAgainstSubwooferSideAngle(false);
 
                 // runAction(new ParallelAction(List.of(

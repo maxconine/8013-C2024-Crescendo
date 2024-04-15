@@ -12,6 +12,7 @@ import com.team8013.frc2024.auto.actions.ParallelAction;
 import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
 import com.team8013.frc2024.auto.actions.WaitAction;
+import com.team8013.frc2024.auto.actions.WaitForShootAction;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Superstructure;
@@ -93,7 +94,7 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-2))),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(2))),
                                                 // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
@@ -123,29 +124,30 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(270))),
                                                 // new WaitForHeadingAction(160,200),
-                                                new WaitAction(0.25),
+                                                new WaitAction(0.35),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.5),
+                                                new WaitAction(1.4),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.15),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.3),
+                                                new WaitAction(0.1),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 if (mSuperstructure.hasGamePiece()) {
                         mSuperstructure.autoShot();
-                        runAction(new WaitAction(0.45));
-                        mSuperstructure.setSuperstuctureStow();
-                        mSuperstructure.disableAutoShot();
+                        runAction(new WaitAction(0.35));
+                        // mSuperstructure.setSuperstuctureStow();
+                        // mSuperstructure.disableAutoShot();
                 }
                 runAction(new ParallelAction(List.of(
                                 pathC,
                                 new SeriesAction(List.of(
                                                 // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.05),
+                                                new LambdaAction(() -> mSuperstructure.disableAutoShot()),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(20))),
                                                 // new WaitForHeadingAction(160,200),
