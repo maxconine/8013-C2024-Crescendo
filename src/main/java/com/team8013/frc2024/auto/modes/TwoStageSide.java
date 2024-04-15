@@ -196,7 +196,7 @@ public class TwoStageSide extends AutoModeBase {
                                                                         .setSuperstuctureTransferToShooter()),
                                                         new WaitAction(0.3),
                                                         new LambdaAction(() -> Drive.getInstance()
-                                                                        .setAutoHeading(Rotation2d.fromDegrees(227))),
+                                                                        .setAutoHeading(Rotation2d.fromDegrees(204))), //was 227
                                                         new WaitAction(0.01),
                                                         new LambdaAction(
                                                                         () -> mLimelight.setShootingFromStage2Piece(true)))))));

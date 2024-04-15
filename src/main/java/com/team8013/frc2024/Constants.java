@@ -477,7 +477,7 @@ public class Constants {
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
-        public static final double kStage2PieceAngle = 46;
+        public static final double kStage2PieceAngle = 44.5; //46 at dcmp?
         public static final double kMid2PieceAngle = 55; // 53 - 1;
         public static final double kAmp2PieceAngle = 46;
 
