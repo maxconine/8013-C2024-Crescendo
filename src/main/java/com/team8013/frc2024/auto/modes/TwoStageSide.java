@@ -182,7 +182,7 @@ public class TwoStageSide extends AutoModeBase {
                                                 new WaitAction(1.6),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.3),
+                                                new WaitAction(0.15),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()))))));
                 mSuperstructure.setSuperstuctureStow();

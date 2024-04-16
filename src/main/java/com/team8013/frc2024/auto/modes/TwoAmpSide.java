@@ -63,12 +63,12 @@ public class TwoAmpSide extends AutoModeBase {
 
                 // read trajectories from PathWeaver and generate trajectory actions
                 drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                                Constants.AutoConstants.createConfig(1, 1.5, 0.0, 0)); // 0.95 also works
+                                Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0)); // 0.95 also works
                 driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(120.0));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
                 drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                                Constants.AutoConstants.createConfig(0.95, 1.5, 0.0, 0)); // 0.95 also works
+                                Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0)); // 0.95 also works
                 driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(120.0));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
@@ -78,12 +78,12 @@ public class TwoAmpSide extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_C1 = AutoTrajectoryReader.generateTrajectoryFromFile(path_C1,
-                                Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
+                                Constants.AutoConstants.createConfig(5, 2.6, 0.0, 0));
                 driveToThirdNote1 = new SwerveTrajectoryAction(drivePath_C1, Rotation2d.fromDegrees(120));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C1);
 
                 drivePath_C2 = AutoTrajectoryReader.generateTrajectoryFromFile(path_C2,
-                                Constants.AutoConstants.createConfig(4.5, 3, 0, 0));
+                                Constants.AutoConstants.createConfig(5, 3.5, 0, 0));
                 driveToThirdNote2 = new SwerveTrajectoryAction(drivePath_C2, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C2);
 
@@ -100,7 +100,7 @@ public class TwoAmpSide extends AutoModeBase {
 
                 System.out.println("Running 2 note BLUE RIGHT auto");
                 mSuperstructure.autoShot();
-                runAction(new WaitAction(1.35));
+                runAction(new WaitAction(1.3));
                 mSuperstructure.disableAutoShot();
 
                 runAction(new ParallelAction(List.of(
@@ -122,14 +122,15 @@ public class TwoAmpSide extends AutoModeBase {
                                                 // new WaitToPassXCoordinateAction(3.2),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(130.0))),
-                                                new WaitToPassXCoordinateAction(14.7),
+                                                //new WaitToPassXCoordinateAction(14.7),
+                                                new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
                                                 new LambdaAction(() -> mLimelight.setShootingSideOfSubwoofer(true))
                                 // new WaitToPassYCoordinateAction(6.7),
                                 // new LambdaAction(() -> mSuperstructure.autoShot())
                                 )))));
-                runAction(new WaitAction(0.1));        
+                runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.3));
                 mSuperstructure.setSuperstuctureStow();
@@ -138,32 +139,32 @@ public class TwoAmpSide extends AutoModeBase {
                 // mLimelight.shootAgainstSubwooferSideAngle(false);
 
                 // runAction(new ParallelAction(List.of(
-                //                 driveToThirdNote,
-                //                 new SeriesAction(List.of(
-                //                                 new WaitAction(0.3),
-                //                                 new LambdaAction(() -> Drive.getInstance()
-                //                                                 .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                //                                 new WaitToPassXCoordinateAction(11.3),
-                //                                 new LambdaAction(() -> mSuperstructure
-                //                                                 .setSuperstuctureIntakingGround()))))));
+                // driveToThirdNote,
+                // new SeriesAction(List.of(
+                // new WaitAction(0.3),
+                // new LambdaAction(() -> Drive.getInstance()
+                // .setAutoHeading(Rotation2d.fromDegrees(180.0))),
+                // new WaitToPassXCoordinateAction(11.3),
+                // new LambdaAction(() -> mSuperstructure
+                // .setSuperstuctureIntakingGround()))))));
 
                 // mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 driveToThirdNote1,
                                 new SeriesAction(List.of(
+                                                new WaitAction(0.1),
+                                                new LambdaAction(() -> Drive.getInstance()
+                                                                .setAutoHeading(Rotation2d.fromDegrees(180))),
                                                 new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction((() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround())),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(-160))),
-                                                new WaitAction(1.4),
+                                                                .setAutoHeading(Rotation2d.fromDegrees(-155))),
+                                                new WaitAction(1.55),
                                                 new LambdaAction(() -> Drive.getInstance()
-                                                                .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.3),
-                                                new LambdaAction(() -> mSuperstructure
-                                                                .setSuperstuctureStow()))))));
+                                                                .setAutoHeading(Rotation2d.fromDegrees(180))))))));
                 mSuperstructure.setSuperstuctureStow();
 
                 if (mEffector.hasGamePiece()) {
@@ -175,13 +176,13 @@ public class TwoAmpSide extends AutoModeBase {
                                                                         .setSuperstuctureTransferToShooter()),
                                                         new WaitAction(0.3),
                                                         new LambdaAction(() -> Drive.getInstance()
-                                                                        .setAutoHeading(Rotation2d.fromDegrees(133))),
+                                                                        .setAutoHeading(Rotation2d.fromDegrees(136))), //was 133
                                                         new WaitAction(0.01),
                                                         new LambdaAction(
                                                                         () -> mLimelight.setShootingFromAmp2Piece(
                                                                                         true)))))));
                         mLimelight.setShootingFromAmp2Piece(true);
-                        //runAction(new WaitAction(0.1));
+                        runAction(new WaitAction(0.1));
                         mSuperstructure.autoShot();
                 } else {
                         runAction(new ParallelAction(List.of(

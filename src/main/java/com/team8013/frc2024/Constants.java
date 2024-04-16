@@ -479,7 +479,7 @@ public class Constants {
         // Autos
         public static final double kStage2PieceAngle = 44.5; //46 at dcmp?
         public static final double kMid2PieceAngle = 55; // 53 - 1;
-        public static final double kAmp2PieceAngle = 46;
+        public static final double kAmp2PieceAngle = 39;
 
         public static final double kShootLoadAngle = 56; // changed from 54
 
@@ -582,7 +582,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = -91.56;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+        public static final double CANCODER_OFFSET = -91.56+60.56;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
                                                             // there
 
         public static final double kGearRatio = 25; // radians per rotation
