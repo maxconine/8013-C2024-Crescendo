@@ -202,8 +202,22 @@ public class ControlBoard {
         return false;
     }
 
+    public boolean farLeftSwitchUp(){
+       return (m_driver.getRawAxis(4)<-0.25);
+    }
+
+    public boolean shootFromOppositePodiumAllign() { // triggers once every click up
+        if (!(m_driver.getRawAxis(5) < -0.25)) {
+            podiumAllignBoolean = true;
+        } else if (m_driver.getRawAxis(5) < -0.25 && podiumAllignBoolean) {
+            podiumAllignBoolean = false;
+            return true;
+        }
+        return false;
+    }
+
     public boolean shootFromPodium() {
-        return (m_driver.getRawAxis(4) < -0.25);
+        return (m_driver.getRawAxis(4) < -0.25)||(m_driver.getRawAxis(5) < -0.25);
     }
 
     public double pivotPercentOutput() {

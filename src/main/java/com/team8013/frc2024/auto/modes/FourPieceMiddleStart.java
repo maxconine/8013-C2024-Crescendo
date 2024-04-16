@@ -67,7 +67,7 @@ public class FourPieceMiddleStart extends AutoModeBase {
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
 
                 drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                                Constants.AutoConstants.createConfig(1.5, 1.35, 0.0, 0));
+                                Constants.AutoConstants.createConfig(1.5, 1.45, 0.0, 0));
                 pathC = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
@@ -99,13 +99,13 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
-                                                new WaitAction(1.3),
+                                                new WaitAction(1.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureStow()),
-                                                new WaitAction(0.1),
+                                                new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.15),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
                 if (mSuperstructure.hasGamePiece()) {
@@ -138,7 +138,7 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                                 .setSuperstuctureTransferToShooter()))))));
                 if (mSuperstructure.hasGamePiece()) {
                         mSuperstructure.autoShot();
-                        runAction(new WaitAction(0.35));
+                        runAction(new WaitAction(0.3));
                         // mSuperstructure.setSuperstuctureStow();
                         // mSuperstructure.disableAutoShot();
                 }
@@ -163,7 +163,7 @@ public class FourPieceMiddleStart extends AutoModeBase {
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                                                new WaitAction(0.2),
+                                                new WaitAction(0.15),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
 

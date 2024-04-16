@@ -271,7 +271,14 @@ public class Robot extends TimedRobot {
 					mDrive.setHeadingControlTarget(-207);
 				}
 			}
-			else if (mControlBoard.shootFromPodium()&&(!Util.epsilonEquals(210, mDrive.getHeading().getDegrees(), 5))){ //extra check to make sure it stays the right angle
+			else if (mControlBoard.shootFromOppositePodiumAllign()){
+				if (!is_red_alliance) { //keep in mind the alliance is flipped
+					mDrive.setHeadingControlTarget(-207);
+				} else {
+					mDrive.setHeadingControlTarget(207);
+				}
+			}
+			else if (mControlBoard.shootFromPodium()&&(mControlBoard.farLeftSwitchUp() && !Util.epsilonEquals(207, mDrive.getHeading().getDegrees(), 5))){ //extra check to make sure it stays the right angle
 				if (!is_red_alliance) { //keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(207);
 				} else {
@@ -594,7 +601,7 @@ public class Robot extends TimedRobot {
 			}
 			flip_trajectories = is_red_alliance; // TODO: THIS MIGHT MESS EVERYTHING UP?
 
-			SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
+			//SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);
 			Optional<AutoModeBase> autoMode = mAutoModeSelector.getAutoMode();
 			mLimelight.isRedAlliance(is_red_alliance);
