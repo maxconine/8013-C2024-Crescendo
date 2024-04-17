@@ -214,8 +214,8 @@ public class Constants {
         /*** MODULE SPECIFIC CONSTANTS ***/
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final double betaAngleOffset = 40.07;
-            public static final double compAngleOffset = 40.07;
+            public static final double betaAngleOffset = 39.63;//40.07;
+            public static final double compAngleOffset = 39.63;//40.07;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
@@ -225,8 +225,8 @@ public class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final double betaAngleOffset = 171.21;
-            public static final double compAngleOffset = 171.21;
+            public static final double betaAngleOffset = 169.62;//171.21;
+            public static final double compAngleOffset = 169.62;//171.21;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
@@ -236,8 +236,8 @@ public class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final double betaAngleOffset = 182.46;
-            public static final double compAngleOffset = 182.46;
+            public static final double betaAngleOffset = 181.58;//182.46;
+            public static final double compAngleOffset = 181.58;//182.46;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
@@ -247,8 +247,8 @@ public class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final double betaAngleOffset = 277.82;
-            public static final double compAngleOffset = 277.82;
+            public static final double betaAngleOffset = 278.52; //277.82;
+            public static final double compAngleOffset = 278.52; //277.82;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
@@ -471,8 +471,8 @@ public class Constants {
         public static final double kAmpScoreAngle = 88; // was 88
 
         // SHOOTING ANGLES
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 1; // changed
-                                                                                                            // from 55 //TODO: UNDO THE -1 BEFORE HOUSTON!
+        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75; // changed
+                                                                                                            // from 55
         public static final double kShootAgainstPodiumAngle = 36.5;
         public static final double kPassNoteFromMidAngle = 56;
 
@@ -582,7 +582,7 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = -91.56+60.56;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
+        public static final double CANCODER_OFFSET = -91.56+60.56+148.36;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
                                                             // there
 
         public static final double kGearRatio = 25; // radians per rotation
@@ -820,8 +820,8 @@ public class Constants {
 
     public static final class EndEffectorConstants {
         // SHOOTING RPM's
-        public static final double kSubwooferRPM = 5000; // 5000
-        public static final double kShootFastRPM = 6500; // rpm for passing and shooting from furthur away
+        public static final double kSubwooferRPM = 5000; // 5000 //tunes to 5080
+        public static final double kShootFastRPM = 6550; //tunes to 6560 rpm for passing and shooting from furthur away
         public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35;
@@ -831,11 +831,11 @@ public class Constants {
 
         // PID TUNING
         // SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.000157; // this value tunes the subwoofer shot
+        public static final double kFFTopSubwoofer = 0.0001566; // this value tunes the subwoofer shot
         public static final double kFFBottomSubwoofer = 0.0001566; // this value tunes the subwoofer shot
         // FAST
-        public static final double kFFTopFast = 0.0001564; // this value tunes the note passing
-        public static final double kFFBottomFast = 0.000156; // this value tunes the note passing
+        public static final double kFFTopFast = 000155;//0.0001564; // this value tunes the note passing
+        public static final double kFFBottomFast = 000155;// 0.000156; // this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;
