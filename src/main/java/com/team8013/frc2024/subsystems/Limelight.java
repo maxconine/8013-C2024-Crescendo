@@ -39,6 +39,8 @@ public class Limelight extends Subsystem {
     private boolean wantNoteChase = false;
     private boolean gottenNotePose = false;
     private boolean cantFindTargetOnInitialSnap = false;
+    private double manualControlPivotShootModePodium = Constants.PivotConstants.kShootAgainstPodiumAngle;
+    private double manualControlPivotShootPassMode = Constants.PivotConstants.kPassNoteFromMidAngle;
     private int smoothCounter = 0;
     private double degreesToSnap = 180;
     private double sumx = 0;
@@ -329,10 +331,24 @@ public class Limelight extends Subsystem {
             pivAngle = Constants.PivotConstants.kAmp2PieceAngle;
         }
         else if (mControlBoard.passNoteFromMid()){
-            pivAngle = Constants.PivotConstants.kPassNoteFromMidAngle;
+            if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                manualControlPivotShootPassMode += 0.085;
+            } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                manualControlPivotShootPassMode -= 0.085;
+            }
+            manualControlPivotShootPassMode = Util.limit(manualControlPivotShootPassMode,
+                    30, Constants.PivotConstants.kMaxAngle);
+            pivAngle = manualControlPivotShootPassMode; //Constants.PivotConstants.kPassNoteFromMidAngle;
         }
         else if (mControlBoard.shootFromPodium()){
-            pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
+            if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                manualControlPivotShootModePodium += 0.04;
+            } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                manualControlPivotShootModePodium -= 0.04;
+            }
+            manualControlPivotShootModePodium = Util.limit(manualControlPivotShootModePodium,
+                    30, Constants.PivotConstants.kMaxAngle);
+            pivAngle = manualControlPivotShootModePodium; //Constants.PivotConstants.kShootAgainstPodiumAngle;
         }
         else if(sideOfSubwoofer){
             pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle-1;

@@ -691,27 +691,27 @@ public class Superstructure extends Subsystem {
 
                 if (transfterToShooterTracker == 2) {
                     /* Manual control here */
-                    if (mControlBoard.passNoteFromMid()) {
-                        if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                            manualControlPivotShootMode += 0.085;
-                        } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                            manualControlPivotShootMode -= 0.085;
-                        }
-                        manualControlPivotShootMode = Util.limit(manualControlPivotShootMode,
-                                30, Constants.PivotConstants.kMaxAngle);
-                        mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
-                    } else if (mControlBoard.shootFromPodium()) { // manual adjustment of both podium and passing angles
-                        if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                            manualControlPivotShootModePodium += 0.04;
-                        } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                            manualControlPivotShootModePodium -= 0.04;
-                        }
-                        manualControlPivotShootModePodium = Util.limit(manualControlPivotShootModePodium,
-                                30, Constants.PivotConstants.kMaxAngle);
-                        mPivot.setSetpointMotionMagic(manualControlPivotShootModePodium);
-                    } else {
+                    // if (mControlBoard.passNoteFromMid()) {
+                    //     if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                    //         manualControlPivotShootMode += 0.085;
+                    //     } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                    //         manualControlPivotShootMode -= 0.085;
+                    //     }
+                    //     manualControlPivotShootMode = Util.limit(manualControlPivotShootMode,
+                    //             30, Constants.PivotConstants.kMaxAngle);
+                    //     mPivot.setSetpointMotionMagic(manualControlPivotShootMode);
+                    // } else if (mControlBoard.shootFromPodium()) { // manual adjustment of both podium and passing angles
+                    //     if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                    //         manualControlPivotShootModePodium += 0.04;
+                    //     } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                    //         manualControlPivotShootModePodium -= 0.04;
+                    //     }
+                    //     manualControlPivotShootModePodium = Util.limit(manualControlPivotShootModePodium,
+                    //             30, Constants.PivotConstants.kMaxAngle);
+                    //     mPivot.setSetpointMotionMagic(manualControlPivotShootModePodium);
+                    // } else {
                         mPivot.setSetpointMotionMagic(mLimelight.getPivotShootingAngle());
-                    }
+                    //}
                 }
 
                 if ((transfterToShooterTracker == 2) && mWantsToShoot
