@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team254.lib.util.Util;
 import com.team8013.frc2024.auto.AutoModeBase;
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
 	public static boolean wantChase = false;
 	public static boolean doneChasing = true;
 	public static boolean shootFromPodiumBoolean = false;
-	private boolean autoAllignBoolean = false;
+	//private boolean autoAllignBoolean = false;
 
 	// private final int kDpadUp = 0;
 	private final int kDpadRight = 90;

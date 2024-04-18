@@ -76,8 +76,8 @@ public class Superstructure extends Subsystem {
     private Timer shootingTimer = new Timer();
     // private Timer autoShootingTimer = new Timer();
 
-    private double manualControlPivotShootMode = Constants.PivotConstants.kPassNoteFromMidAngle;
-    private double manualControlPivotShootModePodium = Constants.PivotConstants.kShootAgainstPodiumAngle;
+    // private double manualControlPivotShootMode = Constants.PivotConstants.kPassNoteFromMidAngle;
+    // private double manualControlPivotShootModePodium = Constants.PivotConstants.kShootAgainstPodiumAngle;
 
     public boolean requestsCompleted() {
         return allRequestsComplete;

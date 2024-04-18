@@ -7,7 +7,7 @@ import com.team8013.frc2024.loops.Loop;
 import com.team8013.lib.Conversions;
 import com.team8013.lib.logger.Log;
 import com.team8013.lib.requests.Request;
-import com.team8013.lib.util.DelayedBoolean;
+//import com.team8013.lib.util.DelayedBoolean;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
@@ -50,8 +50,8 @@ public class Elevator extends Subsystem {
     // Homing refers to moving the elevator into it's "zero" position. Needs to be
     // done at the start of every match
     private boolean mHoming = true;
-    private boolean mNeedsToHome = false;
-    private final DelayedBoolean mHomingDelay = new DelayedBoolean(Timer.getFPGATimestamp(), 0.2);
+    //private boolean mNeedsToHome = false;
+    //private final DelayedBoolean mHomingDelay = new DelayedBoolean(Timer.getFPGATimestamp(), 0.2);
 
     public void setNeutralBrake(boolean brake) {
         NeutralModeValue wantedMode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
@@ -62,9 +62,9 @@ public class Elevator extends Subsystem {
     public void setWantHome(boolean home) {
         mHoming = home;
         // once homing is started, no longer needs to home
-        if (mHoming) {
-            mNeedsToHome = false;
-        }
+        // if (mHoming) {
+        //     mNeedsToHome = false;
+        // }
         // force update state
         writePeriodicOutputs();
     }

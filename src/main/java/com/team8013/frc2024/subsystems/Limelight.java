@@ -12,7 +12,7 @@ import com.team8013.lib.swerve.ChassisSpeeds;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.util.Units;
+//import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -41,7 +41,9 @@ public class Limelight extends Subsystem {
     private boolean cantFindTargetOnInitialSnap = false;
     private double manualControlPivotShootModePodium = Constants.PivotConstants.kShootAgainstPodiumAngle;
     private double manualControlPivotShootPassMode = Constants.PivotConstants.kPassNoteFromMidAngle;
-    private int smoothCounter = 0;
+    private double manualControlPivotShootSubwoofer = Constants.PivotConstants.kShootAgainstSubwooferAngle;
+    private double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
+    //private int smoothCounter = 0;
     private double degreesToSnap = 180;
     private double sumx = 0;
     private double sumy = 0;
@@ -162,16 +164,16 @@ public class Limelight extends Subsystem {
         public double latencyTimestamp;
     }
 
-    private void initializeNoteChase() { 
-        xController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.X_CONSTRAINTS);
-        yController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.Y_CONSTRAINTS); //3 also works
-        omegaController = new ProfiledPIDController(7, 0, 0, Constants.VisionAlignConstants.OMEGA_CONSTRAINTS);
-        xController.setTolerance(0.05); //change if having consistency issues was originally 0.2
-        yController.setTolerance(0.05);
-        omegaController.setTolerance(Units.degreesToRadians(0.2));
-        omegaController.enableContinuousInput(-Math.PI, Math.PI);
+    // private void initializeNoteChase() { 
+    //     xController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.X_CONSTRAINTS);
+    //     yController = new ProfiledPIDController(2, 0, 0, Constants.VisionAlignConstants.Y_CONSTRAINTS); //3 also works
+    //     omegaController = new ProfiledPIDController(7, 0, 0, Constants.VisionAlignConstants.OMEGA_CONSTRAINTS);
+    //     xController.setTolerance(0.05); //change if having consistency issues was originally 0.2
+    //     yController.setTolerance(0.05);
+    //     omegaController.setTolerance(Units.degreesToRadians(0.2));
+    //     omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    }
+    // }
 
     public void wantNoteChase(boolean chase){
         if (wantNoteChase != chase){
@@ -312,7 +314,6 @@ public class Limelight extends Subsystem {
 
     public double getPivotShootingAngle() {
         //Right now we can use this to decide if we are shooting at the subwoofer or podium
-        double pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle;
 
         // if ((mPeriodicIO.tanLineToSpeaker>2)&&mPeriodicIO.sees_target){
         //     pivAngle = Constants.PivotConstants.kShootAgainstPodiumAngle;
@@ -333,33 +334,47 @@ public class Limelight extends Subsystem {
         else if (mControlBoard.passNoteFromMid()){
             if (mControlBoard.operator.getController().getRightY() > 0.2) {
                 manualControlPivotShootPassMode += 0.085;
+                System.out.println("Pass Angle: " + manualControlPivotShootPassMode);
             } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                 manualControlPivotShootPassMode -= 0.085;
+                System.out.println("Pass Angle: " + manualControlPivotShootPassMode);
             }
-            manualControlPivotShootPassMode = Util.limit(manualControlPivotShootPassMode,
-                    30, Constants.PivotConstants.kMaxAngle);
+            // manualControlPivotShootPassMode = Util.limit(manualControlPivotShootPassMode,
+            //         30, Constants.PivotConstants.kMaxAngle);
             pivAngle = manualControlPivotShootPassMode; //Constants.PivotConstants.kPassNoteFromMidAngle;
         }
         else if (mControlBoard.shootFromPodium()){
             if (mControlBoard.operator.getController().getRightY() > 0.2) {
                 manualControlPivotShootModePodium += 0.04;
+                System.out.println("Podium Angle: " + manualControlPivotShootModePodium);
             } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
                 manualControlPivotShootModePodium -= 0.04;
+                System.out.println("Podium Angle: " + manualControlPivotShootModePodium);
             }
-            manualControlPivotShootModePodium = Util.limit(manualControlPivotShootModePodium,
-                    30, Constants.PivotConstants.kMaxAngle);
+            // manualControlPivotShootModePodium = Util.limit(manualControlPivotShootModePodium,
+            //         30, Constants.PivotConstants.kMaxAngle);
             pivAngle = manualControlPivotShootModePodium; //Constants.PivotConstants.kShootAgainstPodiumAngle;
         }
         else if(sideOfSubwoofer){
             pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle-1;
         }
+        else{
+            if (mControlBoard.operator.getController().getRightY() > 0.2) {
+                manualControlPivotShootSubwoofer += 0.04;
+                System.out.println("Subwoofer Angle: " + manualControlPivotShootSubwoofer);
+            } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
+                manualControlPivotShootSubwoofer -= 0.04;
+                System.out.println("Subwoofer Angle: " + manualControlPivotShootSubwoofer);
+            }
+            pivAngle = manualControlPivotShootSubwoofer;
+        }
                 // if (shootAgainstSubwooferSide){
         //     pivAngle = Constants.PivotConstants.kShootAgainstSubwooferAngle+1.5;
         // }
 
-        SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
+        //SmartDashboard.putNumber("Pivot Limelight Generated angle", pivAngle);
 
-        pivAngle = Util.limit(pivAngle, Constants.PivotConstants.kMinAngle, Constants.PivotConstants.kMaxAngle);
+        pivAngle = Util.limit(pivAngle, 25, Constants.PivotConstants.kMaxAngle);
 
         return pivAngle;
     }
