@@ -473,7 +473,7 @@ public class Constants {
         // SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 1.2; // changed
                                                                                                             // from 55
-        public static final double kShootAgainstPodiumAngle = 37.6; //brought up 1 degree
+        public static final double kShootAgainstPodiumAngle = 37.3; //brought up 1 degree
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
@@ -820,22 +820,22 @@ public class Constants {
 
     public static final class EndEffectorConstants {
         // SHOOTING RPM's
-        public static final double kSubwooferRPM = 5000; // 5000 //tunes to 5080
-        public static final double kShootFastRPM = 6500; //tunes to 6560 rpm for passing and shooting from furthur away
+        public static final double kSubwooferRPM = 5050; // 5000 //tunes to 5080
+        public static final double kShootFastRPM = 6550; //tunes to 6560 rpm for passing and shooting from furthur away
         public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
-        public static final double kSourceIntakeDemand = 0.35;
+        public static final double kSourceIntakeDemand = 0.32; //was 0.35 with more resistance end effector
         public static final double kGroundIntakeDemand = 0.58;
         public static final double kOuttakingDemandTop = -0.50;
         public static final double kOuttakingDemandBottom = -0.55;
 
         // PID TUNING
         // SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.0001566; // this value tunes the subwoofer shot
-        public static final double kFFBottomSubwoofer = 0.0001566; // this value tunes the subwoofer shot
+        public static final double kFFTopSubwoofer = 0.000154;//old eff val: 0.0001566; // this value tunes the subwoofer shot
+        public static final double kFFBottomSubwoofer = 0.000154;//Old eff val 0.0001566; // this value tunes the subwoofer shot
         // FAST
-        public static final double kFFTopFast = 0.000155;//0.000155;//0.0001564; // this value tunes the note passing
-        public static final double kFFBottomFast = 0.000165;//= 0.000167;// 0.000156; // this value tunes the note passing
+        public static final double kFFTopFast = 0.000154;//OLD EFF: 0.000155;//0.000155;//0.0001564; // this value tunes the note passing
+        public static final double kFFBottomFast = 0.000154;//old EFF 0.000165;//= 0.000167;// 0.000156; // this value tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;

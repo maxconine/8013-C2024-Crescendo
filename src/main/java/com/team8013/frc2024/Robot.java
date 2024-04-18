@@ -4,12 +4,14 @@
 
 package com.team8013.frc2024;
 
+import java.nio.Buffer;
 import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,7 +72,9 @@ public class Robot extends TimedRobot {
 	public static boolean wantChase = false;
 	public static boolean doneChasing = true;
 	public static boolean shootFromPodiumBoolean = false;
-	//private boolean autoAllignBoolean = false;
+	private Timer mManualSourceIntakeTimer = new Timer();
+	private boolean mManualSourceBoolean = false;
+	// private boolean autoAllignBoolean = false;
 
 	// private final int kDpadUp = 0;
 	private final int kDpadRight = 90;
@@ -251,53 +255,57 @@ public class Robot extends TimedRobot {
 			// }
 
 			if (mControlBoard.allignWithHumanPlayer()) {
-				if (!is_red_alliance) { //keep in mind the alliance is flipped
+				if (!is_red_alliance) { // keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(60);
 				} else {
 					mDrive.setHeadingControlTarget(-60);
 				}
-			}
-			else if (mControlBoard.passNoteFromMidAllign()){
-				if (!is_red_alliance) { //keep in mind the alliance is flipped
+			} else if (mControlBoard.passNoteFromMidAllign()) {
+				if (!is_red_alliance) { // keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(-140);
 				} else {
 					mDrive.setHeadingControlTarget(140);
 				}
-			}
-			else if(mControlBoard.shootFromPodiumAllign()){
-				if (!is_red_alliance) { //keep in mind the alliance is flipped
+			} else if (mControlBoard.shootFromPodiumAllign()) {
+				if (!is_red_alliance) { // keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(207);
 				} else {
 					mDrive.setHeadingControlTarget(-207);
 				}
-			}
-			else if (mControlBoard.shootFromOppositePodiumAllign()){
+			} else if (mControlBoard.shootFromOppositePodiumAllign()) {
 				// if (!is_red_alliance) { //keep in mind the alliance is flipped
-				// 	mDrive.setHeadingControlTarget(-207);
+				// mDrive.setHeadingControlTarget(-207);
 				// } else {
-				// 	mDrive.setHeadingControlTarget(207);
+				// mDrive.setHeadingControlTarget(207);
 				// }
-			}
-			else if (mControlBoard.shootFromPodium()&&(mControlBoard.farLeftSwitchUp() && !Util.epsilonEquals(207, mDrive.getHeading().getDegrees(), 5))){ //extra check to make sure it stays the right angle
-				if (!is_red_alliance) { //keep in mind the alliance is flipped
+			} else if (mControlBoard.shootFromPodium() && (mControlBoard.farLeftSwitchUp()
+					&& !Util.epsilonEquals(207, mDrive.getHeading().getDegrees(), 5))) { // extra check to make sure it
+																							// stays the right angle
+				if (!is_red_alliance) { // keep in mind the alliance is flipped
 					mDrive.setHeadingControlTarget(207);
 				} else {
 					mDrive.setHeadingControlTarget(-207);
 				}
 			}
 
-			// if (!mLimelight.cantFindTargetOnInitialSnap() && mControlBoard.snapToTarget()){
-			// 	System.out.println("Snapping to target" + mLimelight.getTargetSnap());
-			// 	mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called once per switch flip up
-			// 	//autoAllignBoolean = true; //take out this to make always auto aim
+			// if (!mLimelight.cantFindTargetOnInitialSnap() &&
+			// mControlBoard.snapToTarget()){
+			// System.out.println("Snapping to target" + mLimelight.getTargetSnap());
+			// mDrive.setHeadingControlTarget(mLimelight.getTargetSnap()); //only called
+			// once per switch flip up
+			// //autoAllignBoolean = true; //take out this to make always auto aim
 			// }
 
-			// if (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){ //makes it so when its spinning to 180 if it sees the target it will auto aim instead of just going 180
-			// 	mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
-			// } //flip 180 if no tag seen, and continue searching for tag until tag seen and then snap to correct angle (2 snaps total)
+			// if
+			// (mControlBoard.snapToTarget()&&mLimelight.cantFindTargetOnInitialSnap()&&mLimelight.hasTarget()){
+			// //makes it so when its spinning to 180 if it sees the target it will auto aim
+			// instead of just going 180
+			// mDrive.setHeadingControlTarget(mLimelight.getTargetSnap());
+			// } //flip 180 if no tag seen, and continue searching for tag until tag seen
+			// and then snap to correct angle (2 snaps total)
 
 			// if (!mControlBoard.snapToTarget()){
-			// 	autoAllignBoolean = false;
+			// autoAllignBoolean = false;
 			// }
 
 			if (Constants.isManualControlMode) {
@@ -413,9 +421,19 @@ public class Robot extends TimedRobot {
 						mSuperstructure.setSuperstuctureSourceLoadShooter();
 					} else if (mControlBoard.operator.getButton(Button.A)) {
 						mSuperstructure.setSuperstuctureShooterToEndEffector();
+					} else if (mControlBoard.operator.getButton(Button.LB) && mManualSourceBoolean == false) {
+						mManualSourceIntakeTimer.reset();
+						mManualSourceIntakeTimer.start();
+						mManualSourceBoolean = true;
+					} else if (!mControlBoard.operator.getButton(Button.LB)) {
+						mManualSourceBoolean = false;
+					} else if (mManualSourceIntakeTimer.get() > 1 && mControlBoard.operator.getButton(Button.LB)) {
+						mSuperstructure.setManualSourceIntake();
 					}
 
-					if(mControlBoard.operator.getButton(Button.B)){ //used to be sending button b all the time, this makes it more automated but you can't undo -- make sure to test this
+					if (mControlBoard.operator.getButton(Button.B)) { // used to be sending button b all the time, this
+																		// makes it more automated but you can't undo --
+																		// make sure to test this
 						mSuperstructure.setSuperstuctureShoot(true);
 					}
 
@@ -435,10 +453,11 @@ public class Robot extends TimedRobot {
 
 				if (mSuperstructure.isDeclimbing()) {
 					// if (mControlBoard.operator.getButton(Button.X)) {
-					// 	mSuperstructure.setDeClimbUnhook();
+					// mSuperstructure.setDeClimbUnhook();
 					// }
 					// if (mControlBoard.operator.getButton(Button.Y)) {
-					// 	mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless in declimb mode
+					// mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless
+					// in declimb mode
 					// }
 				}
 
@@ -601,7 +620,7 @@ public class Robot extends TimedRobot {
 			}
 			flip_trajectories = is_red_alliance; // TODO: THIS MIGHT MESS EVERYTHING UP?
 
-			//SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
+			// SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);
 			Optional<AutoModeBase> autoMode = mAutoModeSelector.getAutoMode();
 			mLimelight.isRedAlliance(is_red_alliance);
