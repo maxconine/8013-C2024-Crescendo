@@ -473,7 +473,7 @@ public class Constants {
         // SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 2.7; // changed
                                                                                                             // from 55
-        public static final double kShootAgainstPodiumAngle = 39.0; //37.86; //brought up 1 degree
+        public static final double kShootAgainstPodiumAngle = 35;//39.0; //37.86; //brought up 1 degree
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
@@ -698,7 +698,7 @@ public class Constants {
         public static final double kExtendOffChain2 = 0.126;
         public static final double kExtendOffChain3 = 0.26 - Conversions.inchesToMeters(1); // to go within height
                                                                                             // limits
-        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(2.5); // height of the
+        public static final double kExtendToScoreTrapHeight = 0.447 - Conversions.inchesToMeters(3.5); // height of the
                                                                                                        // elvator when
                                                                                                        // scoring in the
                                                                                                        // trap
