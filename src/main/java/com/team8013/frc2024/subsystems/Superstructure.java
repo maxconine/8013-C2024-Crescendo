@@ -893,12 +893,12 @@ public class Superstructure extends Subsystem {
 
                 if (climbingTracker == 2 && mPivot.getPivotAngleDeg() < Constants.PivotConstants.kPullOntoChainAngle2
                         + 1) {
-                    mClimberHook.setSetpointMotionMagic(98);
+                    mClimberHook.setSetpointMotionMagic(95); //92 WORKS
                     climbingTracker = 3;
                 }
 
                 if (climbingTracker == 3 && (mControlBoard.operator.getTrigger(Side.LEFT)
-                        && mControlBoard.operator.getTrigger(Side.RIGHT)) && mClimberHook.getAngleDeg() > 88) {
+                        && mControlBoard.operator.getTrigger(Side.RIGHT)) && mClimberHook.getAngleDeg() > 86) {
                     mElevator.setMotorConfig(Constants.ElevatorConstants.elevatorSlowMotorConfig());
                     mPivot.setMotorConfig(Constants.PivotConstants.pivotSlowMotorConfig());
                     mPivot.setSetpointMotionMagic(Constants.PivotConstants.kExtendToScoreTrapAngle2);

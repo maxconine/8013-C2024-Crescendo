@@ -492,7 +492,7 @@ public class Constants {
                                                                  // release
         public static final double kExtendOffChainAngle2 = 32; // Angle before abrupt flip over to trap
         public static final double kExtendToScoreTrapAngle1 = 67; // angle when pressed up against trap wall
-        public static final double kExtendToScoreTrapAngle2 = 97; // angle when pressed up against trap wall
+        public static final double kExtendToScoreTrapAngle2 = 97;//97; // angle when pressed up against trap wall
 
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
