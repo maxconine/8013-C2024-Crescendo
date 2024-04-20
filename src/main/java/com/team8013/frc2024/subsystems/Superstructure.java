@@ -1145,7 +1145,7 @@ public class Superstructure extends Subsystem {
                         - Constants.ElevatorConstants.kPositionError) &&
                         (mWrist.getWristAngleDeg() < Constants.WristConstants.kloadShooterAngle + 2)
                         && shooterToEndEffectorTracker == 0) {
-                    mShooter.setOpenLoopDemand(0.9);
+                    mShooter.setOpenLoopDemand(0.85);
                     mEndEffector.setOpenLoopDemand(0.4);
                     shooterToEndEffectorTracker = 1;
                 }

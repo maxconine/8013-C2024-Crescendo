@@ -792,8 +792,8 @@ public class Constants {
                 { 0.2, 356, 7 },
                 { 0.215, 358, 7 },
                 { 0.23, 359.7 + 3, 7 },
-                { 0.235, 359.7 + 4, 7 },
-                { 0.237, 362 + 5, 6 } // really 0.275, but less so that everything else goes into position
+                { 0.235, 359.7, 7 },
+                { 0.237, 359, 6 } // really 0.275, but less so that everything else goes into position
 
         };
 
@@ -824,14 +824,14 @@ public class Constants {
         public static final double kShootFastRPM = 6550; //tunes to 6560 rpm for passing and shooting from furthur away
         public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
-        public static final double kSourceIntakeDemand = 0.32; //was 0.35 with more resistance end effector
-        public static final double kGroundIntakeDemand = 0.5; //was 0.58 for more resistance eff
+        public static final double kSourceIntakeDemand = 0.35; //was 0.35 with more resistance end effector
+        public static final double kGroundIntakeDemand = 0.45; //was 0.58 for more resistance eff
         public static final double kOuttakingDemandTop = -0.50;
         public static final double kOuttakingDemandBottom = -0.55;
 
         // PID TUNING
         // SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.000154;//old eff val: 0.0001566; // this value tunes the subwoofer shot
+        public static final double kFFTopSubwoofer = 0.000153;//old eff val: 0.0001566; // this value tunes the subwoofer shot
         public static final double kFFBottomSubwoofer = 0.000154;//Old eff val 0.0001566; // this value tunes the subwoofer shot
         // FAST
         public static final double kFFTopFast = 0.000154;//OLD EFF: 0.000155;//0.000155;//0.0001564; // this value tunes the note passing
