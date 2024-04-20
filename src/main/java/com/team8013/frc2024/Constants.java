@@ -793,7 +793,7 @@ public class Constants {
                 { 0.215, 358, 7 },
                 { 0.23, 359.7 + 3, 7 },
                 { 0.235, 359.7, 7 },
-                { 0.237, 359, 6 } // really 0.275, but less so that everything else goes into position
+                { 0.237, 359, 5.5 } // really 0.275, but less so that everything else goes into position
 
         };
 
@@ -825,7 +825,7 @@ public class Constants {
         public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
         public static final double kSourceIntakeDemand = 0.35; //was 0.35 with more resistance end effector
-        public static final double kGroundIntakeDemand = 0.45; //was 0.58 for more resistance eff
+        public static final double kGroundIntakeDemand = 0.475; //was 0.58 for more resistance eff
         public static final double kOuttakingDemandTop = -0.50;
         public static final double kOuttakingDemandBottom = -0.55;
 

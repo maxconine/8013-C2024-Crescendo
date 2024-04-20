@@ -273,11 +273,11 @@ public class Robot extends TimedRobot {
 					mDrive.setHeadingControlTarget(-207);
 				}
 			} else if (mControlBoard.shootFromOppositePodiumAllign()) {
-				if (!is_red_alliance) { //keep in mind the alliance is flipped
-				mDrive.setHeadingControlTarget(-207);
-				} else {
-				mDrive.setHeadingControlTarget(207);
-				}
+				// if (!is_red_alliance) { //keep in mind the alliance is flipped
+				// mDrive.setHeadingControlTarget(-207);
+				// } else {
+				// mDrive.setHeadingControlTarget(207);
+				// }
 			} else if (mControlBoard.shootFromPodium() && (mControlBoard.farLeftSwitchUp()
 					&& !Util.epsilonEquals(207, mDrive.getHeading().getDegrees(), 5))) { // extra check to make sure it
 																							// stays the right angle
