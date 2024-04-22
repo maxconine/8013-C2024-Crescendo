@@ -360,10 +360,10 @@ public class Limelight extends Subsystem {
         }
         else{
             if (mControlBoard.operator.getController().getRightY() > 0.2) {
-                manualControlPivotShootSubwoofer += 0.04;
+                manualControlPivotShootSubwoofer += 0.085;
                 System.out.println("Subwoofer Angle: " + manualControlPivotShootSubwoofer);
             } else if (mControlBoard.operator.getController().getRightY() < -0.2) {
-                manualControlPivotShootSubwoofer -= 0.04;
+                manualControlPivotShootSubwoofer -= 0.085;
                 System.out.println("Subwoofer Angle: " + manualControlPivotShootSubwoofer);
             }
             pivAngle = manualControlPivotShootSubwoofer;
