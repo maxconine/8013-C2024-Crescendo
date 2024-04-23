@@ -174,10 +174,8 @@ public class Constants {
          * MODULE SPECIFIC CONSTANTS **
          * 
          * which way to zero modules?
-         * foreward, right
-         * 90: x+ y- (doesnt turn)
-         * 180 x-, y+ (turns opposite)
-         * 270 x+, y+ (doesn't turn)
+         * if you tip the robot up on its back side, allign the bevel gears to the right
+         * side (from lookers perspective) on all the wheels. Make sure all the wheels are in line then record canCoder offset values in shuffleboard
          * 
          * Zero them so that odometry is x positive going forwards and y positive going
          * left
@@ -188,8 +186,8 @@ public class Constants {
         /*** MODULE SPECIFIC CONSTANTS ***/
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final double betaAngleOffset = 39.63;// 40.07;
-            public static final double compAngleOffset = 39.63;// 40.07;
+            public static final double betaAngleOffset = 39.63;
+            public static final double compAngleOffset = 39.63;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
@@ -199,8 +197,8 @@ public class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final double betaAngleOffset = 169.62;// 171.21;
-            public static final double compAngleOffset = 169.62;// 171.21;
+            public static final double betaAngleOffset = 169.62;
+            public static final double compAngleOffset = 169.62;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
@@ -210,8 +208,8 @@ public class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final double betaAngleOffset = 181.58;// 182.46;
-            public static final double compAngleOffset = 181.58;// 182.46;
+            public static final double betaAngleOffset = 181.58;
+            public static final double compAngleOffset = 181.58;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
@@ -221,8 +219,8 @@ public class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final double betaAngleOffset = 278.52; // 277.82;
-            public static final double compAngleOffset = 278.52; // 277.82;
+            public static final double betaAngleOffset = 278.52;
+            public static final double compAngleOffset = 278.52;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
@@ -243,7 +241,6 @@ public class Constants {
             config.Slot0.kP = Constants.SwerveConstants.driveKP;
             config.Slot0.kI = Constants.SwerveConstants.driveKI;
             config.Slot0.kD = Constants.SwerveConstants.driveKD;
-            // config.Slot0.kV = Constants.SwerveConstants.driveKF;
 
             config.MotorOutput.NeutralMode = Constants.SwerveConstants.driveNeutralMode;
             config.MotorOutput.Inverted = Constants.SwerveConstants.driveMotorInvert;
@@ -255,7 +252,6 @@ public class Constants {
 
         public static TalonFXConfiguration swerveAngleFXConfig() {
             TalonFXConfiguration angleConfig = new TalonFXConfiguration();
-            // TODO: do any of these configs even matter?
             angleConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.SwerveConstants.angleEnableCurrentLimit;
             angleConfig.CurrentLimits.SupplyCurrentLimit = Constants.SwerveConstants.angleContinuousCurrentLimit;
             angleConfig.CurrentLimits.SupplyCurrentThreshold = Constants.SwerveConstants.anglePeakCurrentLimit;
@@ -269,10 +265,6 @@ public class Constants {
             angleConfig.MotorOutput.NeutralMode = Constants.SwerveConstants.angleNeutralMode;
             angleConfig.MotorOutput.Inverted = Constants.SwerveConstants.angleMotorInvert;
 
-            // angleConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod =
-            // Constants.SwerveConstants.openLoopRamp;
-            // angleConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod =
-            // Constants.SwerveConstants.openLoopRamp;
             return angleConfig;
         }
 
@@ -280,19 +272,14 @@ public class Constants {
             CANcoderConfiguration config = new CANcoderConfiguration();
             config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1; // TODO: PROBLEM
             config.MagnetSensor.SensorDirection = Constants.SwerveConstants.canCoderInvert;
-            // config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
-            // config.sensorDirection = Constants.SwerveConstants.canCoderInvert;
-            // config.initializationStrategy =
-            // SensorInitializationStrategy.BootToAbsolutePosition;
-            // config.sensorTimeBase = SensorTimeBase.PerSecond;
             return config;
         }
     }
 
     public static final class SnapConstants {
-        public static final double kP = 6.0; // was 6
-        public static final double kI = 0.5; // was .5
-        public static final double kD = 0.2; // was .2
+        public static final double kP = 6.0;
+        public static final double kI = 0.5;
+        public static final double kD = 0.2;
         public static final double snapTimeout = 0.25;
         public static final double snapEpsilon = 1.0;
 
@@ -306,7 +293,7 @@ public class Constants {
         public static final double kDXController = 0.0;
         public static final double kDYController = 0.0;
 
-        public static final double kPThetaController = 2.75; // was 2, changed to 4
+        public static final double kPThetaController = 2.75; // was 2, changed to 4 -- faster it turns = more wheels slip
 
         // Constraint for the motion profilied robot angle controller (Radians)
         public static final double kMaxAngularSpeed = 2.0 * Math.PI;
@@ -401,16 +388,14 @@ public class Constants {
         public static final int kMaxAngle = 95; // deg
 
         /* State Positions */
-        // public static final double kFloorIntakeAngle = 0;
         public static final double kSourceIntakeAngle = 68;
         public static final double kSourceLoadShooterAngle = 41; // if anything, lower
         public static final double kStowAngle = 4.8;
         public static final double kAmpScoreAngle = 88; // was 88
 
         // SHOOTING ANGLES
-        public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 2.7; // changed
-        // from 55
-        public static final double kShootAgainstPodiumAngle = 35;// 39.0; //37.86; //brought up 1 degree
+        public static final double kShootAgainstSubwooferAngle = 58.5;
+        public static final double kShootAgainstPodiumAngle = 35;
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
@@ -451,7 +436,7 @@ public class Constants {
             TalonFXConfiguration config = new TalonFXConfiguration();
             // TODO: do any of these configs even matter?
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-            config.CurrentLimits.SupplyCurrentLimit = 25; // start off pretty low
+            config.CurrentLimits.SupplyCurrentLimit = 25; // start off pretty low when initially testing
             config.CurrentLimits.SupplyCurrentThreshold = 40;
             config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
@@ -506,7 +491,7 @@ public class Constants {
             config.Slot0.kD = 0.0;
             config.Slot0.kV = 0.0;
 
-            config.MotionMagic.MotionMagicCruiseVelocity = 15; // TODO: change this
+            config.MotionMagic.MotionMagicCruiseVelocity = 15;
             config.MotionMagic.MotionMagicExpo_kA = 0.7;
             config.MotionMagic.MotionMagicAcceleration = 30;
 
@@ -519,11 +504,9 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = -91.56 + 60.56 + 148.36;// +4;//86.3 + 58 + 4; // +3.3 so it never
-                                                                             // gets
-        // there
+        public static final double CANCODER_OFFSET = 117.36;// +3.3 so it never gets to 0
 
-        public static final double kGearRatio = 25; // radians per rotation
+        public static final double kGearRatio = 25; // 25:1
 
         public static final double kMinPosition = 0; // degrees
         public static final double kMaxPosition = 200; // degrees
