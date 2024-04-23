@@ -56,16 +56,6 @@ public class EndEffectorREV extends Subsystem {
         pidTopRoller = mTopMotor.getPIDController();
         pidBottomRoller = mBottomMotor.getPIDController();
 
-        // pidTopRoller.setIZone(0.01);
-        // pidBottomRoller.setIZone(0.01);
-
-        // pidTopRoller = new PIDController(Constants.EndEffectorConstants.kP,
-        // Constants.EndEffectorConstants.kI,
-        // Constants.EndEffectorConstants.kD);
-        // pidBottomRoller = new PIDController(Constants.EndEffectorConstants.kPSlave,
-        // Constants.EndEffectorConstants.kI,
-        // Constants.EndEffectorConstants.kD);
-
         mEncoderTop = mTopMotor.getEncoder();
         mEncoderBottom = mBottomMotor.getEncoder();
 
@@ -198,10 +188,6 @@ public class EndEffectorREV extends Subsystem {
         if (mState == State.CLOSED_LOOP) {
             pidTopRoller.setReference(mPeriodicIO.demandMaster, CANSparkFlex.ControlType.kVelocity,slotID);
             pidBottomRoller.setReference(mPeriodicIO.demandSlave, CANSparkFlex.ControlType.kVelocity,slotID);
-            // mPeriodicIO.demandMaster = pidTopRoller.calculate(mPeriodicIO.velocityMaster,
-            // mPeriodicIO.demandMaster);
-            // mPeriodicIO.demandSlave = pidBottomRoller.calculate(mPeriodicIO.velocitySlave,
-            // mPeriodicIO.demandSlave);
             SmartDashboard.putString("END EFFECTOR STATE", "CLOSED LOOP");
         } else {
 

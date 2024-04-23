@@ -25,22 +25,12 @@ public class Shooter extends Subsystem {
     private final TalonFX mSlave;
     ControlState mControlState;
 
-    // private final SupplyCurrentLimitConfiguration kSupplyCurrentLimit = new
-    // SupplyCurrentLimitConfiguration(true, 40, 40,
-    // 0.02);
-
-    // private final StatorCurrentLimitConfiguration kDisabledStatorLimit = new
-    // StatorCurrentLimitConfiguration(false, 0, 0, 0);
-    // private final StatorCurrentLimitConfiguration kEnabledStatorLimit = new
-    // StatorCurrentLimitConfiguration(true, 40, 40,
-    // 0.0);
-
     private Shooter() {
         mMaster = new TalonFX(Ports.Shooter_A, Ports.CANBUS_UPPER);
         mSlave = new TalonFX(Ports.Shooter_B, Ports.CANBUS_UPPER);
         mBeamBreak = new DigitalInput(Ports.SHOOTER_BEAM_BREAK);
 
-        // Customize these configs from constants in the future
+        // Configs from constants
         mMaster.getConfigurator().apply(Constants.ShooterConstants.shooterMotorConfig());
         mSlave.getConfigurator().apply(Constants.ShooterConstants.shooterMotorConfig());
 
@@ -133,46 +123,13 @@ public class Shooter extends Subsystem {
             mMaster.setControl(
                     new MotionMagicVelocityDutyCycle(mPeriodicIO.demand, 0, true, 0, 0, false, false, false));
         }
-        // else if (mControlState == ControlState.SLINGSHOT){
-        // mMaster.setControl(new TorqueCurrentFOC(780,1,1,false,false,false));
-        // }
     }
-
-    // public Request effectorRequest (State _wantedState) {
-    // return new Request () {
-    // @Override
-    // public void act() {
-    // setState(_wantedState);
-    // }
-    // @Override
-    // public boolean isFinished() {
-    // return mPeriodicIO.demand == _wantedState.voltage;
-    // }
-    // };
-    // }
-
-    // public Request waitForGamePieceRequest () {
-    // return new Request() {
-    // @Override
-    // public void act () {
-
-    // }
-    // @Override
-    // public boolean isFinished() {
-    // return hasGamePiece;
-    // }
-    // };
-    // }
 
     private void setWantNeutralBrake(boolean brake) {
         NeutralModeValue mode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         mMaster.setNeutralMode(mode);
         mSlave.setNeutralMode(mode);
     }
-
-    // public boolean hasGamePiece() {
-    // return hasGamePiece;
-    // }
 
     public boolean getBeamBreak() {
         return mPeriodicIO.beamBreak;

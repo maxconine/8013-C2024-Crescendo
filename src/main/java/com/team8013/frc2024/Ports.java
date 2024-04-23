@@ -33,7 +33,8 @@ public class Ports {
     /*** SWERVE MODULE PORTS ***/
 
     /*
-     * Swerve Modules go:
+     * Swerve Modules go: (I did this from the view on bottom, if doing from view on
+     * top - change drivetrain kinematics in constants to match the configuration)
      * 0 1
      * 2 3
      */

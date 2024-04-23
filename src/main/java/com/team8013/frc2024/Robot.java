@@ -4,7 +4,6 @@
 
 package com.team8013.frc2024;
 
-import java.nio.Buffer;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.team254.lib.util.Util;
 import com.team8013.frc2024.auto.AutoModeBase;
@@ -30,13 +28,12 @@ import com.team8013.frc2024.subsystems.ClimberHook;
 import com.team8013.frc2024.subsystems.Drive;
 import com.team8013.frc2024.subsystems.Elevator;
 import com.team8013.frc2024.subsystems.EndEffectorREV;
-//import com.team8013.frc2024.subsystems.EndEffectorREV;
 import com.team8013.frc2024.subsystems.Limelight;
 import com.team8013.frc2024.subsystems.Pivot;
 import com.team8013.frc2024.subsystems.Shooter;
 import com.team8013.frc2024.subsystems.Superstructure;
 import com.team8013.frc2024.subsystems.Wrist;
-//import com.team8013.frc2024.subsystems.EndEffectorREV.State;
+import com.team8013.frc2024.subsystems.EndEffectorREV.State;
 import com.team8013.lib.swerve.ChassisSpeeds;
 
 public class Robot extends TimedRobot {
@@ -69,9 +66,6 @@ public class Robot extends TimedRobot {
 
 	public static boolean is_red_alliance = false;
 	public static boolean flip_trajectories = false;
-	public static boolean wantChase = false;
-	public static boolean doneChasing = true;
-	public static boolean shootFromPodiumBoolean = false;
 	private Timer mManualSourceIntakeTimer = new Timer();
 	private boolean mManualSourceBoolean = false;
 	// private boolean autoAllignBoolean = false;
@@ -165,7 +159,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		try {
-			if (is_red_alliance) { // TODO: UNDO THIS IF THE ROBOT DOESNT START IN THE RIGHT ORIENTATION
+			if (is_red_alliance) {
 				mDrive.zeroGyro(mDrive.getHeading().getDegrees() + 180.0);
 				flip_trajectories = false;
 			}
@@ -220,39 +214,6 @@ public class Robot extends TimedRobot {
 						mDrive.getHeading()));
 
 			}
-
-			// if (mControlBoard.snapToTarget()) {
-			// mDrive.setHeadingControlTarget(202.5);
-			// mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
-			// 0,
-			// 0,
-			// mDrive.getHeading()));
-			// //shootFromPodiumBoolean = true;
-			// //mDrive.setHeadingControlTarget(-mLimelight.getTargetSnap());
-			// }
-			// else if (!mControlBoard.snapToTarget()){
-			// shootFromPodiumBoolean = false;
-			// }
-
-			/* Uncomment to enable podium shots */
-			// if (mControlBoard.farLeftSwitchUp()) {
-			// if (!is_red_alliance) {
-			// mDrive.setHeadingControlTarget(202.5);
-			// } else {
-			// mDrive.setHeadingControlTarget(360 - 202.5);
-			// }
-			// mDrive.feedTeleopSetpoint(ChassisSpeeds.fromFieldRelativeSpeeds(0,
-			// 0,
-			// 0,
-			// mDrive.getHeading()));
-			// }
-
-			// mLimelight.setShootingFromPodium(mControlBoard.farLeftSwitchUp());
-
-			// if (mControlBoard.operator.getController().getRawButton(9)
-			// && mControlBoard.operator.getController().getRawButton(10)) {
-			// mElevator.setWantHome(true);
-			// }
 
 			if (mControlBoard.allignWithHumanPlayer()) {
 				if (!is_red_alliance) { // keep in mind the alliance is flipped
@@ -311,97 +272,71 @@ public class Robot extends TimedRobot {
 			if (Constants.isManualControlMode) {
 				/* PIVOT */
 
-				// if (Math.abs(mControlBoard.pivotPercentOutput()) > 0.1) {
-				// mSuperstructure.controlPivotManually(mControlBoard.pivotPercentOutput());
-				// } else if (mControlBoard.pivotUp()) {
-				// mPivot.setSetpointMotionMagic(80);
-				// } else if (mControlBoard.pivotDown()) {
-				// mPivot.setSetpointMotionMagic(10);
-				// }
-
 				mSuperstructure.controlPivotManually(mControlBoard.operator.getController().getLeftY());
 
 				/* ELEVATOR */
 
-				// if (Math.abs(mControlBoard.elevatorPercentOutput())){
 				mSuperstructure.controlElevatorManually(mControlBoard.elevatorPercentOutput());
-				// }
-				if (mControlBoard.operator.getButton(Button.RB)) {
-					mSuperstructure.controlWristManually(1);
-					// mElevator.setSetpointMotionMagic(0.4);
-				} else if (mControlBoard.operator.getButton(Button.LB)) {
-					mSuperstructure.controlWristManually(-1);
-					// mElevator.setSetpointMotionMagic(0.00);
-				}
-
-				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
-					mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
-					// mClimberHook.setDemandOpenLoop(0.2);
-					// mSuperstructure.controlClimberHookManually(1);
-					// mElevator.setSetpointMotionMagic(0.4);
-				}
-				if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
-					// mClimberHook.setDemandOpenLoop(0.0);
-					mClimberHook.setSetpointMotionMagic(25);
-					// mElevator.setSetpointMotionMagic(0.00);
-				}
 
 				/* WRIST */
+				if (mControlBoard.operator.getButton(Button.RB)) {
+					mSuperstructure.controlWristManually(1);
+				} else if (mControlBoard.operator.getButton(Button.LB)) {
+					mSuperstructure.controlWristManually(-1);
+				}
 
-				// if (Math.abs(mControlBoard.operator.getController().getLeftX())>0.1){
-				// mSuperstructure.controlWristManually(mControlBoard.operator.getController().getLeftX());
+				/* CLIMBER HOOKS */
+				if (mControlBoard.operator.getController().getPOV() == kDpadLeft) {
+					mClimberHook.setSetpointMotionMagic(Constants.ClimberHookConstants.kHookAngle);
+				}
 
-				// }
+				if (mControlBoard.operator.getController().getPOV() == kDpadRight) {
+					mClimberHook.setSetpointMotionMagic(25);
+				}
+
 				if (mControlBoard.operator.getButton(Button.X)) {
-					mShooter.setOpenLoopDemand(0.95); // 6380 max
-					// mWrist.setSetpointMotionMagic(10);
-				} else {// if (mControlBoard.operator.getButton(Button.B)){
+					mShooter.setOpenLoopDemand(0.95);
+				} else {
 					mShooter.setOpenLoopDemand(0);
 				}
 
 				/* END EFFECTOR */
 
-				// if (mControlBoard.operator.getController().getPOV() == kDpadUp){
-				// mEndEffector.setEndEffectorVelocity(2000);
-				// }
-				// else if(mControlBoard.operator.getController().getPOV() == kDpadDown){
-				// mEndEffector.setEndEffectorVelocity(0);
-				// }
-
-				// if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
-				// mEndEffector.setState(State.INTAKING);
-				// } else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
-				// mEndEffector.setState(State.OUTTAKING);
-				// } else {
-				// mEndEffector.setState(State.IDLE);
-				// }
+				if (mControlBoard.operator.getTrigger(Side.RIGHT)) {
+					mEndEffector.setState(State.INTAKING);
+				} else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
+					mEndEffector.setState(State.OUTTAKING);
+				} else {
+					mEndEffector.setState(State.IDLE);
+				}
 
 			} else {
 				/*
+				 * -- CONTROLS --
 				 * Dpads:
 				 * Down: intake ground
 				 * Right: intake source (human player)
 				 * Left: stow
-				 * Up: outtake for amp or shoot when in shooting mode
+				 * Up: outtake, for amp, trap, and low passing
 				 * 
 				 * Triggers:
 				 * Left Trigger: Score Amp
-				 * Right Trigger: Manual intake
+				 * Right Trigger: Shoot/Load shooter and shoot, press B to shoot
+				 * A Button: Pass note from shooter to end effector
+				 * 
+				 * Bumpers:
+				 * Right bumper: Load shooter or go to source intake and immediatly load shooter when note detected
+				 * Left bumper: if held for a second, robot goes into manual source intake mode which is an override if the beam breaks are out
 				 * 
 				 * CLIMB:
 				 * press both Start+Back button to go to initial chain hook height
 				 * press both bumpers to engage stage 2 climb which pulls the robot onto the
 				 * chain
-				 * press A to engage stage 3 climb which scores into the trap, press Dpad to
+				 * press both triggers to engage stage 3 climb which scores into the trap
+				 * press Dpad to
 				 * eject note
 				 */
 
-				/*
-				 * TODO:
-				 * Manual Control of elevator during climb
-				 * Do more climbing tests
-				 * 
-				 */
 				if ((!mSuperstructure.inClimbMode()) && (!mSuperstructure.isDeclimbing())) {
 					if (mControlBoard.operator.getTrigger(Side.LEFT)) {
 						mSuperstructure.setSuperstuctureScoreAmp();
@@ -442,113 +377,12 @@ public class Robot extends TimedRobot {
 					if (mControlBoard.operator.getButton(Button.RB) && mControlBoard.operator.getButton(Button.LB)) {
 						mSuperstructure.setClimbModeStage2();
 					}
-					if (mControlBoard.operator.getTrigger(Side.LEFT) && mControlBoard.operator.getTrigger(Side.RIGHT)) {
-						mSuperstructure.setClimbModeStage3();
-					}
 					if (mSuperstructure.climbFinished() && mControlBoard.operator.getButton(Button.START)
 							&& mControlBoard.operator.getButton(Button.BACK)) {
 						mSuperstructure.setSuperstuctureDeclimb();
 					}
 				}
-
-				if (mSuperstructure.isDeclimbing()) {
-					// if (mControlBoard.operator.getButton(Button.X)) {
-					// mSuperstructure.setDeClimbUnhook();
-					// }
-					// if (mControlBoard.operator.getButton(Button.Y)) {
-					// mSuperstructure.setDeclimbWantsElevatorDown(); // doesn't do anything unless
-					// in declimb mode
-					// }
-				}
-
-				// mSuperstructure.setWantOuttake((mControlBoard.operator.getController().getPOV()
-				// == kDpadUp));
-				// mSuperstructure.setWantIntake(mControlBoard.operator.getTrigger(Side.RIGHT));
-
-				// mShooter.setOpenLoopDemand(mControlBoard.operator.getController().getLeftY());
 			}
-
-			// if (mControlBoard.getSwerveSnap() != SwerveCardinal.NONE) {
-			// mDrive.setHeadingControlTarget(mControlBoard.getSwerveSnap().degrees);
-			// SmartDashboard.putNumber("Snapping Drgrees",
-			// mControlBoard.getSwerveSnap().degrees);
-			// } else {
-			// SmartDashboard.putNumber("Snapping Drgrees", -1);
-			// }
-
-			// if ((mControlBoard.getWantChase()) && (!wantChase)) {
-			// // mLimelight.setWantChase(true);
-			// mSuperstructure.tagTrajectory(mControlBoard.tagToChase(),
-			// mControlBoard.chaseNearest());
-			// wantChase = true;
-			// doneChasing = false;
-			// }
-			// if ((!mControlBoard.getWantChase()) && (wantChase)) {
-			// mDrive.stopModules();
-			// // mLimelight.setWantChase(false);
-			// wantChase = false;
-			// doneChasing = true;
-			// } else {
-			// // mLimelight.updatePoseWithLimelight();
-			// }
-
-			// SmartDashboard.putBoolean("Done with tag trajectory",
-			// mSuperstructure.isFinishedWithTagTrajectory());
-
-			// /* SUPERSTRUCTURE */
-
-			// if (mControlBoard.driver.getTrigger(Side.RIGHT)) {
-			// mSuperstructure.setEndEffectorForwards();
-			// } else if ((mControlBoard.driver.getTrigger(Side.LEFT))) {
-			// mSuperstructure.setEndEffectorReverse();
-			// } else {
-			// mSuperstructure.setEndEffectorIdle();
-			// }
-
-			// if (mControlBoard.driver.getController().getPOV() == 0) {
-			// mWrist.setWantJog(1.0);
-			// } else if (mControlBoard.driver.getController().getPOV() == 180) {
-			// mWrist.setWantJog(-1.0);
-			// }
-
-			// if (mControlBoard.driver.getController().getLeftBumper()) {
-			// mSuperstructure.stowState();
-			// mDrive.setKinematicLimits(Constants.SwerveConstants.kUncappedLimits);
-			// } else if (mControlBoard.driver.getController().getRightBumper()) {
-			// mSuperstructure.chooseScoreState();
-			// } else if (mControlBoard.operator.getController().getRightBumper()) {
-			// mSuperstructure.groundIntakeState();
-			// } else if (mControlBoard.operator.getButton(Button.A)) {
-			// mSuperstructure.chooseShelfIntake();
-			// } else if (mControlBoard.operator.getButton(Button.Y)) {
-			// mSuperstructure.slideIntakeState();
-			// }else if (mControlBoard.operator.getButton(Button.X)) {
-			// mSuperstructure.scoreStandbyState();
-			// } else if (mControlBoard.operator.getButton(Button.B)) {
-			// mSuperstructure.yoshiState();
-			// } else if
-			// (mControlBoard.operator.getController().getLeftStickButtonPressed()) {
-			// mSuperstructure.climbFloatState();
-			// } else if
-			// (mControlBoard.operator.getController().getRightStickButtonPressed()) {
-			// mSuperstructure.climbScrapeState();
-			// } else if (mControlBoard.operator.getTrigger(Side.LEFT)) {
-			// mSuperstructure.climbCurlState();
-			// }
-
-			// if (mControlBoard.driver.getController().getLeftStickButton()) {
-			// mDrive.setKinematicLimits(Constants.SwerveConstants.kScoringLimits);
-			// } else if (mControlBoard.driver.getController().getLeftStickButtonReleased())
-			// {
-			// mDrive.setKinematicLimits(Constants.SwerveConstants.kUncappedLimits);
-			// }
-
-			// if (mControlBoard.driver.getController().getRightStickButton()) {
-			// mDrive.setKinematicLimits(Constants.SwerveConstants.kLoadingStationLimits);
-			// } else if
-			// (mControlBoard.driver.getController().getRightStickButtonReleased()) {
-			// mDrive.setKinematicLimits(Constants.SwerveConstants.kUncappedLimits);
-			// }
 
 		} catch (Throwable t) {
 			CrashTracker.logThrowableCrash(t);
@@ -613,12 +447,13 @@ public class Robot extends TimedRobot {
 						}
 						is_red_alliance = false;
 					}
-					is_red_alliance = !is_red_alliance; // TODO: this is only for red right side
+					is_red_alliance = !is_red_alliance; // had to flip this because I drew the trajectories on the red
+														// side
 				}
 			} else {
 				alliance_changed = true;
 			}
-			flip_trajectories = is_red_alliance; // TODO: THIS MIGHT MESS EVERYTHING UP?
+			flip_trajectories = is_red_alliance;
 
 			// SmartDashboard.putBoolean("is_red_alliance", is_red_alliance);
 			mAutoModeSelector.updateModeCreator(alliance_changed);

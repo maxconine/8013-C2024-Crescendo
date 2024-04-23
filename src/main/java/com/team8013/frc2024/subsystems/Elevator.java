@@ -214,6 +214,9 @@ public class Elevator extends Subsystem {
         // mHoming = false;
         // }
         // } else
+
+        //took out homing because it was messing up the start of autos
+
         if (mPeriodicIO.mControlModeState == ControlModeState.OPEN_LOOP) {
             if (mPeriodicIO.demand > 1 || mPeriodicIO.demand < -1) {
                 mMaster.setControl(new VoltageOut(mPeriodicIO.demand)); // Enable FOC in the future?

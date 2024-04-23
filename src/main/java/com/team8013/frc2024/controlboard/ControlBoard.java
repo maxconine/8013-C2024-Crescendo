@@ -25,9 +25,6 @@ public class ControlBoard {
     private boolean passNoteAllignBoolean = false;
     private boolean podiumAllignBoolean = false;
 
-    private boolean leftSwitchReset = true;
-    private boolean autoSnap = false;
-
     private static ControlBoard mInstance = null;
 
     int tagLastChased = -1;
@@ -159,7 +156,7 @@ public class ControlBoard {
     }
 
     public void setAutoSnapToTarget(boolean snap) {
-        autoSnap = snap;
+        //would change the angle of pivot if there was a limelight
     }
 
     // public boolean farLeftSwitchUp(){//DISABLED

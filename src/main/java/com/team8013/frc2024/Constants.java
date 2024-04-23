@@ -73,25 +73,10 @@ public class Constants {
         // public static final double angleGearRatio = 15.43; //8:32:24--14:72 = 15.43
         // ratio
 
-        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); // (((5.3 / 1.07)/2)*0.952); //((5.3 / 1.07)
-                                                                           // / 1.04);// // TODO: This needs to be done
-                                                                           // // 6.525 * //might just be 2
-                                                                           // 8.215 / 8; // 6.55
+        // can tune this value by driving a certain distance and multiplying a const to
+        // fix the error
+        public static final double driveGearRatio = ((5.3 / 1.07) / 1.04); // it's 4.76:1
         public static final double angleGearRatio = 21.4285714;// (150/7);// 10.29; // 72:14:24:12
-
-        // 43.75 - number to divide driven distance by
-
-        // public static final edu.wpi.first.math.geometry.Translation2d[]
-        // swerveModuleLocations = {
-        // new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth /
-        // 2.0),
-        // new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth /
-        // 2.0),
-        // new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth /
-        // 2.0),
-        // new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth /
-        // 2.0)
-        // };
 
         public static final edu.wpi.first.math.geometry.Translation2d[] swerveModuleLocations = {
                 new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
@@ -102,10 +87,7 @@ public class Constants {
 
         public static final SwerveDriveKinematics kKinematics = new SwerveDriveKinematics(swerveModuleLocations);
 
-        // public static final SwerveDriveKinematics swerveKinematics = new
-        // SwerveDriveKinematics(swerveModuleLocations);
-
-        /* Swerve Current Limiting */
+        /* Swerve Current Limiting - very neccesary! */
         public static final int angleContinuousCurrentLimit = 25;
         public static final int anglePeakCurrentLimit = 40;
         public static final double anglePeakCurrentDuration = 0.1;
@@ -129,7 +111,7 @@ public class Constants {
                                                                          // attainable (4.6 mps)
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.6; // 0.3 originally
+        public static final double angleKP = 0.6; // 0.3 falcon - higher with kraken
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
         public static final double angleKF = 0.0;
@@ -145,19 +127,11 @@ public class Constants {
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
 
         /* Motor Inverts */
-        public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive; // false TODO:
-                                                                                                      // check if
-        // this is right
-        public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive; // true;
-
-        // THIS MIGHT HAVE FIXED IT!
+        public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+        public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
 
         /* Angle Encoder Invert */
         public static final SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive; // false
-        // TODO:is
-        // this
-        // right?
-        // Changed above inverts but not this yet..
 
         /* Controller Invert */
         public static final boolean invertYAxis = false;
@@ -214,8 +188,8 @@ public class Constants {
         /*** MODULE SPECIFIC CONSTANTS ***/
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final double betaAngleOffset = 39.63;//40.07;
-            public static final double compAngleOffset = 39.63;//40.07;
+            public static final double betaAngleOffset = 39.63;// 40.07;
+            public static final double compAngleOffset = 39.63;// 40.07;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
@@ -225,8 +199,8 @@ public class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final double betaAngleOffset = 169.62;//171.21;
-            public static final double compAngleOffset = 169.62;//171.21;
+            public static final double betaAngleOffset = 169.62;// 171.21;
+            public static final double compAngleOffset = 169.62;// 171.21;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
@@ -236,8 +210,8 @@ public class Constants {
 
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final double betaAngleOffset = 181.58;//182.46;
-            public static final double compAngleOffset = 181.58;//182.46;
+            public static final double betaAngleOffset = 181.58;// 182.46;
+            public static final double compAngleOffset = 181.58;// 182.46;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
@@ -247,19 +221,14 @@ public class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final double betaAngleOffset = 278.52; //277.82;
-            public static final double compAngleOffset = 278.52; //277.82;
+            public static final double betaAngleOffset = 278.52; // 277.82;
+            public static final double compAngleOffset = 278.52; // 277.82;
 
             public static SwerveModuleConstants SwerveModuleConstants() {
                 return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
                         isComp ? compAngleOffset : betaAngleOffset);
             }
         }
-
-        // public static Pigeon2Configuration pigeonConfig(){
-        // Pigeon2Configuration config = new Pigeon2Configuration();
-
-        // }
 
         public static TalonFXConfiguration swerveDriveFXConfig() {
             TalonFXConfiguration config = new TalonFXConfiguration();
@@ -415,38 +384,6 @@ public class Constants {
         };
     }
 
-    // public static final class VisionConstants {
-    // public static final LimelightConstants kLimelightConstants = new
-    // LimelightConstants();
-    // static {
-    // kLimelightConstants.kName = "Limelight";
-    // kLimelightConstants.kTableName = "limelight";
-    // kLimelightConstants.kHeight = 0.79; // meters
-    // kLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(0.0);
-    // }
-
-    // public static final double kHorizontalFOV = 59.6; // degrees
-    // public static final double kVerticalFOV = 49.7; // degrees
-    // public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
-
-    // // lookahead time
-    // public static final double kLookaheadTime = 0.0; // 1.10 as latest
-
-    // /* Goal Tracker Constants */
-    // public static final double kMaxTrackerDistance = 8.0;
-    // public static final double kMaxGoalTrackAge = 10.0;
-    // public static final double kMaxGoalTrackSmoothingTime = 1.5;
-    // public static final double kCameraFrameRate = 90.0;
-
-    // public static final double kTrackStabilityWeight = 0.0;
-    // public static final double kTrackAgeWeight = 10.0;
-    // public static final double kTrackSwitchingWeight = 100.0;
-
-    // public static final int kDefaultPipeline = 0;
-    // public static final double kGoalHeight = 2.63; // meters
-    // public static final double kGoalRadius = Units.inchesToMeters(.5); // meters
-    // }
-
     /*** SUBSYSTEM CONSTANTS ***/
 
     public static final class PivotConstants {
@@ -461,7 +398,7 @@ public class Constants {
                                                                      // rotation of the motor
 
         public static final int kMinAngle = 5; // deg
-        public static final int kMaxAngle = 95; // deg TODO: SET THESE WHEN CONFIGING MOTOR (convert to rotations)
+        public static final int kMaxAngle = 95; // deg
 
         /* State Positions */
         // public static final double kFloorIntakeAngle = 0;
@@ -472,12 +409,12 @@ public class Constants {
 
         // SHOOTING ANGLES
         public static final double kShootAgainstSubwooferAngle = 56 + 2.5 + 1.25 + .15 + 0.25 + 0.3 + 0.75 - 2.7; // changed
-                                                                                                            // from 55
-        public static final double kShootAgainstPodiumAngle = 35;//39.0; //37.86; //brought up 1 degree
+        // from 55
+        public static final double kShootAgainstPodiumAngle = 35;// 39.0; //37.86; //brought up 1 degree
         public static final double kPassNoteFromMidAngle = 56;
 
         // Autos
-        public static final double kStage2PieceAngle = 44.5; //46 at dcmp?
+        public static final double kStage2PieceAngle = 44.5; // 46 at dcmp?
         public static final double kMid2PieceAngle = 55; // 53 - 1;
         public static final double kAmp2PieceAngle = 39;
 
@@ -492,7 +429,7 @@ public class Constants {
                                                                  // release
         public static final double kExtendOffChainAngle2 = 32; // Angle before abrupt flip over to trap
         public static final double kExtendToScoreTrapAngle1 = 67; // angle when pressed up against trap wall
-        public static final double kExtendToScoreTrapAngle2 = 97;//97; // angle when pressed up against trap wall
+        public static final double kExtendToScoreTrapAngle2 = 97;// 97; // angle when pressed up against trap wall
 
         /* CLIMB DOWN CONSTANTS */
         public static final double kDeclimbAngle1 = 50.7;
@@ -582,8 +519,9 @@ public class Constants {
     }
 
     public static final class WristConstants {
-        public static final double CANCODER_OFFSET = -91.56+60.56+148.36;// +4;//86.3 + 58 + 4; // +3.3 so it never gets
-                                                            // there
+        public static final double CANCODER_OFFSET = -91.56 + 60.56 + 148.36;// +4;//86.3 + 58 + 4; // +3.3 so it never
+                                                                             // gets
+        // there
 
         public static final double kGearRatio = 25; // radians per rotation
 
@@ -595,11 +533,12 @@ public class Constants {
         public static final double kAmpScoreAngle = 164; // was 169
         public static final double kloadShooterAngle = 118;// 118.8;
 
-        public static final double kShootAngle = 118; //cancoder should rest at 118.8, so that when shooting the wrist is pulled down against elevator
+        public static final double kShootAngle = 118; // cancoder should rest at 118.8, so that when shooting the wrist
+                                                      // is pulled down against elevator
 
         public static final double kClimbAngle1 = 140;
-        public static final double kClimbFirstPressAngle = 192; //lowered from 200
-        public static final double kClimbSecondPressAngle = 218; //lowered from 225
+        public static final double kClimbFirstPressAngle = 192; // lowered from 200
+        public static final double kClimbSecondPressAngle = 218; // lowered from 225
         // public static final double kClimbAngle3 = 165;
         public static final double kClimbScoreInTrapAngle = 160; // ~200?
 
@@ -692,7 +631,8 @@ public class Constants {
                                                                                                // up
         public static final double kMaxClimbInitHeight = 0.32 + Conversions.inchesToMeters(8); // TODO: set this
         // to chain
-        public static final double kPullOntoChainHeight = Conversions.inchesToMeters(0.25); // height of the elevator when transfering chain
+        public static final double kPullOntoChainHeight = Conversions.inchesToMeters(0.25); // height of the elevator
+                                                                                            // when transfering chain
 
         public static final double kExtendOffChain1 = 0.054;
         public static final double kExtendOffChain2 = 0.126;
@@ -821,21 +761,25 @@ public class Constants {
     public static final class EndEffectorConstants {
         // SHOOTING RPM's
         public static final double kSubwooferRPM = 5050; // 5000 //tunes to 5080
-        public static final double kShootFastRPM = 6550; //tunes to 6560 rpm for passing and shooting from furthur away
+        public static final double kShootFastRPM = 6550; // tunes to 6560 rpm for passing and shooting from furthur away
         public static final double kPassRPM = 6300;
         // INTAKE/OUTTAKE DEMANDS
-        public static final double kSourceIntakeDemand = 0.35; //was 0.35 with more resistance end effector
-        public static final double kGroundIntakeDemand = 0.475; //was 0.58 for more resistance eff
+        public static final double kSourceIntakeDemand = 0.35; // was 0.35 with more resistance end effector
+        public static final double kGroundIntakeDemand = 0.475; // was 0.58 for more resistance eff
         public static final double kOuttakingDemandTop = -0.50;
         public static final double kOuttakingDemandBottom = -0.55;
 
         // PID TUNING
         // SUBWOOFER
-        public static final double kFFTopSubwoofer = 0.000153;//old eff val: 0.0001566; // this value tunes the subwoofer shot
-        public static final double kFFBottomSubwoofer = 0.000154;//Old eff val 0.0001566; // this value tunes the subwoofer shot
+        public static final double kFFTopSubwoofer = 0.000153;// old eff val: 0.0001566; // this value tunes the
+                                                              // subwoofer shot
+        public static final double kFFBottomSubwoofer = 0.000154;// Old eff val 0.0001566; // this value tunes the
+                                                                 // subwoofer shot
         // FAST
-        public static final double kFFTopFast = 0.000154;//OLD EFF: 0.000155;//0.000155;//0.0001564; // this value tunes the note passing
-        public static final double kFFBottomFast = 0.000155;//old EFF 0.000165;//= 0.000167;// 0.000156; // this value tunes the note passing
+        public static final double kFFTopFast = 0.000154;// OLD EFF: 0.000155;//0.000155;//0.0001564; // this value
+                                                         // tunes the note passing
+        public static final double kFFBottomFast = 0.000155;// old EFF 0.000165;//= 0.000167;// 0.000156; // this value
+                                                            // tunes the note passing
 
         public static final double kMaxOutput = 1;
         public static final double kMinOutput = -1;

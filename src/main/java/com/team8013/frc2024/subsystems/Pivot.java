@@ -28,11 +28,6 @@ public class Pivot extends Subsystem {
     private CANcoder mCANcoder;
 
     private mPeriodicIO mPeriodicIO = new mPeriodicIO();
-    // private ControlModeState mControlModeState = new ControlModeState();
-
-    // private final StatorCurrentLimitConfiguration kScrapeCurrentLimit = new
-    // StatorCurrentLimitConfiguration(true, 2, 2,
-    // 0.0);
 
     public static Pivot getInstance() {
         if (mInstance == null) {
@@ -47,7 +42,7 @@ public class Pivot extends Subsystem {
         mCANcoder = new CANcoder(Ports.PIVOT_CANCODER, Ports.CANBUS_LOWER);
         CANcoderConfiguration CANCoderConfig = Constants.PivotConstants.pivotCancoderConfig();
 
-        // Customize these configs from constants in the future
+        // configs from constants
         mMaster.getConfigurator().apply(Constants.PivotConstants.pivotFastMotorConfig());
         mSlave.getConfigurator().apply(Constants.PivotConstants.pivotFastMotorConfig());
 
@@ -105,23 +100,6 @@ public class Pivot extends Subsystem {
 
     }
 
-    // public Request PivotRequest(double angle, boolean waitForPosition) {
-    // return new Request() {
-    // @Override
-    // public void act() {
-    // setSetpointMotionMagic(angle);
-    // is_climb = false;
-    // is_scraping = false;
-    // updateCurrentLimits();
-    // }
-
-    // @Override
-    // public boolean isFinished() {
-    // return waitForPosition ? Util.epsilonEquals(mPeriodicIO.position, angle, 3.0)
-    // : true;
-    // }
-    // };
-    // }
 
     public void setSetpointMotionMagic(double degrees) {
         if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {

@@ -12,7 +12,6 @@ import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.ParallelAction;
 import com.team8013.frc2024.auto.actions.SeriesAction;
 import com.team8013.frc2024.auto.actions.SwerveTrajectoryAction;
-import com.team8013.frc2024.auto.actions.WaitAction;
 import com.team8013.frc2024.auto.actions.WaitToPassXCoordinateAction;
 import com.team8013.frc2024.controlboard.ControlBoard;
 import com.team8013.frc2024.shuffleboard.ShuffleBoardInteractions;

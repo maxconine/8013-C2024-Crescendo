@@ -27,7 +27,7 @@ public class ClimberHook extends Subsystem {
 
     private ClimberHook() {
         mMotor = new TalonFX(Ports.CLIMBER_HOOK, Ports.CANBUS_LOWER);
-        // Customize these configs from constants in the future
+        // configs from constants
         mMotor.getConfigurator().apply(Constants.ClimberHookConstants.climberHookMotorConfig());
 
         setWantNeutralBrake(true);
@@ -81,12 +81,6 @@ public class ClimberHook extends Subsystem {
         if (mPeriodicIO.mControlModeState != ControlModeState.MOTION_MAGIC) {
             mPeriodicIO.mControlModeState = ControlModeState.MOTION_MAGIC;
         }
-        // if (degrees > Constants.ClimberHookConstants.kMaxAngle){
-        // degrees = Constants.ClimberHookConstants.kMaxAngle;
-        // }
-        // else if (degrees<Constants.ClimberHookConstants.kMinAngle){
-        // degrees = Constants.ClimberHookConstants.kMinAngle;
-        // }
 
         double rotationDemand = Conversions.degreesToRotation(degrees, Constants.ClimberHookConstants.kGearRatio);
         mPeriodicIO.demand = rotationDemand;
