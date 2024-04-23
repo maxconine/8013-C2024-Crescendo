@@ -11,7 +11,7 @@ Code for Team 8013's 2024 robot, Crepe Flipper.
 - Multi Game Piece Autonomous Modes going up to 4 pieces.
 - Trap Climb Sequence in under 6 seconds
 - Able to do every task: Shoot, Amp, Trap
-- Inspired by 1678's Tangerine Tumbler
+- Code implemented from 1678 Citrus Circuts, 5940 Bread, and 2910 Jack in the Bot
 
 **Major Package Functions:**
 
