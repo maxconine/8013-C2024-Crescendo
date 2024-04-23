@@ -33,7 +33,7 @@ Code for Team 8013's 2024 robot, Crepe Flipper.
 
 - [com.team8013.frc2024.controlboard](https://github.com/maxconine/8013-2024-Crescendo-Imported-v2/tree/Public-Code-2024/src/main/java/com/team8013/frc2024/controlboard)
 
-  Handles polling driver and operator inputs from two Xbox Controllers.
+  Handles polling driver and operator inputs from one [`Xbox Controller`](src/main/java/com/team1678/frc2023/controlboard/CustomXboxController.java). And one TBS Mambo Controller for     driving
 
 - [com.team8013.frc2024.shuffleboard](https://github.com/maxconine/8013-2024-Crescendo-Imported-v2/tree/Public-Code-2024/src/main/java/com/team8013/frc2024/shuffleboard)
 
