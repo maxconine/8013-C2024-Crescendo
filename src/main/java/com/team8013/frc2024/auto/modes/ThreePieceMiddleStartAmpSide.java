@@ -61,7 +61,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(180));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
 
-                drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B, //not used
+                drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B, // not used
                                 Constants.AutoConstants.createConfig(1, 1.3, 0.0, 0));
                 driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(0));
                 ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
@@ -87,32 +87,29 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 runAction(new LambdaAction(() -> Drive.getInstance().resetOdometry(getStartingPose())));
 
                 System.out.println("Running 3 note auto");
-                // mSuperstructure.setSuperstuctureTransferToShooter();
-                // runAction(new WaitAction(0.2));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(1.4));
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 
-                if (Robot.is_red_alliance){
+                if (Robot.is_red_alliance) {
                         degreesToSpin = -2;
                 }
-
 
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
                                 new SeriesAction(List.of(
-                                                // new WaitToPassXCoordinateAction(15.62),
+
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(degreesToSpin))),
-                                                // new WaitForHeadingAction(160,200),
+
                                                 new WaitAction(0.25), // used to be 0.15 before wpi
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
                                                 new WaitAction(1.6), // used to be 1.5 before wpi
                                                 new LambdaAction(() -> mSuperstructure
-                                                .setSuperstuctureStow()),
+                                                                .setSuperstuctureStow()),
                                                 new WaitAction(0.05),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
@@ -120,29 +117,6 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
 
-                // runAction(new ParallelAction(List.of(
-                // driveToFirstNote,
-                // new SeriesAction(List.of(
-                // // new WaitToPassXCoordinateAction(15.62),
-                // new WaitAction(0.1),
-                // new LambdaAction(() -> Drive.getInstance()
-                // .setAutoHeading(Rotation2d.fromDegrees(-2))),
-                // // new WaitForHeadingAction(160,200),
-                // new WaitAction(0.15),
-                // new LambdaAction(() -> mSuperstructure
-                // .setSuperstuctureIntakingGround()))))));
-
-                // mSuperstructure.setSuperstuctureStow();
-
-                // runAction(new ParallelAction(List.of(
-                // driveToShootFirstNote,
-                // new SeriesAction(List.of(
-                // new WaitAction(0.05),
-                // new LambdaAction(() -> Drive.getInstance()
-                // .setAutoHeading(Rotation2d.fromDegrees(180))),
-                // new WaitAction(0.3),
-                // new LambdaAction(() -> mSuperstructure
-                // .setSuperstuctureTransferToShooter()))))));
                 runAction(new WaitAction(0.15));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.3)); // used to use 0.4 before wpi
@@ -161,7 +135,6 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                                 () -> mSuperstructure
                                                                                 .setSuperstuctureIntakingGround()))))));
 
-                //mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.setSuperstuctureShoot(false);
 
                 runAction(new ParallelAction(List.of(
@@ -175,7 +148,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                                                 new WaitAction(0.8),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
-                
+
                 runAction(new WaitAction(0.15));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.3));
@@ -185,10 +158,6 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
                 runAction(new ParallelAction(List.of(
                                 driveOut,
                                 new SeriesAction(List.of(
-                                                // new WaitAction(0.1),
-                                                // new LambdaAction(() -> Drive.getInstance()
-                                                // .setAutoHeading(Rotation2d.fromDegrees(-2))),
-                                                // new WaitAction(3),
                                                 new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction((() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround())),
@@ -214,7 +183,7 @@ public class ThreePieceMiddleStartAmpSide extends AutoModeBase {
 
         @Override
         public Pose2d getStartingPose() {
-                Rotation2d startingRotation = Rotation2d.fromDegrees(180);// TODO: NO IDEA IF THIS IS RIGHT
+                Rotation2d startingRotation = Rotation2d.fromDegrees(180);
                 if (Robot.is_red_alliance) {
                         startingRotation = Rotation2d.fromDegrees(0);
                 }

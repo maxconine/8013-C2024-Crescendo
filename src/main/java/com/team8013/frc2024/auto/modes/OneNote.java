@@ -45,24 +45,6 @@ public class OneNote extends AutoModeBase {
         mSuperstructure.autoShot();
         runAction(new WaitAction(1.5));
         runAction(driveToFirstNote);
-
-        // runAction(new ParallelAction(List.of(
-        //         driveToFirstNote,
-        //         new SeriesAction(List.of(
-        //                 new WaitToPassXCoordinateAction(4.0),
-        //                 new LambdaAction(() -> Drive.getInstance()
-        //                         .setAutoHeading(Rotation2d.fromDegrees(0.0))))),
-        //         new SeriesAction(List.of(
-        //                 new LambdaAction(() -> mSuperstructure.setSuperstuctureIntakingGround()),
-        //                 new WaitToPassXCoordinateAction(4.0))))));
-
-        // mSuperstructure.setSuperstuctureIntakingGround();
-
-        // mSuperstructure.stowState();
-        // runAction(new WaitForSuperstructureAction());
-        // System.out.println("Finished waiting for stow");
-        // mSuperstructure.scoreL3State();
-
     }
 
     @Override

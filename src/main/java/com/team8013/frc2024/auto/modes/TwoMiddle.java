@@ -88,11 +88,9 @@ public class TwoMiddle extends AutoModeBase {
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote,
                                 new SeriesAction(List.of(
-                                                // new WaitToPassXCoordinateAction(15.62),
                                                 new WaitAction(0.1),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(-2))),
-                                                // new WaitForHeadingAction(160,200),
                                                 new WaitAction(0.25),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround()),
@@ -106,17 +104,6 @@ public class TwoMiddle extends AutoModeBase {
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()))))));
 
-                //mSuperstructure.setSuperstuctureStow();
-
-                // runAction(new ParallelAction(List.of(
-                //                 driveToFirstNote_B,
-                //                 new SeriesAction(List.of(
-                //                                 new WaitAction(0.05),
-                //                                 new LambdaAction(() -> Drive.getInstance()
-                //                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                //                                 new WaitAction(0.5),
-                //                                 new LambdaAction(() -> mSuperstructure
-                //                                                 .setSuperstuctureTransferToShooter()))))));
                 mSuperstructure.autoShot();
                 runAction(new WaitAction(0.65)); //0.45 before wpi
                 mSuperstructure.setSuperstuctureStow();
@@ -126,9 +113,6 @@ public class TwoMiddle extends AutoModeBase {
                 runAction(new ParallelAction(List.of(
                                 driveToFirstNote_C,
                                 new SeriesAction(List.of(
-                                                // new WaitAction(0.1),
-                                                // new LambdaAction(() -> Drive.getInstance()
-                                                //                 .setAutoHeading(Rotation2d.fromDegrees(-2))),
                                                 new WaitToPassXCoordinateAction(13),
                                                 new LambdaAction((() -> mSuperstructure
                                                                 .setSuperstuctureIntakingGround())),
@@ -150,31 +134,6 @@ public class TwoMiddle extends AutoModeBase {
                 mLimelight.setShootingFromMid2Piece(true);
                 runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
-
-
-                // runAction(new ParallelAction(List.of(
-                // driveToFirstNote,
-                // new LambdaAction(() -> Drive.getInstance()
-                // .setAutoHeading(Rotation2d.fromDegrees(0))))));
-
-                // mSuperstructure.setSuperstuctureIntakingGround();
-
-                // mSuperstructure.stowState();
-                // runAction(new WaitForSuperstructureAction());
-                // System.out.println("Finished waiting for stow");
-                // mSuperstructure.scoreL3State();
-
-                // old stuff that worked by picking up at a 30 degree angle
-
-                // runAction(driveToFirstNote_A);
-                // mSuperstructure.setSuperstuctureIntakingGround();
-                // runAction(driveToFirstNote_B);
-                // runAction(new WaitAction(0.1));
-                // runAction(driveToFirstNote_C);
-                // mSuperstructure.setSuperstuctureTransferToShooter();
-                // mSuperstructure.setSuperstuctureShoot(true);
-                // runAction(new WaitAction(1));
-
         }
 
         @Override

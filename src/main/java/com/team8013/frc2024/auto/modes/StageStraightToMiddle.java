@@ -24,30 +24,18 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 
 public class StageStraightToMiddle extends AutoModeBase {
-
+//worked on field
         private Superstructure mSuperstructure;
         // private ControlBoard mControlBoard;
         private Limelight mLimelight;
         private EndEffectorREV mEffector;
 
         // required PathWeaver trajectory paths
-        // String path_A = "paths/2024Paths/LeftRed_A.path";
-        // String path_B = "paths/2024Paths/LeftRed_B.path";
-        // String path_C = "paths/2024Paths/LeftRed_C.path";
         String path_C1 = "paths/2024Paths/StageSideStraightToMiddle_A.path";
         String path_C2 = "paths/2024Paths/StageSideStraightToMiddle_B.path";
         String path_C3 = "paths/2024Paths/StageSideStraightToMiddle_C.path";
 
         // trajectories
-        // SwerveTrajectoryAction driveToFirstNote;
-        // final Trajectory drivePath_A;
-
-        // SwerveTrajectoryAction driveToShootFirstNote;
-        // final Trajectory drivePath_B;
-
-        // SwerveTrajectoryAction driveToThirdNote;
-        // final Trajectory drivePath_C;
-
         SwerveTrajectoryAction driveToThirdNote1;
         final Trajectory drivePath_C1;
 
@@ -62,22 +50,6 @@ public class StageStraightToMiddle extends AutoModeBase {
                 // mControlBoard = ControlBoard.getInstance();
                 mLimelight = Limelight.getInstance();
                 mEffector = EndEffectorREV.getInstance();
-
-                // read trajectories from PathWeaver and generate trajectory actions
-                // drivePath_A = AutoTrajectoryReader.generateTrajectoryFromFile(path_A,
-                //                 Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0)); // 0.95 also works
-                // driveToFirstNote = new SwerveTrajectoryAction(drivePath_A, Rotation2d.fromDegrees(240));
-                // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_A);
-
-                // drivePath_B = AutoTrajectoryReader.generateTrajectoryFromFile(path_B,
-                //                 Constants.AutoConstants.createConfig(1.2, 1.5, 0.0, 0)); // 0.95 also works
-                // driveToShootFirstNote = new SwerveTrajectoryAction(drivePath_B, Rotation2d.fromDegrees(240));
-                // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_B);
-
-                // drivePath_C = AutoTrajectoryReader.generateTrajectoryFromFile(path_C,
-                //                 Constants.AutoConstants.createConfig(4.5, 2, 0.0, 0));
-                // driveToThirdNote = new SwerveTrajectoryAction(drivePath_C, Rotation2d.fromDegrees(240));
-                // ShuffleBoardInteractions.getInstance().mFieldView.addTrajectory("Traj", drivePath_C);
 
                 drivePath_C1 = AutoTrajectoryReader.generateTrajectoryFromFile(path_C1,
                                 Constants.AutoConstants.createConfig(5, 2.5, 0.0, 0));
@@ -107,34 +79,6 @@ public class StageStraightToMiddle extends AutoModeBase {
                 mSuperstructure.disableAutoShot();
                 mSuperstructure.setSuperstuctureStow();
 
-                // runAction(new ParallelAction(List.of(
-                //                 driveToThirdNote,
-                //                 new SeriesAction(List.of(
-                //                                 new WaitToPassXCoordinateAction(13),
-                //                                 new LambdaAction((() -> mSuperstructure
-                //                                                 .setSuperstuctureIntakingGround())),
-                //                                 new WaitAction(0.1),
-                //                                 new LambdaAction(() -> Drive.getInstance()
-                //                                                 .setAutoHeading(Rotation2d.fromDegrees(-125))),
-                //                                 new WaitAction(1.8),
-                //                                 new LambdaAction(() -> Drive.getInstance()
-                //                                                 .setAutoHeading(Rotation2d.fromDegrees(180))),
-                //                                 new WaitAction(0.3),
-                //                                 new LambdaAction(() -> mSuperstructure
-                //                                                 .setSuperstuctureStow()),
-                //                                 new WaitAction(0.7),
-                //                                 new LambdaAction(() -> mSuperstructure
-                //                                                 .setSuperstuctureTransferToShooter()),
-                //                                 new WaitAction(0.3),
-                //                                 new LambdaAction(() -> Drive.getInstance()
-                //                                                 .setAutoHeading(Rotation2d.fromDegrees(230))),
-                //                                 new WaitAction(0.01),
-                //                                 new LambdaAction(
-                //                                                 () -> mLimelight.setShootingFromStage2Piece(true)))))));
-                // mLimelight.setShootingFromStage2Piece(true);
-                // // runAction(new WaitAction(0.1));
-                // mSuperstructure.autoShot();
-
                 runAction(new ParallelAction(List.of(
                                 driveToThirdNote1,
                                 new SeriesAction(List.of(
@@ -161,7 +105,7 @@ public class StageStraightToMiddle extends AutoModeBase {
                                                                         .setSuperstuctureTransferToShooter()),
                                                         new WaitAction(0.3),
                                                         new LambdaAction(() -> Drive.getInstance()
-                                                                        .setAutoHeading(Rotation2d.fromDegrees(204))), //was 227
+                                                                        .setAutoHeading(Rotation2d.fromDegrees(240))), //was 227
                                                         new WaitAction(0.01),
                                                         new LambdaAction(
                                                                         () -> mLimelight.setShootingFromStage2Piece(true)))))));
@@ -190,7 +134,7 @@ public class StageStraightToMiddle extends AutoModeBase {
         public Pose2d getStartingPose() {
                 Rotation2d startingRotation = Rotation2d.fromDegrees(240);
                 if (Robot.is_red_alliance) {
-                        startingRotation = Rotation2d.fromDegrees(300);// weird, doesnt work
+                        startingRotation = Rotation2d.fromDegrees(300);
                 }
                 return new Pose2d(drivePath_C1.getInitialPose().getTranslation(), startingRotation);
         }

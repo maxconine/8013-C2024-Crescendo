@@ -119,16 +119,12 @@ public class TwoAmpSide extends AutoModeBase {
                 runAction(new ParallelAction(List.of(
                                 driveToShootFirstNote,
                                 new SeriesAction(List.of(
-                                                // new WaitToPassXCoordinateAction(3.2),
                                                 new LambdaAction(() -> Drive.getInstance()
                                                                 .setAutoHeading(Rotation2d.fromDegrees(130.0))),
-                                                //new WaitToPassXCoordinateAction(14.7),
                                                 new WaitAction(0.3),
                                                 new LambdaAction(() -> mSuperstructure
                                                                 .setSuperstuctureTransferToShooter()),
                                                 new LambdaAction(() -> mLimelight.setShootingSideOfSubwoofer(true))
-                                // new WaitToPassYCoordinateAction(6.7),
-                                // new LambdaAction(() -> mSuperstructure.autoShot())
                                 )))));
                 runAction(new WaitAction(0.1));
                 mSuperstructure.autoShot();
@@ -136,19 +132,6 @@ public class TwoAmpSide extends AutoModeBase {
                 mSuperstructure.setSuperstuctureStow();
                 mSuperstructure.disableAutoShot();
                 mLimelight.setShootingSideOfSubwoofer(false);
-                // mLimelight.shootAgainstSubwooferSideAngle(false);
-
-                // runAction(new ParallelAction(List.of(
-                // driveToThirdNote,
-                // new SeriesAction(List.of(
-                // new WaitAction(0.3),
-                // new LambdaAction(() -> Drive.getInstance()
-                // .setAutoHeading(Rotation2d.fromDegrees(180.0))),
-                // new WaitToPassXCoordinateAction(11.3),
-                // new LambdaAction(() -> mSuperstructure
-                // .setSuperstuctureIntakingGround()))))));
-
-                // mSuperstructure.setSuperstuctureStow();
 
                 runAction(new ParallelAction(List.of(
                                 driveToThirdNote1,
